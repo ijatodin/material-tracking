@@ -1,0 +1,49 @@
+<!-- <p>material-registry works!</p> -->
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="#">Home</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Material Registry</li>
+  </ol>
+</nav>
+
+<div class="card">
+  <div class="card-header">
+    <div class="d-md-flex justify-content-between">
+      <h4 class="card-title my-1 ml-2">Material Registry</h4>
+      <a data-bs-toggle="collapse" href="#collapseSupplier" role="button" class="btn btn-primary mr-2">
+        <i class="fa fa-plus"></i> Add Material
+      </a>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="collapse" id="collapseSupplier">
+      <div class="card card-body">
+        <div class="mb-3">
+          <label for="name" class="form-label">Material Name/ Description</label>
+          <input type="text" class="form-control" id="name" [(ngModel)]="formData.description">
+        </div>
+        <div class="col-md-3">
+          <button type="submit" class="btn btn-primary btn-sm" (click)="submitData()">Submit</button>
+        </div>
+
+
+      </div>
+    </div>
+    <table class="table table-sm table-bordered mt-2">
+      <thead class="table-dark">
+        <tr>
+          <th scope="col" class="text-center">#</th>
+          <th scope="col" class="text-center">Description</th>
+          <th scope="col" class="text-center">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of materialData; let num = index">
+          <th scope="row" class="text-center">{{ num+1 }}</th>
+          <td class="text-center">{{ item.description }}</td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

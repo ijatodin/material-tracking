@@ -1,0 +1,79 @@
+<!-- <p>receiving-form works!</p> -->
+
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="#">Home</a></li>
+    <li class="breadcrumb-item" aria-current="page">Receiving</li>
+    <li class="breadcrumb-item active" aria-current="page">Create</li>
+  </ol>
+</nav>
+
+<div class="row">
+  <div class="col-md-3 border rounded my-2">
+    <h4 class="pt-2 mb-0">Material Search</h4>
+    <hr>
+    <div class="input-group pb-2">
+      <div class="input-group-text"><i class="fa fa-search"></i></div>
+      <input class="form-control" type="text" name="search" id="search">
+    </div>
+    <button class="btn btn-primary">Search</button>
+
+  </div>
+
+  <div class="col-md-9 my-2">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Receiving > Create</h3>
+      </div>
+      <div class="card-body">
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label for="supplier" class="form-label">Supplier</label>
+            <select class="form-select" [(ngModel)]="selectedSupplier" (change)="setSubcon()">
+              <option *ngFor="let supp of supplierData" [ngValue]="supp">{{ supp.name }}</option>
+            </select>
+          </div>
+          <div class="col-md-6">
+            <label for="subcon" class="form-label">Subcon</label>
+            <select class="form-select" [(ngModel)]="formData.subcon">
+              <option *ngFor="let sub of subconData" [ngValue]="sub.name">{{ sub.name }}</option>
+            </select>
+          </div>
+          <hr>
+          <h5 class="my-0">Material Info</h5>
+          <hr class="mb-0">
+          <div class="col-md-8">
+            <label for="description" class="form-label">Description</label>
+            <input type="text" class="form-control" id="description" disabled [(ngModel)]="selectedMaterial.name">
+          </div>
+          <div class="col-md-4">
+            <label for="do_no" class="form-label">DO Number</label>
+            <input type="text" class="form-control" id="do_no" [(ngModel)]="selectedMaterial.do_no">
+          </div>
+          <div class="col-md-6">
+            <label for="date" class="form-label">Date</label>
+            <input class="form-control" type="datetime-local" name="date" id="date" [(ngModel)]="selectedMaterial.date">
+          </div>
+          <div class="col-md-6">
+            <label for="received_date" class="form-label">Date Received</label>
+            <input class="form-control" type="datetime-local" name="received_date" id="received_date"
+              [(ngModel)]="selectedMaterial.received_date">
+          </div>
+          <div class="col-md-8">
+            <label for="location" class="form-label">Location</label>
+            <select class="form-select" [(ngModel)]="selectedMaterial.location_id">
+              <option *ngFor="let loc of locationData" [ngValue]="loc.id">{{ loc.name }}</option>
+            </select>
+          </div>
+          <div class="col-md-4">
+            <label for="quantity" class="form-label">Quantity</label>
+            <input type="text" class="form-control" id="quantity" [(ngModel)]="selectedMaterial.quantity">
+          </div>
+          <div class="col-12">
+            <button type="submit" class="btn btn-primary">Add Material</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

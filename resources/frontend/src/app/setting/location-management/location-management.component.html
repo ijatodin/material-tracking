@@ -1,0 +1,60 @@
+<!-- <p>location-management works!</p> -->
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="#">Home</a></li>
+    <li class="breadcrumb-item" aria-current="page">Setting</li>
+    <li class="breadcrumb-item active" aria-current="page">Location Management</li>
+  </ol>
+</nav>
+
+<div class="card">
+  <div class="card-header">
+    <div class="d-md-flex justify-content-between">
+      <h5 class="card-title my-1 ml-2">Location Management</h5>
+      <a data-bs-toggle="collapse" href="#collapseSupplier" role="button" class="btn btn-primary mr-2">
+        <i class="fa fa-plus"></i> Add New Data
+      </a>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="collapse" id="collapseSupplier">
+      <div class="card card-body">
+        <div class="mb-3">
+          <label for="name" class="form-label">Location Name</label>
+          <input type="text" class="form-control" id="name" [(ngModel)]="formData.name">
+        </div>
+        <div class="mb-3">
+          <label for="status" class="form-label">Status</label>
+          <select class="form-select" [(ngModel)]="formData.status">
+            <option selected value="1">Active</option>
+            <option value="8">InActive</option>
+          </select>
+        </div>
+        <div class="col-md-3">
+          <button type="submit" class="btn btn-primary btn-sm" (click)="submitData()">Submit</button>
+        </div>
+
+
+      </div>
+    </div>
+    <table class="table table-sm table-bordered mt-2">
+      <thead class="table-dark">
+        <tr>
+          <th scope="col" class="text-center">#</th>
+          <th scope="col" class="text-center">Name</th>
+          <th scope="col" class="text-center">Status</th>
+          <th scope="col" class="text-center">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of locationData; let num = index">
+          <th scope="row" class="text-center">{{ num+1 }}</th>
+          <td class="text-center">{{ item.name }}</td>
+          <td class="text-center">{{ formatStatus(item.status) }}</td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+

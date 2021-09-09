@@ -1,45 +1,52 @@
   <header>
     <!-- Fixed navbar -->
-    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="#">MatTracker</a>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+      <div class="container-md">
+        <a class="navbar-brand" href="#"><img src="favicon.ico" alt=""> MatTracker</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarCollapse">
           <ul class="navbar-nav me-auto mb-2 mb-md-0">
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="#">Home</a>
+              <a class="nav-link" aria-current="page" [routerLink]="['/receiving']"><i class="fa fa-inbox"></i> RECEIVING</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#" [routerLink]="['/test']" routerLinkActive="router-link-active" >Link</a>
+              <a class="nav-link" aria-current="page" [routerLink]="['/receiving/create']"><i class="fa fa-magic"></i> RECEIVING create</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+              <a class="nav-link" href="#" [routerLink]="['/material-registry']" routerLinkActive="router-link-active"><i class="fa fa-save"></i> MATERIAL REGISTRY</a>
             </li>
           </ul>
-          <form class="d-flex">
-            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-success" type="submit">Search</button>
-          </form>
+          <div class="d-flex">
+            <ul class="navbar-nav me-auto mb-2 mb-md-0">
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  <i class="fa fa-gear"></i> Settings
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                  <li><a class="dropdown-item" [routerLink]="['/setting/supplier-management']" routerLinkActive="router-link-active"><i class="fa fa-group"></i> Supplier & Subcon</a></li>
+                  <li><a class="dropdown-item" [routerLink]="['/setting/location-management']" routerLinkActive="router-link-active"><i class="fa fa-map-marker"></i> Location Management</a></li>
+                  <li><hr class="dropdown-divider"></li>
+                  <li><a href="#" class="dropdown-item"><i class="fa fa-sign-out"></i> Logout</a></li>
+                </ul>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
     </nav>
   </header>
 
   <!-- Begin page content -->
-  <main class="flex-shrink-0">
-    <div class="container">
+  <!-- <main class="flex-shrink-0"> -->
+    <div class="container-md pt-4">
       <router-outlet></router-outlet>
-
-      <h1 class="mt-5">Sticky footer with fixed navbar</h1>
-      <p class="lead">Pin a footer to the bottom of the viewport in desktop browsers with this custom HTML and CSS. A fixed navbar has been added with <code class="small">padding-top: 60px;</code> on the <code class="small">main &gt; .container</code>.</p>
-      <p>Back to <a href="/docs/5.1/examples/sticky-footer/">the default sticky footer</a> minus the navbar.</p>
     </div>
-  </main>
+  <!-- </main> -->
 
-  <footer class="footer mt-auto py-3 bg-light">
+  <!-- <footer class="footer mt-auto py-3 bg-primary">
     <div class="container">
-      <span class="text-muted">Place sticky footer content here.</span>
+      <span class="text-muted">MatTracker</span>
     </div>
-  </footer>
+  </footer> -->
