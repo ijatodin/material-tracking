@@ -15,6 +15,10 @@ class location extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'status', 'created_by', 'updated_by'
+        'name', 'status', 'parent_id', 'created_by', 'updated_by'
     ];
+
+    public function parent() {
+        return $this->hasOne('App\Models\location', 'id', 'parent_id');
+    }
 }

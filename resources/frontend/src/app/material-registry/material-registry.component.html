@@ -22,6 +22,10 @@
           <label for="name" class="form-label">Material Name/ Description</label>
           <input type="text" class="form-control" id="name" [(ngModel)]="formData.description">
         </div>
+        <div class="mb-3">
+          <label for="name" class="form-label">Material Specifications <small>(if any)</small></label>
+          <input type="text" class="form-control" id="name" [(ngModel)]="formData.specs">
+        </div>
         <div class="col-md-3">
           <button type="submit" class="btn btn-primary btn-sm" (click)="submitData()">Submit</button>
         </div>
@@ -34,6 +38,7 @@
         <tr>
           <th scope="col" class="text-center">#</th>
           <th scope="col" class="text-center">Description</th>
+          <th scope="col" class="text-center">Specs</th>
           <th scope="col" class="text-center">Action</th>
         </tr>
       </thead>
@@ -41,6 +46,7 @@
         <tr *ngFor="let item of materialData; let num = index">
           <th scope="row" class="text-center">{{ num+1 }}</th>
           <td class="text-center">{{ item.description }}</td>
+          <td class="text-center">{{ item.specs ? item.specs : '-' }}</td>
           <td></td>
         </tr>
       </tbody>

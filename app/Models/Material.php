@@ -15,6 +15,6 @@ class Material extends Model
      * @var array
      */
     protected $fillable = [
-        'description', 'vendor_id', 'created_by', 'updated_by'
+        'description', 'specs', 'vendor_id', 'created_by', 'updated_by'
     ];
 }

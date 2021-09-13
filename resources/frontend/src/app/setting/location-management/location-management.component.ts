@@ -9,6 +9,8 @@ import { LocationService } from 'src/app/services/location.service';
 export class LocationManagementComponent implements OnInit {
   locationData: any = null;
   formData: any = {};
+  forParent: any = [];
+  isParent: boolean = false;
 
   constructor(
     private locSvc: LocationService,) {}
@@ -22,6 +24,24 @@ export class LocationManagementComponent implements OnInit {
       this.locationData = res.model;
       console.log(this.locationData);
     });
+  }
+
+  getParent() {
+    this.locSvc.getAll().subscribe((res) => {
+      this.forParent = res.model;
+      console.log(this.locationData);
+    });
+  }
+
+  setParent() {
+    if (this.isParent === false) {
+      this.getParent();
+      this.isParent = true;
+    } else {
+      this.isParent = false;
+      this.formData.parent_id = "";
+      console.log(this.formData);
+    }
   }
 
   formatStatus(data: any) {

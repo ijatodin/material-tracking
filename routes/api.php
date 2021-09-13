@@ -20,6 +20,11 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('logout', 'AuthController@logout');
 });
 
+// receiving
+Route::post('receiving-all', 'ReceivingController@index');
+Route::post('receiving-store', 'ReceivingController@store');
+
+
 // material registry
 Route::post('material-store', 'MaterialController@store');
 Route::post('material-all', 'MaterialController@index');

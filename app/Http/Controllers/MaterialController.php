@@ -20,7 +20,7 @@ class MaterialController extends Controller
         try {
             $query = Material::query();
             $query->when(request('search'), function ($q) {
-                return $q->where('description', 'LIKE', "%" . request('description') . "%");
+                return $q->where('description', 'LIKE', "%" . request('search') . "%");
             });
 
             $model = $query->get();
@@ -38,6 +38,7 @@ class MaterialController extends Controller
             if (!$material) {
                 $res = Material::create([
                     'description' => $request->input('description'),
+                    'specs' => $request->input('specs') ?: null,
                     'status' => $request->input('vendor_id') ?: null
                 ]);
 

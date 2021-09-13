@@ -23,6 +23,16 @@
           <label for="name" class="form-label">Location Name</label>
           <input type="text" class="form-control" id="name" [(ngModel)]="formData.name">
         </div>
+        <div class="mb-3 form-check">
+          <input type="checkbox" class="form-check-input" id="subcon" (change)="setParent()">
+          <label class="form-check-label" for="subcon">Add parent location</label>
+        </div>
+        <div class="mb-3" *ngIf="isParent === true">
+          <label for="supplier" class="form-label">Choose Parent</label>
+          <select class="form-select" [(ngModel)]="formData.parent_id">
+            <option *ngFor="let item of forParent" [value]="item.id">{{ item.name }}</option>
+          </select>
+        </div>
         <div class="mb-3">
           <label for="status" class="form-label">Status</label>
           <select class="form-select" [(ngModel)]="formData.status">
@@ -42,6 +52,7 @@
         <tr>
           <th scope="col" class="text-center">#</th>
           <th scope="col" class="text-center">Name</th>
+          <th scope="col" class="text-center">Parent</th>
           <th scope="col" class="text-center">Status</th>
           <th scope="col" class="text-center">Action</th>
         </tr>
@@ -50,6 +61,7 @@
         <tr *ngFor="let item of locationData; let num = index">
           <th scope="row" class="text-center">{{ num+1 }}</th>
           <td class="text-center">{{ item.name }}</td>
+          <td class="text-center">{{ item.parent_id ? item.parent.name : '-' }}</td>
           <td class="text-center">{{ formatStatus(item.status) }}</td>
           <td></td>
         </tr>

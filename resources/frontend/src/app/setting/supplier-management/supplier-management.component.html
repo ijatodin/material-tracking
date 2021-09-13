@@ -45,9 +45,8 @@
       <thead class="table-dark">
         <tr>
           <th scope="col" class="text-center">#</th>
-          <th scope="col" class="text-center">Name</th>
-          <th scope="col" class="text-center">Role</th>
           <th scope="col" class="text-center">Supplier</th>
+          <th scope="col" class="text-center">Subcon</th>
           <th scope="col" class="text-center">Action</th>
         </tr>
       </thead>
@@ -55,10 +54,11 @@
         <tr *ngFor="let item of supplierData; let num = index">
           <th scope="row" class="text-center">{{ num+1 }}</th>
           <td class="text-center">{{ item.name }}</td>
-          <td *ngIf="item.parent_id != null" class="text-center">SUBCON</td>
-          <td *ngIf="item.parent_id === null" class="text-center">SUPPLIER</td>
-          <td *ngIf="item.parent_id != null" class="text-center">{{ item.parent.name }}</td>
-          <td *ngIf="item.parent_id === null" class="text-center">-</td>
+          <td class="justify-content-center">
+            <tr *ngFor="let sub of item.subcon">
+              <td>{{ sub.name }}</td>
+            </tr>
+          </td>
           <td></td>
         </tr>
       </tbody>

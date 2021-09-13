@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateLocationsTable extends Migration
+class CreateRegistryCountersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,13 @@ class CreateLocationsTable extends Migration
      */
     public function up()
     {
-        Schema::create('locations', function (Blueprint $table) {
+        Schema::create('registry_counters', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 155);
-            $table->integer('parent_id')->nullable();
-            $table->tinyInteger('status');
+            $table->string('prefix', 10);
+            $table->integer('counter')->default(10000);
+            $table->string('description')->nullable();
             $table->integer('created_by')->default(1);
-            $table->integer('updated_by')->nullable();
+            $table->integer('updated_by')->default(1);
             $table->timestamps();
         });
     }
@@ -31,6 +31,6 @@ class CreateLocationsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('locations');
+        Schema::dropIfExists('registry_counters');
     }
 }

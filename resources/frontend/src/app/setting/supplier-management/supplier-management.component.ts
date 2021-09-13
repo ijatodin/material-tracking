@@ -21,7 +21,7 @@ export class SupplierManagementComponent implements OnInit {
   }
 
   getAll() {
-    this.suppSvc.getAll().subscribe((res) => {
+    this.suppSvc.getSupplier().subscribe((res) => {
       this.supplierData = res.model;
       console.log(this.supplierData);
     });
@@ -51,6 +51,7 @@ export class SupplierManagementComponent implements OnInit {
       if (res.message === 'SUCCESS') {
         console.log(res.model);
         this.getAll();
+        this.formData = {};
       }
     });
   }

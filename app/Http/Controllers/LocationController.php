@@ -9,7 +9,7 @@ class LocationController extends Controller
 {
     public function index() {
         try {
-            $model = location::all();
+            $model = location::with('parent')->get();
             return response()->json(['message' => 'SUCCESS', 'model' => $model], 200);
         } catch (\Exception $e) {
             return response()->json(['message' => $e->getMessage()], 404);
@@ -32,6 +32,7 @@ class LocationController extends Controller
             if (!$location) {
                 $res = location::create([
                     'name' => $request->input('name'),
+                    'parent_id' => $request->input('parent_id') ?: null,
                     'status' => $request->input('status') ?: 1
                 ]);
 

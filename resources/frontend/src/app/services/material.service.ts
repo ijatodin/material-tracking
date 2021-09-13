@@ -22,4 +22,8 @@ export class MaterialService {
     return this.http.post<GenericResponse>(`${environment.apiUrl}/material-store`, data);
   }
 
+  search(data: any) {
+    return this.http.post<GenericResponse>(`${environment.apiUrl}/material-search`, data);
+  }
+
 }

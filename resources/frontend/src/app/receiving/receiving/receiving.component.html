@@ -1,9 +1,106 @@
-<p>receiving works!</p>
-<div class="card-body px-0 py-1">
-  <nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="#">Home</a></li>
-      <li class="breadcrumb-item active" aria-current="page">Receiving</li>
-    </ol>
-  </nav>
+<!-- <p>receiving works!</p> -->
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="#">Home</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Receiving</li>
+  </ol>
+</nav>
+
+<div class="card">
+  <div class="card-header">
+    <div class="d-md-flex justify-content-between">
+      <h4 class="card-title my-1 ml-2">Receiving</h4>
+      <a [routerLink]="['/receiving/create']" role="button" class="btn btn-primary mr-2">
+        <i class="fa fa-plus"></i> New Receiving
+      </a>
+    </div>
+  </div>
+  <div class="card-body">
+    <table class="table table-sm table-bordered table-hover mt-2">
+      <thead class="table-dark">
+        <tr>
+          <th scope="col" class="text-center">#</th>
+          <th scope="col" class="text-center">Ref No</th>
+          <th scope="col" class="text-center">D.O No</th>
+          <th scope="col" class="text-center">Supplier</th>
+          <th scope="col" class="text-center">Subcon</th>
+          <th scope="col" class="text-center">Received Date</th>
+          <th scope="col" class="text-center">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of receivingData; let num = index">
+          <th scope="row" class="text-center">{{ num+1 }}</th>
+          <td class="text-center">{{ item.ref_no }}</td>
+          <td class="text-center">{{ item.do_no }}</td>
+          <td class="text-center">{{ item.supplier }}</td>
+          <td class="text-center">{{ item.subcon }}</td>
+          <td class="text-center">{{ item.received_date | date:'dd/MM/yyyy' }}</td>
+          <td class="text-center"><button data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight"
+              (click)="setDetails(item)" class="btn btn-primary btn-sm py-0" aria-controls="offcanvasRight"><i
+                class="fa fa-info"></i></button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>
+
+<!-- canvas receiving data -->
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+  <div class="offcanvas-header">
+    <h5 class="py-2 m-0" id="offcanvasRightLabel"><strong>{{ selectedReceiving.ref_no }}</strong></h5>
+    <div class="btn-group">
+      <button type="button" class="btn text-reset"><i class="fa fa-pencil"></i></button>
+      <button type="button" class="btn text-reset" data-bs-dismiss="offcanvas" aria-label="Close"><i
+          class="fa fa-close"></i></button>
+    </div>
+
+  </div>
+  <div class="offcanvas-body">
+    <div>
+      <table class="table table-borderless table-hover">
+        <tr>
+          <th>Supplier</th>
+          <td>{{ selectedReceiving.supplier }}</td>
+        </tr>
+        <tr>
+          <th>Subcon</th>
+          <td>{{ selectedReceiving.subcon }}</td>
+        </tr>
+        <tr>
+          <th>D.O No</th>
+          <td>{{ selectedReceiving.do_no }}</td>
+        </tr>
+        <tr>
+          <th>P.O No</th>
+          <td>{{ selectedReceiving.po_no ? selectedReceiving.po_no : 'N/A' }}</td>
+        </tr>
+        <tr>
+          <th>Date</th>
+          <td>{{ selectedReceiving.date | date:'dd/MM/yyyy' }}</td>
+        </tr>
+        <tr>
+          <th>Received Date</th>
+          <td>{{ selectedReceiving.received_date | date:'dd/MM/yyyy' }}</td>
+        </tr>
+        <tr>
+          <th>Location</th>
+          <td>{{ selectedReceiving.location.name }}</td>
+        </tr>
+      </table>
+    </div>
+    <hr>
+    <h5 class="my-0">Material Details</h5>
+    <hr class="mb-0">
+    <div class="card mt-2" *ngFor="let item of selectedReceiving.details">
+      <div class="card-body">
+        <div class="d-flex align-items-center justify-content-between">
+         <span><strong>{{item.description}}</strong><br><small>Remarks: {{ item.remarks ? item.remarks : '-' }}</small></span>
+         <button class="btn btn-primary">{{item.quantity}}</button>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
