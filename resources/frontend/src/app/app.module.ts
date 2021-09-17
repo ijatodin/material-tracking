@@ -12,9 +12,11 @@ import { LoginComponent } from './auth/login/login.component';
 import { RegisterComponent } from './auth/register/register.component';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDateAdapter, NgbDateParserFormatter, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ReceivingComponent } from './receiving/receiving/receiving.component';
 import { ReceivingFormComponent } from './receiving/receiving-form/receiving-form.component';
+import { PersonnelManagementComponent } from './setting/personnel-management/personnel-management.component';
+import { CustomAdapter, CustomDateParserFormatter } from './receiving/receiving-form/dateFormatter';
 
 @NgModule({
   declarations: [
@@ -27,7 +29,8 @@ import { ReceivingFormComponent } from './receiving/receiving-form/receiving-for
     LoginComponent,
     RegisterComponent,
     ReceivingComponent,
-    ReceivingFormComponent
+    ReceivingFormComponent,
+    PersonnelManagementComponent
   ],
   imports: [
     BrowserModule,
@@ -36,7 +39,10 @@ import { ReceivingFormComponent } from './receiving/receiving-form/receiving-for
     FormsModule,
     NgbModule
   ],
-  providers: [],
+  providers: [
+    {provide: NgbDateAdapter, useClass: CustomAdapter},
+    {provide: NgbDateParserFormatter, useClass: CustomDateParserFormatter}
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
