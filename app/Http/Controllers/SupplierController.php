@@ -10,7 +10,7 @@ class SupplierController extends Controller
 {
     public function index() {
         try {
-            $model = supplier::with('parent')->get();
+            $model = supplier::all();
             return response()->json(['message' => 'SUCCESS', 'model' => $model], 200);
         } catch (\Exception $e) {
             return response()->json(['message' => $e->getMessage()], 404);
@@ -19,7 +19,16 @@ class SupplierController extends Controller
 
     public function supplier() {
         try {
-            $model = supplier::whereNull('parent_id')->with('subcon')->get();
+            $model = supplier::whereIn('role', [1,3])->get();
+            return response()->json(['message' => 'SUCCESS', 'model' => $model], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 404);
+        }
+    }
+
+    public function subcon() {
+        try {
+            $model = supplier::whereIn('role', [2,3])->get();
             return response()->json(['message' => 'SUCCESS', 'model' => $model], 200);
         } catch (\Exception $e) {
             return response()->json(['message' => $e->getMessage()], 404);
@@ -33,7 +42,8 @@ class SupplierController extends Controller
             if (!$supplier) {
                 $res = supplier::create([
                     'name' => $request->input('name'),
-                    'parent_id' => $request->input('parent_id') ?: null
+                    'parent_id' => $request->input('parent_id') ?: null,
+                    'role' => $request->input('role') ?: null
                 ]);
 
                 return response()->json(['message' => 'SUCCESS', 'model' => $res], 200);

@@ -15,7 +15,7 @@ class supplier extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'parent_id', 'id'
+        'name', 'parent_id', 'id', 'role'
     ];
 
     public function parent() {

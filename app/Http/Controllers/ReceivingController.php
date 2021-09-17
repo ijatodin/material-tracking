@@ -43,8 +43,7 @@ class ReceivingController extends Controller
 
             if ($res) {
                 foreach ($receivingDetails as $rd) {
-                    ReceivingDetails::updateOrCreate(
-                        ['id' => $rd['id']],
+                    ReceivingDetails::create(
                         [
                             'ref_no' => $res->ref_no,
                             'description' => $rd['description'],

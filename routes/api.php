@@ -36,6 +36,7 @@ Route::group(['prefix' => 'setting'], function () {
     Route::post('supplier-store', 'SupplierController@store');
     Route::post('supplier-all', 'SupplierController@index');
     Route::post('supplier-only', 'SupplierController@supplier');
+    Route::post('subcon-only', 'SupplierController@subcon');
 
     // location management
     Route::post('location-store', 'LocationController@store');
