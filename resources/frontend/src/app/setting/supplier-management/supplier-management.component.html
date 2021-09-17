@@ -4,49 +4,24 @@
   <ol class="breadcrumb">
     <li class="breadcrumb-item"><a href="#">Home</a></li>
     <li class="breadcrumb-item" aria-current="page">Setting</li>
-    <li class="breadcrumb-item active" aria-current="page">Supplier & Subcon Management</li>
+    <li class="breadcrumb-item active" aria-current="page">Vendor Management</li>
   </ol>
 </nav>
 
 <div class="card">
   <div class="card-header">
     <div class="d-md-flex justify-content-between">
-      <h5 class="card-title my-1 ml-2">Supplier & SubCon Management</h5>
-      <a data-bs-toggle="collapse" href="#collapseSupplier" role="button" class="btn btn-primary mr-2">
-        <i class="fa fa-plus"></i> Add New Data
-      </a>
-    </div>
+      <h5 class="card-title my-1 ml-2">Vendor Management</h5>
+    <button data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" class="btn btn-primary"><i class="fa fa-plus"></i> Add New Data</button>
+  </div>
   </div>
   <div class="card-body">
-    <div class="collapse" id="collapseSupplier">
-      <div class="card card-body">
-        <div class="mb-3">
-          <label for="name" class="form-label">Name</label>
-          <input type="text" class="form-control" id="name" [(ngModel)]="formData.name">
-        </div>
-        <div class="mb-3 form-check">
-          <input type="checkbox" class="form-check-input" id="subcon" (change)="setSubcon()">
-          <label class="form-check-label" for="subcon">Add as SubCon</label>
-        </div>
-        <div class="mb-3" *ngIf="isSubcon === true">
-          <label for="supplier" class="form-label">Choose Supplier</label>
-          <select class="form-select" [(ngModel)]="formData.parent_id">
-            <option *ngFor="let item of forSubcon" [value]="item.id">{{ item.name }}</option>
-          </select>
-        </div>
-        <div class="col-md-3">
-          <button type="submit" class="btn btn-primary btn-sm" (click)="submitData()">Submit</button>
-        </div>
-
-
-      </div>
-    </div>
     <table class="table table-sm table-bordered mt-2">
       <thead class="table-dark">
         <tr>
           <th scope="col" class="text-center">#</th>
-          <th scope="col" class="text-center">Supplier</th>
-          <th scope="col" class="text-center">Subcon</th>
+          <th scope="col" class="text-center">Name</th>
+          <th scope="col" class="text-center">Role</th>
           <th scope="col" class="text-center">Action</th>
         </tr>
       </thead>
@@ -54,14 +29,35 @@
         <tr *ngFor="let item of supplierData; let num = index">
           <th scope="row" class="text-center">{{ num+1 }}</th>
           <td class="text-center">{{ item.name }}</td>
-          <td class="justify-content-center">
-            <tr *ngFor="let sub of item.subcon">
-              <td>{{ sub.name }}</td>
-            </tr>
-          </td>
+          <td class="text-center">{{ formatRole(item.role) }}</td>
           <td></td>
         </tr>
       </tbody>
     </table>
+  </div>
+</div>
+
+<!-- canvas material data -->
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+  <div class="offcanvas-header">
+    <h5 id="offcanvasRightLabel">New Vendor</h5>
+    <button type="button" class="btn text-reset" data-bs-dismiss="offcanvas" aria-label="Close"><i class="fa fa-close"></i></button>
+  </div>
+  <div class="offcanvas-body">
+    <div class="mb-3">
+      <label for="name" class="form-label">Name</label>
+      <input type="text" class="form-control" id="name" [(ngModel)]="formData.name">
+    </div>
+    <div class="mb-3">
+      <label for="supplier" class="form-label">Role</label>
+      <select class="form-select" [(ngModel)]="formData.role">
+        <option value=1>Supplier</option>
+        <option value=2>Subcon</option>
+        <option value=3>Both</option>
+      </select>
+    </div>
+    <div>
+      <button type="submit" class="btn btn-primary form-control" (click)="submitData()">Submit</button>
+    </div>
   </div>
 </div>

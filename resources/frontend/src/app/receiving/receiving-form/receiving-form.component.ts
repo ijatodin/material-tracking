@@ -47,12 +47,9 @@ export class ReceivingFormComponent implements OnInit {
     this.supplierSvc.getSupplier().subscribe((res) => {
       this.supplierData = res.model;
     });
-  }
-
-  setSubcon() {
-    this.formData.supplier = this.selectedSupplier.name;
-    this.subconData = this.selectedSupplier.subcon;
-    console.log(this.selectedSupplier);
+    this.supplierSvc.getSubcon().subscribe((res) => {
+      this.subconData = res.model;
+    });
   }
 
   searchMaterial(searchTerm: string) {

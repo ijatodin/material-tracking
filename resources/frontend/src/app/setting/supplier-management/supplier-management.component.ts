@@ -13,7 +13,7 @@ export class SupplierManagementComponent implements OnInit {
   forSubcon: any = [];
 
   constructor(private suppSvc: SupplierService) {
-    this.formData.parent_id = "";
+    this.formData.parent_id = '';
   }
 
   ngOnInit(): void {
@@ -21,7 +21,7 @@ export class SupplierManagementComponent implements OnInit {
   }
 
   getAll() {
-    this.suppSvc.getSupplier().subscribe((res) => {
+    this.suppSvc.getAll().subscribe((res) => {
       this.supplierData = res.model;
       console.log(this.supplierData);
     });
@@ -40,14 +40,31 @@ export class SupplierManagementComponent implements OnInit {
       this.isSubcon = true;
     } else {
       this.isSubcon = false;
-      this.formData.parent_id = "";
+      this.formData.parent_id = '';
       console.log(this.formData);
     }
   }
 
-  submitData(){
+  formatRole(data: any) {
+    let res: string = '';
+
+    switch (data) {
+      case 1:
+        res = 'Supplier';
+        break;
+      case 2:
+        res = 'Subcon';
+        break;
+      case 3:
+        res = 'Supplier & Subcon';
+        break;
+    }
+    return res;
+  }
+
+  submitData() {
     console.log(this.formData);
-    this.suppSvc.storeSupplier(this.formData).subscribe((res)=> {
+    this.suppSvc.storeSupplier(this.formData).subscribe((res) => {
       if (res.message === 'SUCCESS') {
         console.log(res.model);
         this.getAll();

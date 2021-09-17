@@ -29,8 +29,8 @@
         <div class="row g-3">
           <div class="col-md-6">
             <label for="supplier" class="form-label">Supplier</label>
-            <select class="form-select" [(ngModel)]="selectedSupplier" (change)="setSubcon()">
-              <option *ngFor="let supp of supplierData" [ngValue]="supp">{{ supp.name }}</option>
+            <select class="form-select" [(ngModel)]="formData.supplier">
+              <option *ngFor="let supp of supplierData" [ngValue]="supp.name">{{ supp.name }}</option>
             </select>
           </div>
           <div class="col-md-6">
@@ -41,12 +41,19 @@
           </div>
           <div class="col-md-6">
             <label for="date" class="form-label">Date</label>
-            <input class="form-control" type="datetime-local" name="date" id="date" [(ngModel)]="formData.date">
+            <!-- <input class="form-control" type="datetime-local" name="date" id="date" [(ngModel)]="formData.date"> -->
+            <div class="input-group">
+              <span (click)="d2.toggle()" class="input-group-text"><i class="fa fa-calendar"></i></span>
+              <input class="form-control" placeholder="dd/mm/yyyy"
+                 name="d2" #c2="ngModel" [(ngModel)]="formData.date" ngbDatepicker #d2="ngbDatepicker" (click)="d2.toggle()">
+            </div>
           </div>
           <div class="col-md-6">
             <label for="received_date" class="form-label">Date Received</label>
-            <input class="form-control" type="datetime-local" name="received_date" id="received_date"
-              [(ngModel)]="formData.received_date">
+            <!-- <input class="form-control" type="datetime-local" name="received_date" id="received_date"
+              [(ngModel)]="formData.received_date"> -->
+              <input class="form-control" placeholder="dd/mm/yyyy"
+                 name="d1" #c1="ngModel" [(ngModel)]="formData.received_date" ngbDatepicker #d1="ngbDatepicker" (click)="d1.toggle();">
           </div>
           <div class="col-md-6">
             <label for="do_no" class="form-label">D.O Number</label>
@@ -56,13 +63,18 @@
             <label for="po_no" class="form-label">P.O Number</label>
             <input type="text" class="form-control" id="po_no" [(ngModel)]="formData.po_no">
           </div>
-          <div class="col-md-6">
+          <div class="col-md-4">
             <label for="location" class="form-label">Location</label>
             <select class="form-select" [(ngModel)]="formData.location_id">
               <option *ngFor="let loc of locationData" [value]="loc.id">{{ loc.name }}</option>
             </select>
           </div>
-          <div class="col-md-6">
+          <div class="col-md-4">
+            <label for="plot" class="form-label">Plot</label>
+            <input type="text" class="form-control" id="plot" [(ngModel)]="formData.plot">
+            <div class="form-text">Location plot. If any.</div>
+          </div>
+          <div class="col-md-4">
             <label for="remarks" class="form-label">Remarks</label>
             <input type="text" class="form-control" id="remarks" [(ngModel)]="formData.remarks">
           </div>

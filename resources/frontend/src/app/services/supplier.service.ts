@@ -22,6 +22,10 @@ export class SupplierService {
     return this.http.post<GenericResponse>(`${environment.apiUrl}/setting/supplier-only`, {});
   }
 
+  getSubcon() {
+    return this.http.post<GenericResponse>(`${environment.apiUrl}/setting/subcon-only`, {});
+  }
+
   storeSupplier(data: any) {
     return this.http.post<GenericResponse>(`${environment.apiUrl}/setting/supplier-store`, data);
   }
