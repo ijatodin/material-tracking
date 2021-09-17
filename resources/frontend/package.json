@@ -24,15 +24,18 @@
     "bootstrap": "^5.0.0-beta3",
     "bootswatch": "^5.1.0",
     "font-awesome": "^4.7.0",
+    "moment": "^2.29.1",
     "rxjs": "~6.6.0",
     "sweetalert2": "^11.1.5",
     "tslib": "^2.3.0",
+    "xlsx": "^0.17.2",
     "zone.js": "~0.11.4"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~12.2.2",
     "@angular/cli": "~12.2.2",
     "@angular/compiler-cli": "~12.2.0",
+    "@angular/localize": "^12.2.2",
     "@types/jasmine": "~3.8.0",
     "@types/node": "^12.11.1",
     "jasmine-core": "~3.8.0",
