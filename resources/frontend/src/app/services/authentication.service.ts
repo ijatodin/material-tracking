@@ -27,8 +27,8 @@ export class AuthenticationService {
         })
       };
 
-        // this.currentUserSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('matTracker')));
-        // this.currentUser = this.currentUserSubject.asObservable();
+        this.currentUserSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('matTracker')));
+        this.currentUser = this.currentUserSubject.asObservable();
     }
 
     public get currentUserValue(): User {
