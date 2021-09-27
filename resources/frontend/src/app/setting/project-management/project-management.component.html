@@ -1,18 +1,19 @@
-<p>personnel-management works!</p>
+<!-- <p>project-management works!</p> -->
+<!-- <p>material-registry works!</p> -->
 <nav aria-label="breadcrumb">
   <ol class="breadcrumb">
     <li class="breadcrumb-item"><a href="#">Home</a></li>
     <li class="breadcrumb-item active" aria-current="page">Setting</li>
-    <li class="breadcrumb-item active" aria-current="page">Personnel Management</li>
+    <li class="breadcrumb-item active" aria-current="page">Project Management</li>
   </ol>
 </nav>
 
 <div class="card">
   <div class="card-header">
     <div class="d-md-flex justify-content-between">
-      <h4 class="card-title my-1 ml-2">Personnel Management</h4>
+      <h4 class="card-title my-1 ml-2">Project Management</h4>
       <a data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" role="button" class="btn btn-primary mr-2">
-        <i class="fa fa-plus"></i> Add Personnel
+        <i class="fa fa-plus"></i> Add Project
       </a>
     </div>
   </div>
@@ -21,18 +22,18 @@
       <thead class="table-dark">
         <tr>
           <th scope="col" class="text-center">#</th>
-          <th scope="col" class="text-center">Name</th>
-          <th scope="col" class="text-center">Designation</th>
-          <th scope="col" class="text-center">Role</th>
+          <th scope="col" class="text-center">Title</th>
+          <th scope="col" class="text-center">Sub Title</th>
+          <th scope="col" class="text-center">Project No/Info</th>
           <th scope="col" class="text-center">Action</th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let item of personnelData; let num = index">
+        <tr *ngFor="let item of projectData; let num = index">
           <th scope="row" class="text-center">{{ num+1 }}</th>
-          <td class="text-center">{{ item.name }}</td>
-          <td class="text-center">{{ item.designation }}</td>
-          <td class="text-center">{{ formatRole(item.role) }}</td>
+          <td class="text-center">{{ item.title }}</td>
+          <td class="text-center">{{ item.sub_title ? item.sub_title : '-' }}</td>
+          <td class="text-center">{{ item.project_no }}</td>
           <td class="text-center">
             <div class="btn-group">
               <button class="btn btn-primary btn-sm py-0"><i class="fa fa-pencil"></i></button>
@@ -48,28 +49,25 @@
 <!-- canvas material data -->
 <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
   <div class="offcanvas-header">
-    <h5 id="offcanvasRightLabel">New Personnel</h5>
+    <h5 id="offcanvasRightLabel">New Project</h5>
     <button type="button" class="btn text-reset" data-bs-dismiss="offcanvas" aria-label="Close"><i class="fa fa-close"></i></button>
   </div>
   <div class="offcanvas-body">
     <div class="mb-3">
-      <label for="name" class="form-label">Name</label>
-      <input type="text" class="form-control" id="name" [(ngModel)]="formData.name">
+      <label for="name" class="form-label">Project Title</label>
+      <input type="text" class="form-control" id="name" [(ngModel)]="formData.title">
     </div>
     <div class="mb-3">
-      <label for="designation" class="form-label">Designation</label>
-      <input type="text" class="form-control" id="designation" [(ngModel)]="formData.designation">
+      <label for="name" class="form-label">Project Sub Title <small>(if any)</small></label>
+      <input type="text" class="form-control" id="name" [(ngModel)]="formData.sub_title">
     </div>
     <div class="mb-3">
-      <label for="role" class="form-label">Role</label>
-      <select class="form-select" name="role" id="role" [(ngModel)]="formData.role">
-        <option value="1">Maker</option>
-        <option value="2">Checker</option>
-        <option value="3">Approver</option>
-      </select>
+      <label for="name" class="form-label">Project No</label>
+      <input type="text" class="form-control" id="name" [(ngModel)]="formData.project_no">
     </div>
     <div class="">
       <button type="submit" class="btn btn-primary btn-sm form-control" (click)="submit()">Submit</button>
     </div>
   </div>
 </div>
+

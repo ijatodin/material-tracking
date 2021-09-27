@@ -10,35 +10,20 @@
   <div class="card-header">
     <div class="d-md-flex justify-content-between">
       <h4 class="card-title my-1 ml-2">Material Registry</h4>
-      <a data-bs-toggle="collapse" href="#collapseSupplier" role="button" class="btn btn-primary mr-2">
+      <a data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" role="button" class="btn btn-primary mr-2">
         <i class="fa fa-plus"></i> Add Material
       </a>
     </div>
   </div>
   <div class="card-body">
-    <div class="collapse" id="collapseSupplier">
-      <div class="card card-body">
-        <div class="mb-3">
-          <label for="name" class="form-label">Material Name/ Description</label>
-          <input type="text" class="form-control" id="name" [(ngModel)]="formData.description">
-        </div>
-        <div class="mb-3">
-          <label for="name" class="form-label">Material Specifications <small>(if any)</small></label>
-          <input type="text" class="form-control" id="name" [(ngModel)]="formData.specs">
-        </div>
-        <div class="col-md-3">
-          <button type="submit" class="btn btn-primary btn-sm" (click)="submitData()">Submit</button>
-        </div>
-
-
-      </div>
-    </div>
     <table class="table table-sm table-bordered mt-2">
       <thead class="table-dark">
         <tr>
           <th scope="col" class="text-center">#</th>
           <th scope="col" class="text-center">Description</th>
           <th scope="col" class="text-center">Specs</th>
+          <th scope="col" class="text-center">Type</th>
+          <th scope="col" class="text-center">UOM</th>
           <th scope="col" class="text-center">Action</th>
         </tr>
       </thead>
@@ -47,9 +32,48 @@
           <th scope="row" class="text-center">{{ num+1 }}</th>
           <td class="text-center">{{ item.description }}</td>
           <td class="text-center">{{ item.specs ? item.specs : '-' }}</td>
-          <td></td>
+          <td class="text-center">{{ item.type === 1 ? 'Concrete' : 'Others' }}</td>
+          <td class="text-center">{{ item.uom ? item.uom : '-' }}</td>
+          <td class="text-center">
+            <div class="btn-group">
+              <button class="btn btn-primary btn-sm py-0"><i class="fa fa-pencil"></i></button>
+              <button class="btn btn-warning btn-sm py-0"><i class="fa fa-trash"></i></button>
+            </div>
+          </td>
         </tr>
       </tbody>
     </table>
+  </div>
+</div>
+
+<!-- canvas material data -->
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+  <div class="offcanvas-header">
+    <h5 id="offcanvasRightLabel">New Vendor</h5>
+    <button type="button" class="btn text-reset" data-bs-dismiss="offcanvas" aria-label="Close"><i class="fa fa-close"></i></button>
+  </div>
+  <div class="offcanvas-body">
+    <div class="mb-3">
+      <label for="name" class="form-label">Material Name/ Description</label>
+      <input type="text" class="form-control" id="name" [(ngModel)]="formData.description">
+    </div>
+    <div class="mb-3">
+      <label for="name" class="form-label">Material Specifications <small>(if any)</small></label>
+      <input type="text" class="form-control" id="name" [(ngModel)]="formData.specs">
+    </div>
+    <div class="mb-3">
+      <label for="name" class="form-label">Unit of Measurement</label>
+      <input type="text" class="form-control" id="name" [(ngModel)]="formData.uom">
+    </div>
+    <div class="mb-3">
+      <label for="status" class="form-label">Material Type</label>
+      <select class="form-select" [(ngModel)]="formData.type">
+        <option value="1">Concrete</option>
+        <option value="2">Others</option>
+      </select>
+    </div>
+    <div class="">
+      <button type="submit" class="btn btn-primary btn-sm form-control" (click)="submitData()">Submit</button>
+    </div>
   </div>
 </div>

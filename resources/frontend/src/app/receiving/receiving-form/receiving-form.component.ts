@@ -68,6 +68,7 @@ export class ReceivingFormComponent implements OnInit {
   }
 
   addToDetails() {
+    this.selectedMaterial.location_id = this.selectedMaterial.location.id;
     console.log(this.selectedMaterial);
     this.formData.details.push(this.selectedMaterial);
     this.selectedMaterial = {};

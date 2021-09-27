@@ -9,7 +9,7 @@ export class SanctumInterceptor implements HttpInterceptor {
     constructor(private authenticationService: AuthenticationService) { }
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        // add authorization header with jwt token if available
+        // add authorization header with sanctum token if available
         let currentUser = this.authenticationService.currentUserValue;
         let isLoggedIn = currentUser && currentUser.token;
         let isApuUrl = request.url.startsWith(environment.apiUrl);

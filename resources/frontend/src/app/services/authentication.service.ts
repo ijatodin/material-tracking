@@ -35,16 +35,13 @@ export class AuthenticationService {
         return this.currentUserSubject.value;
     }
 
-    login(username: string, password: string) {
-        return this.http.post<User>(`${environment.apiUrl}/auth/login`, { grant_type: 'password',
-            // client_id: '2',
-            // client_secret: environment.apiKey,
-            username: username,
-            password: password,
-            scope: ''
-          }, this.options )
+    login(email: string, password: string) {
+        return this.http.post<User>(`${environment.apiUrl}/login`, {
+            email: email,
+            password: password
+          })
             .pipe(map(user => {
-               let tempUser:any = user
+               let tempUser:any = user;
                 // store user details and sanctum token in local storage to keep user logged in between page refreshes
                 if(tempUser !== null) {
                   localStorage.setItem('matTracker', JSON.stringify(user));

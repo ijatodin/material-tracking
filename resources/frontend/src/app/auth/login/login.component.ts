@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-// import { AuthenticationService } from 'src/app/services/authentication.service';
+import { Router } from '@angular/router';
+import { first } from 'rxjs/operators';
+import { AuthenticationService } from 'src/app/services/authentication.service';
 
 @Component({
   selector: 'app-login',
@@ -8,17 +10,21 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LoginComponent implements OnInit {
 
-  formData: any = {};
+  loginForm: any = {};
 
   constructor(
-    // private authSvc: AuthenticationService
+    private authSvc: AuthenticationService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
   }
 
   login() {
-    console.log(this.formData);
+    console.log(this.loginForm);
+    this.authSvc.login(this.loginForm.email, this.loginForm.password).pipe(first()).subscribe((data) => {
+      this.router.navigate(["/receiving"]);
+    })
   }
 
 }

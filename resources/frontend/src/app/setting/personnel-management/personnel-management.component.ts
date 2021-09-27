@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { PersonnelService } from 'src/app/services/personnel.service';
 
 @Component({
   selector: 'app-personnel-management',
@@ -7,9 +8,50 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PersonnelManagementComponent implements OnInit {
 
-  constructor() { }
+  personnelData: any = [];
+  formData: any = {};
+
+  constructor(
+    private personnelSvc: PersonnelService
+  ) { }
 
   ngOnInit(): void {
+    this.getData();
+  }
+
+  getData() {
+    this.personnelSvc.getAll().subscribe((res) => {
+      if (res.message === 'SUCCESS') {
+        this.personnelData = res.model;
+      }
+    });
+  }
+
+  formatRole(data: any) {
+    let res: string = '';
+
+    switch (data) {
+      case 1:
+        res = 'Maker';
+        break;
+      case 2:
+        res = 'Checker';
+        break;
+      case 3:
+        res = 'Approver';
+        break;
+    }
+    return res;
+  }
+
+  submit() {
+    this.personnelSvc.storePersonnel(this.formData).subscribe((res) => {
+      if (res.message === 'SUCCESS') {
+        console.log(res.model);
+        this.formData = {};
+        this.getData();
+      }
+    });
   }
 
 }

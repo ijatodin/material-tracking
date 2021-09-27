@@ -10,13 +10,16 @@ import { LocationManagementComponent } from './setting/location-management/locat
 import { SupplierManagementComponent } from './setting/supplier-management/supplier-management.component';
 import { LoginComponent } from './auth/login/login.component';
 import { RegisterComponent } from './auth/register/register.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { NgbDateAdapter, NgbDateParserFormatter, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ReceivingComponent } from './receiving/receiving/receiving.component';
 import { ReceivingFormComponent } from './receiving/receiving-form/receiving-form.component';
 import { PersonnelManagementComponent } from './setting/personnel-management/personnel-management.component';
 import { CustomAdapter, CustomDateParserFormatter } from './receiving/receiving-form/dateFormatter';
+import { SummaryReportComponent } from './receiving/summary-report/summary-report.component';
+import { ProjectManagementComponent } from './setting/project-management/project-management.component';
+import { SanctumInterceptor } from './helpers/sanctum.interceptor';
 
 @NgModule({
   declarations: [
@@ -30,7 +33,9 @@ import { CustomAdapter, CustomDateParserFormatter } from './receiving/receiving-
     RegisterComponent,
     ReceivingComponent,
     ReceivingFormComponent,
-    PersonnelManagementComponent
+    PersonnelManagementComponent,
+    SummaryReportComponent,
+    ProjectManagementComponent
   ],
   imports: [
     BrowserModule,
@@ -41,7 +46,9 @@ import { CustomAdapter, CustomDateParserFormatter } from './receiving/receiving-
   ],
   providers: [
     {provide: NgbDateAdapter, useClass: CustomAdapter},
-    {provide: NgbDateParserFormatter, useClass: CustomDateParserFormatter}
+    {provide: NgbDateParserFormatter, useClass: CustomDateParserFormatter},
+    { provide: HTTP_INTERCEPTORS, useClass: SanctumInterceptor, multi: true },
+
   ],
   bootstrap: [AppComponent]
 })

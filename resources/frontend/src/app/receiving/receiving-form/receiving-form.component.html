@@ -3,24 +3,13 @@
 <nav aria-label="breadcrumb">
   <ol class="breadcrumb">
     <li class="breadcrumb-item"><a href="#">Home</a></li>
-    <li class="breadcrumb-item" aria-current="page"><a  [routerLink]="['/receiving']">Receiving</a></li>
+    <li class="breadcrumb-item" aria-current="page"><a [routerLink]="['/receiving']">Receiving</a></li>
     <li class="breadcrumb-item active" aria-current="page">Create</li>
   </ol>
 </nav>
 
 <div class="row">
-  <div class="col-md-3 border rounded my-2">
-    <h4 class="pt-2 mb-0">Material Search</h4>
-    <hr>
-    <div class="input-group pb-2">
-      <div class="input-group-text"><i class="fa fa-search"></i></div>
-      <input class="form-control" type="text" name="search" id="search" [(ngModel)]="searchTerm">
-    </div>
-    <button data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" class="btn btn-primary form-control" (click)="searchMaterial(searchTerm)">Search</button>
-
-  </div>
-
-  <div class="col-md-9 my-2">
+  <div class="col-md-12 my-2">
     <div class="card">
       <div class="card-header">
         <h3 class="card-title">Receiving > Create</h3>
@@ -41,19 +30,19 @@
           </div>
           <div class="col-md-6">
             <label for="date" class="form-label">Date</label>
-            <!-- <input class="form-control" type="datetime-local" name="date" id="date" [(ngModel)]="formData.date"> -->
             <div class="input-group">
               <span (click)="d2.toggle()" class="input-group-text"><i class="fa fa-calendar"></i></span>
-              <input class="form-control" placeholder="dd/mm/yyyy"
-                 name="d2" #c2="ngModel" [(ngModel)]="formData.date" ngbDatepicker #d2="ngbDatepicker" (click)="d2.toggle()">
+              <input class="form-control" placeholder="dd/mm/yyyy" name="d2" #c2="ngModel" [(ngModel)]="formData.date"
+                ngbDatepicker #d2="ngbDatepicker" (click)="d2.toggle()">
             </div>
           </div>
           <div class="col-md-6">
             <label for="received_date" class="form-label">Date Received</label>
-            <!-- <input class="form-control" type="datetime-local" name="received_date" id="received_date"
-              [(ngModel)]="formData.received_date"> -->
-              <input class="form-control" placeholder="dd/mm/yyyy"
-                 name="d1" #c1="ngModel" [(ngModel)]="formData.received_date" ngbDatepicker #d1="ngbDatepicker" (click)="d1.toggle();">
+            <div class="input-group">
+              <span (click)="d1.toggle()" class="input-group-text"><i class="fa fa-calendar"></i></span>
+              <input class="form-control" placeholder="dd/mm/yyyy" name="d1" #c1="ngModel"
+                [(ngModel)]="formData.received_date" ngbDatepicker #d1="ngbDatepicker" (click)="d1.toggle();">
+            </div>
           </div>
           <div class="col-md-6">
             <label for="do_no" class="form-label">D.O Number</label>
@@ -63,29 +52,24 @@
             <label for="po_no" class="form-label">P.O Number</label>
             <input type="text" class="form-control" id="po_no" [(ngModel)]="formData.po_no">
           </div>
-          <div class="col-md-4">
-            <label for="location" class="form-label">Location</label>
-            <select class="form-select" [(ngModel)]="formData.location_id">
-              <option *ngFor="let loc of locationData" [value]="loc.id">{{ loc.name }}</option>
-            </select>
-          </div>
-          <div class="col-md-4">
-            <label for="plot" class="form-label">Plot</label>
-            <input type="text" class="form-control" id="plot" [(ngModel)]="formData.plot">
-            <div class="form-text">Location plot. If any.</div>
-          </div>
-          <div class="col-md-4">
+          <div class="col-md-12">
             <label for="remarks" class="form-label">Remarks</label>
             <input type="text" class="form-control" id="remarks" [(ngModel)]="formData.remarks">
           </div>
           <hr>
-          <h5 class="my-0">Material Details</h5>
+          <div class="my-1 d-flex justify-content-between">
+            <h5 class="my-0">Material Details</h5>
+            <div>
+              <button data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" class="btn btn-sm btn-primary" (click)="searchMaterial(searchTerm)"><i class="fa fa-plus"></i> ADD MATERIAL</button>
+            </div>
+          </div>
           <hr class="mb-0">
           <table class="table table-sm table-bordered mt-2">
             <thead class="table-dark">
               <tr>
                 <th scope="col" class="text-center">#</th>
                 <th scope="col" class="text-center">Description</th>
+                <th scope="col" class="text-center">Location</th>
                 <th scope="col" class="text-center">Quantity</th>
                 <th scope="col" class="text-center">Remark</th>
               </tr>
@@ -94,13 +78,16 @@
               <tr *ngFor="let item of formData.details; let num = index">
                 <th scope="row" class="text-center">{{ num+1 }}</th>
                 <td class="text-center">{{ item.description }}</td>
+                <td class="text-center">{{ item.location.name + (item.plot ? '+'+item.plot : '') }}</td>
                 <td class="text-center">{{ item.quantity }}</td>
                 <td class="text-center">{{ item.remarks ? item.remarks : '-' }}</td>
               </tr>
             </tbody>
           </table>
+          <hr class="mt-2 mb-0">
           <div class="col-12">
-            <button *ngIf="formData.details.length > 0" type="submit" class="btn btn-primary" (click)="submitReceiving()">submit</button>
+            <button *ngIf="formData.details.length > 0" type="submit" class="btn btn-primary"
+              (click)="submitReceiving()">submit</button>
             <button *ngIf="formData.details.length < 1" type="submit" class="btn btn-primary" disabled>submit</button>
           </div>
         </div>
@@ -112,12 +99,18 @@
 <!-- canvas material data -->
 <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
   <div class="offcanvas-header">
-    <h5 id="offcanvasRightLabel">Select Material</h5>
-    <button type="button" class="btn text-reset" data-bs-dismiss="offcanvas" aria-label="Close"><i class="fa fa-close"></i></button>
+    <h5 id="offcanvasRightLabel">Material Search</h5>
+    <button type="button" class="btn text-reset" data-bs-dismiss="offcanvas" aria-label="Close"><i
+        class="fa fa-close"></i></button>
   </div>
   <div class="offcanvas-body">
+    <div class="input-group pb-2">
+      <div class="input-group-text"><i class="fa fa-search"></i></div>
+      <input class="form-control" type="text" name="search" id="search" [(ngModel)]="searchTerm">
+    </div>
     <ul class="list-group list-group-flush">
-      <li *ngFor="let item of materialData" data-bs-dismiss="offcanvas" class="list-group-item list-group-item-action" (click)="selectMaterial(item);modalOpen(content)">{{ item.description }}</li>
+      <li *ngFor="let item of materialData" data-bs-dismiss="offcanvas" class="list-group-item list-group-item-action"
+        (click)="selectMaterial(item);modalOpen(content)">{{ item.description }}</li>
     </ul>
   </div>
 </div>
@@ -126,25 +119,38 @@
 <ng-template #content let-modal>
   <div class="modal-header">
     <h4 class="modal-title" id="modal-basic-title">Material Information</h4>
-    <button type="button" class="btn text-reset" data-bs-dismiss="offcanvas" aria-label="Close" (click)="modal.dismiss()"><i class="fa fa-close"></i></button>
+    <button type="button" class="btn text-reset" data-bs-dismiss="offcanvas" aria-label="Close"
+      (click)="modal.dismiss()"><i class="fa fa-close"></i></button>
   </div>
   <div class="modal-body">
-    <div class="row">
+    <div class="row g-2">
       <div class="col-md-12">
         <label for="description" class="form-label">Description</label>
         <input type="text" class="form-control" id="description" disabled [(ngModel)]="selectedMaterial.description">
       </div>
       <div class="col-md-6">
+        <label for="location" class="form-label">Location</label>
+        <select class="form-select" [(ngModel)]="selectedMaterial.location">
+          <option *ngFor="let loc of locationData" [ngValue]="loc">{{ loc.name }}</option>
+        </select>
+      </div>
+      <div class="col-md-6">
+        <label for="plot" class="form-label">Plot</label>
+        <input type="text" class="form-control" id="plot" [(ngModel)]="selectedMaterial.plot">
+      </div>
+      <div class="col-md-4">
+        <label for="quantity" class="form-label">Quantity ({{selectedMaterial.uom}})</label>
+        <input type="text" class="form-control" id="quantity" [(ngModel)]="selectedMaterial.quantity">
+      </div>
+      <div class="col-md-8">
         <label for="remarks" class="form-label">Remarks</label>
         <input type="text" class="form-control" id="remarks" [(ngModel)]="selectedMaterial.remarks">
       </div>
-      <div class="col-md-6">
-        <label for="quantity" class="form-label">Quantity</label>
-        <input type="text" class="form-control" id="quantity" [(ngModel)]="selectedMaterial.quantity">
-      </div>
       <div class="col-12 pt-2">
-        <button *ngIf="selectedMaterial.quantity" type="submit" class=" form-control btn btn-primary" (click)="addToDetails();modal.dismiss()">Add Material</button>
-        <button *ngIf="!selectedMaterial.quantity" type="submit" class=" form-control btn btn-primary" disabled>Add Material</button>
+        <button *ngIf="selectedMaterial.quantity" type="submit" class=" form-control btn btn-primary"
+          (click)="addToDetails();modal.dismiss()">Add Material</button>
+        <button *ngIf="!selectedMaterial.quantity" type="submit" class=" form-control btn btn-primary" disabled>Add
+          Material</button>
       </div>
     </div>
   </div>
