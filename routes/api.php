@@ -17,17 +17,20 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
-    Route::post('logout', 'AuthController@logout');
+Route::post('material-all', 'MaterialController@index');
+Route::post('logout', 'AuthController@logout');
 });
 
 // receiving
 Route::post('receiving-all', 'ReceivingController@index');
 Route::post('receiving-store', 'ReceivingController@store');
 
+// receiving details
+Route::post('rdetails-all', 'ReceivingDetailsController@index');
 
 // material registry
 Route::post('material-store', 'MaterialController@store');
-Route::post('material-all', 'MaterialController@index');
+// Route::post('material-all', 'MaterialController@index');
 Route::post('material-search', 'MaterialController@search');
 
 // settings
@@ -42,6 +45,16 @@ Route::group(['prefix' => 'setting'], function () {
     Route::post('location-store', 'LocationController@store');
     Route::post('location-all', 'LocationController@index');
     Route::post('location-active', 'LocationController@location');
+
+    // project management
+    Route::post('project-store', 'ProjectController@store');
+    Route::post('project-all', 'ProjectController@index');
+
+    // personnel management
+    Route::post('personnel-store', 'PersonnelController@store');
+    Route::post('personnel-all', 'PersonnelController@index');
+    Route::post('personnel-group', 'PersonnelController@group');
+
 });
 
 Route::post('register', 'AuthController@register');

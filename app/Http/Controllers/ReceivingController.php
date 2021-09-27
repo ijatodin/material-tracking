@@ -13,7 +13,9 @@ class ReceivingController extends Controller
 {
     public function index() {
         try {
-            $model = Receiving::with('details', 'location')->get();
+            $model = Receiving::with('details', 'details.location')->get();
+            // $res = $model->details->groupBy('description');
+            // dd($model);
             return response()->json(['message' => 'SUCCESS', 'model' => $model], 200);
         } catch (\Exception $e) {
             return response()->json(['message' => $e->getMessage()], 404);
@@ -21,8 +23,8 @@ class ReceivingController extends Controller
     }
 
     public function store() {
+        DB::beginTransaction();
         try {
-
             $refNo = request('ref_no') == '' ? registryCounters::setRunningNumbers('RCV') : request('ref_no');
             $res = Receiving::updateOrCreate(
                 ['ref_no' => $refNo],
@@ -30,7 +32,6 @@ class ReceivingController extends Controller
                     'ref_no' => $refNo,
                     'supplier' => request('supplier'),
                     'subcon' => request('subcon'),
-                    'location_id' => request('location_id'),
                     'do_no' => request('do_no'),
                     'po_no' => request('po_no'),
                     'remarks' => request('remarks') ?: null,
@@ -47,6 +48,8 @@ class ReceivingController extends Controller
                         [
                             'ref_no' => $res->ref_no,
                             'description' => $rd['description'],
+                            'location_id' => $rd['location_id'],
+                            'plot' => $rd['plot'] ?: null,
                             'quantity' => $rd['quantity'],
                             'remarks' => $rd['remarks'] ?: null,
                         ]
@@ -54,11 +57,13 @@ class ReceivingController extends Controller
                 }
             }
 
+            DB::commit();
             return response()->json([
                 'message' => 'SUCCESS',
                 'data' => $res
             ], 200);
         } catch (\Exception $e) {
+            DB::rollback();
             return response()->json([
                 'message' => 'ERROR',
                 'data' => $e->getMessage()

@@ -39,7 +39,9 @@ class MaterialController extends Controller
                 $res = Material::create([
                     'description' => $request->input('description'),
                     'specs' => $request->input('specs') ?: null,
-                    'status' => $request->input('vendor_id') ?: null
+                    'uom' => $request->input('uom') ?: null,
+                    'type' => $request->input('type') ?: null,
+                    'vendor_id' => $request->input('vendor_id') ?: null
                 ]);
 
                 return response()->json(['message' => 'SUCCESS', 'model' => $res], 200);

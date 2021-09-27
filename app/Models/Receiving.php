@@ -15,7 +15,7 @@ class Receiving extends Model
      * @var array
      */
     protected $fillable = [
-        'id', 'ref_no', 'supplier', 'subcon', 'date', 'received_date', 'location_id', 'do_no', 'po_no', 'remarks', 'status', 'created_by', 'updated_by'
+        'id', 'ref_no', 'supplier', 'subcon', 'date', 'received_date', 'location_id', 'plot', 'do_no', 'po_no', 'remarks', 'status', 'created_by', 'updated_by'
     ];
 
     public function details() {

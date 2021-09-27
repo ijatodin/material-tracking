@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\supplier;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class SupplierController extends Controller
 {
@@ -36,6 +37,7 @@ class SupplierController extends Controller
     }
 
     public function store(Request $request) {
+        DB::beginTransaction();
         try {
             $supplier = supplier::where('name', $request->input('name'))->first();
 
@@ -46,9 +48,11 @@ class SupplierController extends Controller
                     'role' => $request->input('role') ?: null
                 ]);
 
+                DB::commit();
                 return response()->json(['message' => 'SUCCESS', 'model' => $res], 200);
             }
         } catch (\Exception $e) {
+            DB::rollBack();
             return response()->json(['message' => $e->getMessage()], 404);
         }
     }
