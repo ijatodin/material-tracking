@@ -152,6 +152,8 @@ export class SummaryReportComponent implements OnInit {
     }
   }
 
+
+  // wip need another plugin to exprt as PDF as this is not very convenient
   exportPdf(): void {
     let DATA = document.getElementById('htmlData');
 
