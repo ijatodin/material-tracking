@@ -17,7 +17,7 @@ class CreateReceivingDetailsTable extends Migration
             $table->id();
             $table->string('ref_no', 15)->comment('receiving ref_no');
             $table->string('description', 155);
-            $table->integer('location_id', 15)->default(1);
+            $table->integer('location_id');
             $table->string('plot', 50)->nullable();
             $table->float('quantity');
             $table->string('remarks', 155)->nullable();
