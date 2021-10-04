@@ -152,7 +152,19 @@ export class SummaryReportComponent implements OnInit {
     }
   }
 
-  exportPdf() {
-    
+  exportPdf(): void {
+    let DATA = document.getElementById('htmlData');
+
+    html2canvas(DATA).then((canvas) => {
+      let fileWidth = 208;
+      let fileHeight = (canvas.height * fileWidth) / canvas.width;
+
+      const FILEURI = canvas.toDataURL('image/png');
+      let PDF = new jsPDF('l', 'mm', 'a4');
+      let position = 0;
+      PDF.addImage(FILEURI, 'PNG', 0, position, fileWidth, fileHeight);
+
+      PDF.save('summary'+this.formData.range+'.pdf');
+    });
   }
 }

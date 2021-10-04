@@ -12,12 +12,16 @@
   <div class="card-header">
     <div class="d-md-flex justify-content-between">
       <h4 class="card-title my-1 ml-2">Generate Summary</h4>
-      <a data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" role="button" class="btn btn-primary mr-2">
-        <i class="fa fa-plus"></i> Summary Option
-      </a>
+      <div>
+        <a data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" role="button" class="btn btn-primary mr-2">
+          <i class="fa fa-plus"></i> Summary Option
+        </a>
+        <button *ngIf="isGenerated" (click)="exportPdf()" class="btn btn-primary">Export PDF</button>
+      </div>
+
     </div>
   </div>
-  <div class="card-body">
+  <div class="card-body" id="htmlData">
     <div *ngIf="!isGenerated">Data not generated yet. Please click SUMMARY OPTIONS for customisation.</div>
     <div *ngIf="selectedProject">
       <span>{{ selectedProject.title }}</span>
