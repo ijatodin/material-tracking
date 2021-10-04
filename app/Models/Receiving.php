@@ -15,7 +15,7 @@ class Receiving extends Model
      * @var array
      */
     protected $fillable = [
-        'id', 'ref_no', 'supplier', 'subcon', 'date', 'received_date', 'location_id', 'plot', 'do_no', 'po_no', 'remarks', 'status', 'created_by', 'updated_by'
+        'id', 'ref_no', 'supplier_id', 'subcon_id', 'date', 'received_date', 'do_no', 'po_no', 'remarks', 'status', 'created_by', 'updated_by'
     ];
 
     public function details() {
@@ -24,5 +24,21 @@ class Receiving extends Model
 
     public function location() {
         return $this->hasOne('App\Models\location', 'id', 'location_id');
+    }
+
+    public function supplier() {
+        return $this->hasOne('App\Models\supplier', 'id', 'supplier_id');
+    }
+
+    public function subcon() {
+        return $this->hasOne('App\Models\supplier', 'id', 'subcon_id');
+    }
+
+    public function files() {
+        return $this->hasMany('App\Models\File', 'ref_no', 'ref_no');
+    }
+
+    public function po() {
+        return $this->hasOne('App\Models\PurchaseOrder', 'name', 'po_no');
     }
 }

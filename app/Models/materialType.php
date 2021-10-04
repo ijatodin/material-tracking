@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Material extends Model
+class materialType extends Model
 {
     use HasFactory;
 
@@ -15,10 +15,6 @@ class Material extends Model
      * @var array
      */
     protected $fillable = [
-        'id', 'description', 'specs', 'type', 'uom', 'vendor_id', 'created_by', 'updated_by'
+        'name', 'status', 'created_by', 'updated_by'
     ];
-
-    public function type() {
-        return $this->hasOne('App\Models\materialType', 'id', 'type');
-    }
 }

@@ -17,6 +17,8 @@ class CreateMaterialsTable extends Migration
             $table->id();
             $table->string('description', 155);
             $table->string('specs', 155)->nullable();
+            $table->string('uom', 50)->nullable();
+            $table->tinyInteger('type')->nullable();
             $table->integer('vendor_id')->nullable();
             $table->integer('created_by')->default(1);
             $table->integer('updated_by')->nullable();

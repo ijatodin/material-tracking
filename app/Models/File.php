@@ -15,6 +15,6 @@ class File extends Model
      * @var array
      */
     protected $fillable = [
-        'ref_no', 'filename', 'path', 'created_by', 'updated_by'
+        'id', 'ref_no', 'type', 'filename', 'path', 'created_by', 'updated_by'
     ];
 }

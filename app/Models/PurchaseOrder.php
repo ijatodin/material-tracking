@@ -5,20 +5,19 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Material extends Model
+class PurchaseOrder extends Model
 {
     use HasFactory;
-
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'id', 'description', 'specs', 'type', 'uom', 'vendor_id', 'created_by', 'updated_by'
+        'id', 'name', 'file_id', 'created_by', 'updated_by'
     ];
 
-    public function type() {
-        return $this->hasOne('App\Models\materialType', 'id', 'type');
+    public function file() {
+        return $this->hasOne('App\Models\File', 'id', 'file_id');
     }
 }

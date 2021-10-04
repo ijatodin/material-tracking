@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\File;
 use App\Models\Receiving;
 use App\Models\ReceivingDetails;
 use App\Models\registryCounters;
@@ -11,9 +12,10 @@ use Illuminate\Support\Facades\DB;
 
 class ReceivingController extends Controller
 {
-    public function index() {
+    public function index()
+    {
         try {
-            $model = Receiving::with('details', 'details.location')->get();
+            $model = Receiving::with('details', 'subcon', 'supplier', 'files', 'po', 'po.file')->get();
             // $res = $model->details->groupBy('description');
             // dd($model);
             return response()->json(['message' => 'SUCCESS', 'model' => $model], 200);
@@ -22,7 +24,8 @@ class ReceivingController extends Controller
         }
     }
 
-    public function store() {
+    public function store()
+    {
         DB::beginTransaction();
         try {
             $refNo = request('ref_no') == '' ? registryCounters::setRunningNumbers('RCV') : request('ref_no');
@@ -30,8 +33,8 @@ class ReceivingController extends Controller
                 ['ref_no' => $refNo],
                 [
                     'ref_no' => $refNo,
-                    'supplier' => request('supplier'),
-                    'subcon' => request('subcon'),
+                    'supplier_id' => request('supplier_id'),
+                    'subcon_id' => request('subcon_id'),
                     'do_no' => request('do_no'),
                     'po_no' => request('po_no'),
                     'remarks' => request('remarks') ?: null,
@@ -47,15 +50,25 @@ class ReceivingController extends Controller
                     ReceivingDetails::create(
                         [
                             'ref_no' => $res->ref_no,
+                            'material_id' => $rd['id'],
                             'description' => $rd['description'],
-                            'location_id' => $rd['location_id'],
-                            'plot' => $rd['plot'] ?: null,
+                            'location' => $rd['location'],
+                            'element' => $rd['element'] ?: null,
                             'quantity' => $rd['quantity'],
                             'remarks' => $rd['remarks'] ?: null,
                         ]
                     );
                 }
             }
+
+            if (request('do_file')) {
+                $dofile = new File(request('do_file'));
+                
+                $file = File::where('id', $dofile->id)->first();
+                $file->ref_no = $refNo;
+                $file->save();
+            }
+
 
             DB::commit();
             return response()->json([

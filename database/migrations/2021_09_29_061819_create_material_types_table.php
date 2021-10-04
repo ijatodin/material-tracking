@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateReceivingDetailsTable extends Migration
+class CreateMaterialTypesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,10 @@ class CreateReceivingDetailsTable extends Migration
      */
     public function up()
     {
-        Schema::create('receiving_details', function (Blueprint $table) {
+        Schema::create('material_types', function (Blueprint $table) {
             $table->id();
-            $table->string('ref_no', 15)->comment('receiving ref_no');
-            $table->string('description', 155);
-            $table->integer('location_id', 15)->default(1);
-            $table->string('plot', 50)->nullable();
-            $table->float('quantity');
-            $table->string('remarks', 155)->nullable();
+            $table->string('name', 50);
+            $table->tinyInteger('status');
             $table->integer('created_by')->default(1);
             $table->integer('updated_by')->default(1);
             $table->timestamps();
@@ -34,6 +30,6 @@ class CreateReceivingDetailsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('receiving_details');
+        Schema::dropIfExists('material_types');
     }
 }
