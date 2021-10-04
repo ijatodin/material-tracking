@@ -10,15 +10,15 @@ interface GenericResponse {
 @Injectable({
   providedIn: 'root'
 })
-export class SummaryService {
+export class FileUploadService {
 
   constructor(private http: HttpClient) { }
 
-  getDetails() {
-    return this.http.post<GenericResponse>(`${environment.apiUrl}/rdetails-all`, {});
+  storeFile(data: any) {
+    return this.http.post<GenericResponse>(`${environment.apiUrl}/file-store`, data);
   }
 
-  generate(data: any) {
-    return this.http.post<GenericResponse>(`${environment.apiUrl}/summary-generate`, data);
+  clearDo() {
+    return this.http.post<GenericResponse>(`${environment.apiUrl}/file-cleardo`, {});
   }
 }

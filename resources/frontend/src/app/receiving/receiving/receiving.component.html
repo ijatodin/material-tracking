@@ -16,7 +16,8 @@
     </div>
   </div>
   <div class="card-body">
-    <table class="table table-sm table-bordered table-hover mt-2">
+    <div class="table-responsive">
+      <table class="table table-sm table-bordered table-hover mt-2">
       <thead class="table-dark">
         <tr>
           <th scope="col" class="text-center">#</th>
@@ -33,8 +34,8 @@
           <th scope="row" class="text-center">{{ num+1 }}</th>
           <td class="text-center">{{ item.ref_no }}</td>
           <td class="text-center">{{ item.do_no }}</td>
-          <td class="text-center">{{ item.supplier }}</td>
-          <td class="text-center">{{ item.subcon }}</td>
+          <td class="text-center">{{ item.supplier.name }}</td>
+          <td class="text-center">{{ item.subcon.name }}</td>
           <td class="text-center">{{ item.received_date | date:'dd/MM/yyyy' }}</td>
           <td class="text-center"><button data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight"
               (click)="setDetails(item)" class="btn btn-primary btn-sm py-0" aria-controls="offcanvasRight"><i
@@ -43,6 +44,7 @@
         </tr>
       </tbody>
     </table>
+    </div>
   </div>
 </div>
 
@@ -62,11 +64,11 @@
       <table class="table table-borderless table-hover">
         <tr>
           <th>Supplier</th>
-          <td>{{ selectedReceiving.supplier }}</td>
+          <td>{{ selectedReceiving.supplier.name }}</td>
         </tr>
         <tr>
           <th>Subcon</th>
-          <td>{{ selectedReceiving.subcon }}</td>
+          <td>{{ selectedReceiving.subcon.name }}</td>
         </tr>
         <tr>
           <th>D.O No</th>
@@ -84,6 +86,15 @@
           <th>Received Date</th>
           <td>{{ selectedReceiving.received_date | date:'dd/MM/yyyy' }}</td>
         </tr>
+        <tr>
+          <th>Files</th>
+          <td *ngIf="selectedReceiving.files?.length">
+            <tr *ngFor="let file of selectedReceiving.files">
+            <a href={{url+file.path}} target="_blank">{{file.filename}}</a>
+            </tr>
+          </td>
+          <td *ngIf="!selectedReceiving.files?.length">-</td>
+        </tr>
         <!-- <tr>
           <th>Location</th>
           <td>{{ selectedReceiving.location.name+ (selectedReceiving.plot ? '+'+selectedReceiving.plot : '') }}</td>
@@ -99,7 +110,7 @@
           <div>
             <span><strong>{{item.description}}</strong>
               <br>
-              <small>Location: {{ item.location.name+ (item.plot ? '+'+item.plot : '') }}</small>
+              <small>Location: {{ item.location }}</small>
               <br>
               <small>Remarks: {{ item.remarks ? item.remarks : '-' }}</small>
             </span>

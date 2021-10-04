@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -20,6 +21,10 @@ import { CustomAdapter, CustomDateParserFormatter } from './receiving/receiving-
 import { SummaryReportComponent } from './receiving/summary-report/summary-report.component';
 import { ProjectManagementComponent } from './setting/project-management/project-management.component';
 import { SanctumInterceptor } from './helpers/sanctum.interceptor';
+import { HeaderComponent } from './shared/header/header.component';
+import { FooterComponent } from './shared/footer/footer.component';
+import { TypeManagementComponent } from './setting/type-management/type-management.component';
+import { PurchaseOrderComponent } from './purchase-order/purchase-order.component';
 
 @NgModule({
   declarations: [
@@ -35,14 +40,19 @@ import { SanctumInterceptor } from './helpers/sanctum.interceptor';
     ReceivingFormComponent,
     PersonnelManagementComponent,
     SummaryReportComponent,
-    ProjectManagementComponent
+    ProjectManagementComponent,
+    HeaderComponent,
+    FooterComponent,
+    TypeManagementComponent,
+    PurchaseOrderComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
-    NgbModule
+    NgbModule,
+    NgSelectModule
   ],
   providers: [
     {provide: NgbDateAdapter, useClass: CustomAdapter},

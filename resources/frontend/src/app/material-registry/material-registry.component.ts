@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MaterialService } from '../services/material.service';
+import { TypeService } from '../services/type.service';
 
 @Component({
   selector: 'app-material-registry',
@@ -9,17 +10,29 @@ import { MaterialService } from '../services/material.service';
 export class MaterialRegistryComponent implements OnInit {
   materialData: any = null;
   formData: any = {};
+  typeData: any = [];
 
-  constructor(private materialSvc: MaterialService) {}
+  constructor(
+    private materialSvc: MaterialService,
+    private typeSvc: TypeService
+    ) {}
 
   ngOnInit(): void {
     this.getAll();
+    this.getType();
   }
 
   getAll() {
     this.materialSvc.getAll().subscribe((res) => {
       this.materialData = res.model;
       console.log(this.materialData);
+    });
+  }
+
+  getType() {
+    this.typeSvc.getAll().subscribe((res) => {
+      this.typeData = res.model;
+      console.log(this.typeData);
     });
   }
 

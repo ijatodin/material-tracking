@@ -32,7 +32,7 @@
           <th scope="row" class="text-center">{{ num+1 }}</th>
           <td class="text-center">{{ item.description }}</td>
           <td class="text-center">{{ item.specs ? item.specs : '-' }}</td>
-          <td class="text-center">{{ item.type === 1 ? 'Concrete' : 'Others' }}</td>
+          <td class="text-center">{{ item.type.name }}</td>
           <td class="text-center">{{ item.uom ? item.uom : '-' }}</td>
           <td class="text-center">
             <div class="btn-group">
@@ -68,9 +68,9 @@
     <div class="mb-3">
       <label for="status" class="form-label">Material Type</label>
       <select class="form-select" [(ngModel)]="formData.type">
-        <option value="1">Concrete</option>
-        <option value="2">Others</option>
+        <option *ngFor="let item of typeData" [ngValue]="item.id">{{item.name}}</option>
       </select>
+      <!-- <ng-select [items]="typeData" bindLabel="name" bindValue="id" [(ngModel)]="formData.type"></ng-select> -->
     </div>
     <div class="">
       <button type="submit" class="btn btn-primary btn-sm form-control" (click)="submitData()">Submit</button>

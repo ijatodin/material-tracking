@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ReceivingService } from 'src/app/services/receiving.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-receiving',
@@ -10,8 +11,11 @@ export class ReceivingComponent implements OnInit {
 
   receivingData:any = null;
   selectedReceiving: any = {
-    location: {}
+    location: {},
+    supplier: {},
+    subcon: {}
   };
+  url: string = environment.url;
 
   constructor(
     private receivingSvc: ReceivingService

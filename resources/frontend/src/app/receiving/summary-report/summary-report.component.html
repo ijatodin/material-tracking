@@ -18,13 +18,14 @@
     </div>
   </div>
   <div class="card-body">
+    <div *ngIf="!isGenerated">Data not generated yet. Please click SUMMARY OPTIONS for customisation.</div>
     <div *ngIf="selectedProject">
       <span>{{ selectedProject.title }}</span>
       <br>
       <span>{{ selectedProject.sub_title+' '+selectedProject.project_no }}</span>
       <br><br>
     </div>
-    <span>SUMMARY OF CONCRETE SUPPLIED</span>
+    <span *ngIf="isGenerated">SUMMARY OF CONCRETE SUPPLIED</span>
     <table *ngFor="let details of data" class="table table-sm table-bordered">
       <thead class="">
         <tr>
@@ -40,15 +41,15 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let item of details; let num = index">
+        <tr *ngFor="let item of details; let num = index;">
           <td scope="row" class="text-center">{{ num+1 }}</td>
           <td class="text-center">{{ item.ref.do_no }}</td>
           <td class="text-center">{{ item.ref.date | date:'dd.MM.yyyy' }}</td>
-          <td class="text-center">{{ item.ref.supplier }}</td>
-          <td class="text-center">{{ item.ref.subcon }}</td>
+          <td class="text-center">{{ item.ref.supplier.name }}</td>
+          <td class="text-center">{{ item.ref.subcon.name }}</td>
           <td class="text-center">{{ item.description }}</td>
           <td class="text-center">{{ item.quantity }}</td>
-          <td class="text-center">{{ item.location.name }}</td>
+          <td class="text-center">{{ item.location }}</td>
           <td class="text-center">{{ item.ref.received_date | date:'dd.MM.yyyy' }}</td>
         </tr>
       </tbody>
@@ -85,38 +86,105 @@
 <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
   <div class="offcanvas-header">
     <h5 id="offcanvasRightLabel">Summary Option</h5>
-    <button type="button" class="btn text-reset" data-bs-dismiss="offcanvas" aria-label="Close"><i class="fa fa-close"></i></button>
+    <button type="button" class="btn text-reset" data-bs-dismiss="offcanvas" aria-label="Close"><i
+        class="fa fa-close"></i></button>
   </div>
   <div class="offcanvas-body">
-    <div class="mb-3">
-      <label for="project" class="form-label">Choose Project</label>
-      <select class="form-select" name="project" id="project" [(ngModel)]="selectedProject">
-        <option *ngFor="let proj of projectData" [ngValue]="proj">{{ proj.title }}</option>
-      </select>
+
+    <div *ngIf="!isGenerated">
+      <!-- filter -->
+      <div class="mb-3">
+        <label for="filter" class="form-label">Filter By</label>
+        <select class="form-select" name="filter" id="filter" [(ngModel)]="filterBy" (change)="handleFilter()">
+          <option [ngValue]="1">Supplier</option>
+          <option [ngValue]="2">Subcon</option>
+          <option [ngValue]="3">Description/Material</option>
+        </select>
+      </div>
+
+      <!-- filter option -->
+      <div *ngIf="isSupplier" class="mb-3">
+        <label for="supplier" class="form-label">Choose Supplier</label>
+        <select class="form-select" name="subcon" id="subcon" [(ngModel)]="formData.supplier_id">
+          <option *ngFor="let sup of supplierData" [ngValue]="sup.id">{{ sup.name }}</option>
+        </select>
+      </div>
+      <div *ngIf="isSubcon" class="mb-3">
+        <label for="subcon" class="form-label">Choose Subcon</label>
+        <select class="form-select" name="subcon" id="subcon" [(ngModel)]="formData.subcon_id">
+          <option *ngFor="let sub of subconData" [ngValue]="sub.id">{{ sub.name }}</option>
+        </select>
+      </div>
+      <div *ngIf="isDescription" class="mb-3">
+        <label for="material" class="form-label">Choose Material</label>
+        <select class="form-select" name="material" id="material" [(ngModel)]="formData.material_id">
+          <option *ngFor="let mat of materialData" [ngValue]="mat.id">{{ mat.description }}</option>
+        </select>
+      </div>
+
+      <!-- range -->
+      <div class="mb-3">
+        <label for="range" class="form-label">Range</label>
+        <select class="form-select" name="range" id="range" [(ngModel)]="formData.range">
+          <option [ngValue]="'week'">This Week</option>
+          <option [ngValue]="'month'">This Month</option>
+          <option [ngValue]="'custom'">Custom Date</option>
+        </select>
+      </div>
+
+      <!-- date range -->
+      <div *ngIf="formData.range === 'custom'">
+        <div class="mb-3">
+          <label for="date" class="form-label">From</label>
+          <div class="input-group">
+            <span (click)="d2.toggle()" class="input-group-text"><i class="fa fa-calendar"></i></span>
+            <input class="form-control" placeholder="dd/mm/yyyy" name="d2" #c2="ngModel" [(ngModel)]="formData.from"
+              ngbDatepicker #d2="ngbDatepicker" (click)="d2.toggle()">
+          </div>
+        </div>
+        <div class="mb-3">
+          <label for="received_date" class="form-label">To</label>
+          <div class="input-group">
+            <span (click)="d1.toggle()" class="input-group-text"><i class="fa fa-calendar"></i></span>
+            <input class="form-control" placeholder="dd/mm/yyyy" name="d1" #c1="ngModel" [(ngModel)]="formData.to"
+              ngbDatepicker #d1="ngbDatepicker" (click)="d1.toggle();">
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <button (click)="test()" class="btn btn-primary form-control">GENERATE</button>
+      </div>
     </div>
-    <div class="mb-3">
-      <label for="subcon" class="form-label">Choose Subcon</label>
-      <select class="form-select" name="subcon" id="subcon" [(ngModel)]="selectedSubcon">
-        <option *ngFor="let sub of subconData" [ngValue]="sub">{{ sub.name }}</option>
-      </select>
-    </div>
-    <div class="mb-3">
-      <label for="maker" class="form-label">Choose Maker</label>
-      <select class="form-select" name="maker" id="maker" [(ngModel)]="selectedMaker" (change)="personnelCheck()">
-        <option *ngFor="let maker of makerData" [ngValue]="maker">{{ maker.name }}</option>
-      </select>
-    </div>
-    <div class="mb-3">
-      <label for="checker" class="form-label">Choose Checker</label>
-      <select class="form-select" name="checker" id="checker" [(ngModel)]="selectedChecker" (change)="personnelCheck()">
-        <option *ngFor="let checker of checkerData" [ngValue]="checker">{{ checker.name }}</option>
-      </select>
-    </div>
-    <div class="mb-3">
-      <label for="approver" class="form-label">Choose Approver</label>
-      <select class="form-select" name="approver" id="approver" [(ngModel)]="selectedApprover" (change)="personnelCheck()">
-        <option *ngFor="let approver of approverData" [ngValue]="approver">{{ approver.name }}</option>
-      </select>
+
+
+    <div *ngIf="isGenerated">
+      <div class="mb-3">
+        <label for="project" class="form-label">Choose Project</label>
+        <select class="form-select" name="project" id="project" [(ngModel)]="selectedProject">
+          <option *ngFor="let proj of projectData" [ngValue]="proj">{{ proj.title }}</option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label for="maker" class="form-label">Choose Maker</label>
+        <select class="form-select" name="maker" id="maker" [(ngModel)]="selectedMaker" (change)="personnelCheck()">
+          <option *ngFor="let maker of makerData" [ngValue]="maker">{{ maker.name }}</option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label for="checker" class="form-label">Choose Checker</label>
+        <select class="form-select" name="checker" id="checker" [(ngModel)]="selectedChecker"
+          (change)="personnelCheck()">
+          <option *ngFor="let checker of checkerData" [ngValue]="checker">{{ checker.name }}</option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label for="approver" class="form-label">Choose Approver</label>
+        <select class="form-select" name="approver" id="approver" [(ngModel)]="selectedApprover"
+          (change)="personnelCheck()">
+          <option *ngFor="let approver of approverData" [ngValue]="approver">{{ approver.name }}</option>
+        </select>
+      </div>
     </div>
   </div>
 </div>

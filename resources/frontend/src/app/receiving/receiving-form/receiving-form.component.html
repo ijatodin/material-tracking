@@ -18,15 +18,17 @@
         <div class="row g-3">
           <div class="col-md-6">
             <label for="supplier" class="form-label">Supplier</label>
-            <select class="form-select" [(ngModel)]="formData.supplier">
+            <!-- <select class="form-select" [(ngModel)]="formData.supplier">
               <option *ngFor="let supp of supplierData" [ngValue]="supp.name">{{ supp.name }}</option>
-            </select>
+            </select> -->
+            <ng-select [items]="supplierData" bindLabel="name" bindValue="id" [(ngModel)]="formData.supplier_id"></ng-select>
           </div>
           <div class="col-md-6">
             <label for="subcon" class="form-label">Subcon</label>
-            <select class="form-select" [(ngModel)]="formData.subcon">
+            <!-- <select class="form-select" [(ngModel)]="formData.subcon">
               <option *ngFor="let sub of subconData" [ngValue]="sub.name">{{ sub.name }}</option>
-            </select>
+            </select> -->
+            <ng-select [items]="subconData" bindLabel="name" bindValue="id" [(ngModel)]="formData.subcon_id"></ng-select>
           </div>
           <div class="col-md-6">
             <label for="date" class="form-label">Date</label>
@@ -44,13 +46,23 @@
                 [(ngModel)]="formData.received_date" ngbDatepicker #d1="ngbDatepicker" (click)="d1.toggle();">
             </div>
           </div>
-          <div class="col-md-6">
+          <div class="col-md-4">
+            <label for="po_no" class="form-label">P.O Number</label>
+            <!-- <input type="text" class="form-control" id="po_no" [(ngModel)]="formData.po_no"> -->
+            <ng-select [items]="poData" bindLabel="name" bindValue="name" [(ngModel)]="formData.po_no"></ng-select>
+
+          </div>
+          <div class="col-md-4">
             <label for="do_no" class="form-label">D.O Number</label>
             <input type="text" class="form-control" id="do_no" [(ngModel)]="formData.do_no">
           </div>
-          <div class="col-md-6">
-            <label for="po_no" class="form-label">P.O Number</label>
-            <input type="text" class="form-control" id="po_no" [(ngModel)]="formData.po_no">
+          <div class="col-md-4">
+            <label for="do_file" class="form-label">D.O File Upload</label>
+            <div *ngIf="!hasFile" class="input-group">
+              <input type="file" class="form-control" id="do_file" (change)="handleFile($event)">
+              <button class="input-group-text"><i class="fa fa-upload" (click)="uploadDoFile()"></i></button>
+            </div>
+            <a class="form-control-plaintext" *ngIf="hasFile" href={{url+formData.do_file.path}} target="_blank">{{formData.do_file.filename}}</a>
           </div>
           <div class="col-md-12">
             <label for="remarks" class="form-label">Remarks</label>
@@ -60,7 +72,8 @@
           <div class="my-1 d-flex justify-content-between">
             <h5 class="my-0">Material Details</h5>
             <div>
-              <button data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" class="btn btn-sm btn-primary" (click)="searchMaterial(searchTerm)"><i class="fa fa-plus"></i> ADD MATERIAL</button>
+              <button data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" class="btn btn-sm btn-primary"
+                (click)="searchMaterial(searchTerm)"><i class="fa fa-plus"></i> ADD MATERIAL</button>
             </div>
           </div>
           <hr class="mb-0">
@@ -70,6 +83,7 @@
                 <th scope="col" class="text-center">#</th>
                 <th scope="col" class="text-center">Description</th>
                 <th scope="col" class="text-center">Location</th>
+                <th scope="col" class="text-center">Element</th>
                 <th scope="col" class="text-center">Quantity</th>
                 <th scope="col" class="text-center">Remark</th>
               </tr>
@@ -78,7 +92,8 @@
               <tr *ngFor="let item of formData.details; let num = index">
                 <th scope="row" class="text-center">{{ num+1 }}</th>
                 <td class="text-center">{{ item.description }}</td>
-                <td class="text-center">{{ item.location.name + (item.plot ? '+'+item.plot : '') }}</td>
+                <td class="text-center">{{ item.location }}</td>
+                <td class="text-center">{{ item.element }}</td>
                 <td class="text-center">{{ item.quantity }}</td>
                 <td class="text-center">{{ item.remarks ? item.remarks : '-' }}</td>
               </tr>
@@ -128,15 +143,13 @@
         <label for="description" class="form-label">Description</label>
         <input type="text" class="form-control" id="description" disabled [(ngModel)]="selectedMaterial.description">
       </div>
-      <div class="col-md-6">
+      <div class="col-md-8">
         <label for="location" class="form-label">Location</label>
-        <select class="form-select" [(ngModel)]="selectedMaterial.location">
-          <option *ngFor="let loc of locationData" [ngValue]="loc">{{ loc.name }}</option>
-        </select>
+        <input type="text" class="form-control" id="location" [(ngModel)]="selectedMaterial.location">
       </div>
-      <div class="col-md-6">
-        <label for="plot" class="form-label">Plot</label>
-        <input type="text" class="form-control" id="plot" [(ngModel)]="selectedMaterial.plot">
+      <div class="col-md-4">
+        <label for="element" class="form-label">Element</label>
+        <input type="text" class="form-control" id="element" [(ngModel)]="selectedMaterial.element">
       </div>
       <div class="col-md-4">
         <label for="quantity" class="form-label">Quantity ({{selectedMaterial.uom}})</label>

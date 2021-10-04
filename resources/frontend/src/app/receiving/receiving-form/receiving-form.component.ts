@@ -5,6 +5,9 @@ import { MaterialService } from 'src/app/services/material.service';
 import { ReceivingService } from 'src/app/services/receiving.service';
 import { ModalDismissReasons, NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { SupplierService } from 'src/app/services/supplier.service';
+import { FileUploadService } from 'src/app/services/file-upload.service';
+import { environment } from 'src/environments/environment';
+import { PurchaseOrderService } from 'src/app/services/purchase-order.service';
 
 @Component({
   selector: 'app-receiving-form',
@@ -21,11 +24,14 @@ export class ReceivingFormComponent implements OnInit {
   materialData: any = [];
   supplierData: any = [];
   subconData: any = [];
+  poData: any = [];
   selectedSupplier: any;
-  selectedMaterial: any = {
-  };
+  selectedMaterial: any = {};
   searchTerm: string = '';
   closeResult: string = '';
+  do_file: any = null;
+  hasFile: boolean = false;
+  url: string = environment.url;
 
   constructor(
     private locSvc: LocationService,
@@ -33,11 +39,14 @@ export class ReceivingFormComponent implements OnInit {
     private modalService: NgbModal,
     private receivingSvc: ReceivingService,
     private materialSvc: MaterialService,
+    private fileSvc: FileUploadService,
+    private poSvc: PurchaseOrderService,
     private router: Router
   ) { }
 
   ngOnInit(): void {
     this.getData();
+    this.cleardo();
   }
 
   getData() {
@@ -49,6 +58,9 @@ export class ReceivingFormComponent implements OnInit {
     });
     this.supplierSvc.getSubcon().subscribe((res) => {
       this.subconData = res.model;
+    });
+    this.poSvc.getData().subscribe((res) => {
+      this.poData = res.model;
     });
   }
 
@@ -97,6 +109,35 @@ export class ReceivingFormComponent implements OnInit {
     } else {
       return `with: ${reason}`;
     }
+  }
+
+  cleardo() {
+    this.fileSvc.clearDo().subscribe((res) => {
+      if (res.message === 'SUCCESS') {
+        console.log(res.model);
+      } else {
+        console.log(res.message);
+      }
+    });
+  }
+
+  handleFile(event: any) {
+    this.do_file = event.target.files.item(0);
+    console.log(this.do_file);
+  }
+
+  uploadDoFile() {
+    const uploadData = new FormData();
+    uploadData.append("file", this.do_file, this.do_file.name);
+    uploadData.append("type", "1");
+    console.log(uploadData);
+    this.fileSvc.storeFile(uploadData).subscribe((res) => {
+      if (res.message === 'SUCCESS') {
+        this.formData.do_file = res.model;
+        console.log(this.formData);
+        this.hasFile = true;
+      }
+    })
   }
 
   submitReceiving() {

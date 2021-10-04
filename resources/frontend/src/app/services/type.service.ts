@@ -10,15 +10,15 @@ interface GenericResponse {
 @Injectable({
   providedIn: 'root'
 })
-export class SummaryService {
+export class TypeService {
 
   constructor(private http: HttpClient) { }
 
-  getDetails() {
-    return this.http.post<GenericResponse>(`${environment.apiUrl}/rdetails-all`, {});
+  getAll() {
+    return this.http.post<GenericResponse>(`${environment.apiUrl}/setting/type-all`, {});
   }
 
-  generate(data: any) {
-    return this.http.post<GenericResponse>(`${environment.apiUrl}/summary-generate`, data);
+  storeType(data: any) {
+    return this.http.post<GenericResponse>(`${environment.apiUrl}/setting/type-store`, data);
   }
 }
