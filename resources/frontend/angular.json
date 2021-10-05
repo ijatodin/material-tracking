@@ -62,7 +62,7 @@
                   "with": "src/environments/environment.prod.ts"
                 }
               ],
-              "outputPath": "../../public/",
+              "outputPath": "../../public/assets/frontend",
               "deployUrl": "/",
               "outputHashing": "all"
             },
