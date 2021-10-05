@@ -16,7 +16,8 @@
         <a data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" role="button" class="btn btn-primary mr-2">
           <i class="fa fa-plus"></i> Summary Option
         </a>
-        <button *ngIf="isGenerated" (click)="exportPdf()" class="btn btn-primary">Export PDF</button>
+        <button *ngIf="isGenerated" class="btn btn-primary" [useExistingCss]="true" printSectionId="htmlData"
+          ngxPrint>Export PDF</button>
       </div>
 
     </div>

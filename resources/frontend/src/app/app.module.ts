@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgSelectModule } from '@ng-select/ng-select';
+import {NgxPrintModule} from 'ngx-print';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -52,6 +53,7 @@ import { PurchaseOrderComponent } from './purchase-order/purchase-order.componen
     HttpClientModule,
     FormsModule,
     NgbModule,
+    NgxPrintModule,
     NgSelectModule
   ],
   providers: [
