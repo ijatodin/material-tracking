@@ -62,8 +62,8 @@
                   "with": "src/environments/environment.prod.ts"
                 }
               ],
-              "outputPath": "../../public/assets/frontend",
-              "deployUrl": "/assets/frontend/",
+              "outputPath": "../../public/",
+              "deployUrl": "/",
               "outputHashing": "all"
             },
             "development": {
