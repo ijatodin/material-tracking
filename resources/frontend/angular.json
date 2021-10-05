@@ -63,7 +63,6 @@
                 }
               ],
               "outputPath": "../../public/assets/frontend",
-              "deployUrl": "/",
               "outputHashing": "all"
             },
             "development": {
