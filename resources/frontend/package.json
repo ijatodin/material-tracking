@@ -4,7 +4,8 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --configuration=development -o",
-    "build": "ng build --prod && cp ../../../public/assets/frontend/index.html ../../views/angular.blade.php",
+    "build": "ng build --prod && cp ../../public/assets/frontend/index.html ../views/angular.blade.php",
+    "build:prod": "ng build --prod && cp ../../public/assets/frontend/index.html ../views/angular.blade.php",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
