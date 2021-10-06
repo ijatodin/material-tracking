@@ -18,10 +18,10 @@
             <a class="nav-link" href="#" [routerLink]="['/material-registry']" routerLinkActive="router-link-active"><i class="fa fa-save"></i> MATERIAL REGISTRY</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#" [routerLink]="['/summary-report']" routerLinkActive="router-link-active"><i class="fa fa-file"></i> SUMMARY REPORT</a>
+            <a class="nav-link" href="#" [routerLink]="['/purchase-order']" routerLinkActive="router-link-active"><i class="fa fa-money"></i> PURCHASE ORDER</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#" [routerLink]="['/purchase-order']" routerLinkActive="router-link-active"><i class="fa fa-money"></i> PURCHASE ORDER</a>
+            <a class="nav-link" href="#" [routerLink]="['/summary-report']" routerLinkActive="router-link-active"><i class="fa fa-file"></i> SUMMARY REPORT</a>
           </li>
         </ul>
         <div class="d-flex">
@@ -31,9 +31,11 @@
                 <i class="fa fa-gear"></i> Settings
               </a>
               <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                <li><a class="dropdown-item" [routerLink]="['/setting/supplier-management']" routerLinkActive="router-link-active"><i class="fa fa-group"></i> Vendor Management</a></li>
+                <li><a class="dropdown-item" [routerLink]="['']" routerLinkActive="router-link-active"><i class="fa fa-male"></i> Profile</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" [routerLink]="['/setting/supplier-management']" routerLinkActive="router-link-active"><i class="fa fa-building"></i> Vendor Management</a></li>
                 <!-- <li><a class="dropdown-item" [routerLink]="['/setting/location-management']" routerLinkActive="router-link-active"><i class="fa fa-map-marker"></i> Location Management</a></li> -->
-                <li><a class="dropdown-item" [routerLink]="['/setting/personnel-management']" routerLinkActive="router-link-active"><i class="fa fa-bar-chart"></i> Personnel Management</a></li>
+                <li><a class="dropdown-item" [routerLink]="['/setting/personnel-management']" routerLinkActive="router-link-active"><i class="fa fa-group"></i> Personnel Management</a></li>
                 <li><a class="dropdown-item" [routerLink]="['/setting/project-management']" routerLinkActive="router-link-active"><i class="fa fa-briefcase"></i> Project Management</a></li>
                 <li><a class="dropdown-item" [routerLink]="['/setting/type-management']" routerLinkActive="router-link-active"><i class="fa fa-th"></i> Type Management</a></li>
                 <li><hr class="dropdown-divider"></li>

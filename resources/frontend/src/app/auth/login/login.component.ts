@@ -11,6 +11,7 @@ import { AuthenticationService } from 'src/app/services/authentication.service';
 export class LoginComponent implements OnInit {
 
   loginForm: any = {};
+  errorMessage: string = null;
 
   constructor(
     private authSvc: AuthenticationService,
@@ -23,8 +24,11 @@ export class LoginComponent implements OnInit {
   login() {
     console.log(this.loginForm);
     this.authSvc.login(this.loginForm.email, this.loginForm.password).pipe(first()).subscribe((data) => {
+      console.log(data);
       this.router.navigate(["/receiving"]);
-    })
+    },() => {
+      this.errorMessage = 'The provided credentials are incorrect.';
+    });
   }
 
 }
