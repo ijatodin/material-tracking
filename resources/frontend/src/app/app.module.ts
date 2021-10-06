@@ -1,7 +1,9 @@
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgSelectModule } from '@ng-select/ng-select';
 import {NgxPrintModule} from 'ngx-print';
+import { NgxSpinnerModule } from "ngx-spinner";
+
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -27,6 +29,7 @@ import { FooterComponent } from './shared/footer/footer.component';
 import { TypeManagementComponent } from './setting/type-management/type-management.component';
 import { PurchaseOrderComponent } from './purchase-order/purchase-order.component';
 import { ProfileComponent } from './setting/profile/profile.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -56,8 +59,11 @@ import { ProfileComponent } from './setting/profile/profile.component';
     FormsModule,
     NgbModule,
     NgxPrintModule,
-    NgSelectModule
+    NgSelectModule,
+    BrowserAnimationsModule,
+    NgxSpinnerModule
   ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [
     {provide: NgbDateAdapter, useClass: CustomAdapter},
     {provide: NgbDateParserFormatter, useClass: CustomDateParserFormatter},
