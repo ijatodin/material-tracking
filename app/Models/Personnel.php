@@ -15,6 +15,6 @@ class Personnel extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'designation', 'role'
+        'name', 'designation', 'role', 'id'
     ];
 }

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSummaryReportsTable extends Migration
+class AddSummaryIdToReceivings extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,8 @@ class CreateSummaryReportsTable extends Migration
      */
     public function up()
     {
-        Schema::create('summary_reports', function (Blueprint $table) {
-            $table->id();
-            $table->string('sum_no', 14);
-            $table->tinyInteger('status');
-            $table->timestamps();
+        Schema::table('receivings', function (Blueprint $table) {
+            $table->integer('summary_id')->nullable()->after('remarks');
         });
     }
 
@@ -28,6 +25,8 @@ class CreateSummaryReportsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('summary_reports');
+        Schema::table('receivings', function (Blueprint $table) {
+            $table->dropColumn('summary_id');
+        });
     }
 }

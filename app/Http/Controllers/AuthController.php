@@ -49,12 +49,11 @@ class AuthController extends Controller
 
         if (! $user || ! Hash::check($request->password, $user->password)) {
             throw ValidationException::withMessages([
-                'email' => ['The provided credentials are incorrect.'],
+                'message' => ['The provided credentials are incorrect.'],
             ]);
         }
 
         $token = $user->createToken('matTrackerToken')->plainTextToken;
-        $user->token = $token;
 
         return response()->json(['user' => $user, 'token' => $token], 201);
     }
