@@ -56,7 +56,7 @@ export class AuthenticationService {
     logout() {
         localStorage.removeItem('matTracker');
         this.options.headers.Authorization = 'Bearer ' + this.currentUserSubject.value.token;
-        return this.http.get(`${environment.apiUrl}/auth/logout`, this.options).subscribe(() => {
+        return this.http.post(`${environment.apiUrl}/logout`, this.options).subscribe(() => {
           this.currentUserSubject.next(null);
         });
     }
