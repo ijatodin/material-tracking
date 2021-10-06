@@ -8,6 +8,7 @@ import { SupplierService } from 'src/app/services/supplier.service';
 import { FileUploadService } from 'src/app/services/file-upload.service';
 import { environment } from 'src/environments/environment';
 import { PurchaseOrderService } from 'src/app/services/purchase-order.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-receiving-form',
@@ -34,25 +35,27 @@ export class ReceivingFormComponent implements OnInit {
   url: string = environment.url;
 
   constructor(
-    private locSvc: LocationService,
+    // private locSvc: LocationService,
     private supplierSvc: SupplierService,
     private modalService: NgbModal,
     private receivingSvc: ReceivingService,
     private materialSvc: MaterialService,
     private fileSvc: FileUploadService,
     private poSvc: PurchaseOrderService,
-    private router: Router
+    private router: Router,
+    public spinner: NgxSpinnerService
   ) { }
 
   ngOnInit(): void {
+    this.spinner.show();
     this.getData();
     this.cleardo();
   }
 
   getData() {
-    this.locSvc.getLocation().subscribe((res) => {
-      this.locationData = res.model;
-    });
+    // this.locSvc.getLocation().subscribe((res) => {
+    //   this.locationData = res.model;
+    // });
     this.supplierSvc.getSupplier().subscribe((res) => {
       this.supplierData = res.model;
     });
@@ -62,6 +65,8 @@ export class ReceivingFormComponent implements OnInit {
     this.poSvc.getData().subscribe((res) => {
       this.poData = res.model;
     });
+
+    this.spinner.hide();
   }
 
   searchMaterial(searchTerm: string) {

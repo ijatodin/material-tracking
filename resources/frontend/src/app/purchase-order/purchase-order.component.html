@@ -53,15 +53,15 @@
   <div class="offcanvas-body">
     <div class="mb-3">
       <label for="name" class="form-label">Reference Number/ Name</label>
-      <input type="text" class="form-control" id="name" [(ngModel)]="formData">
+      <input type="text" class="form-control" id="name" [(ngModel)]="formData" (ngModelChange)="formData = $event.toUpperCase()">
     </div>
     <div class="mb-3">
       <label for="po_file" class="form-label">File Attachment</label>
       <input type="file" class="form-control" id="po_file" (change)="handleFile($event)">
     </div>
     <div class="">
-      <button *ngIf="!formData || !file" type="submit" class="btn btn-primary btn-sm form-control" disabled>Submit</button>
-      <button *ngIf="formData && file" type="submit" class="btn btn-primary btn-sm form-control" (click)="submitData()">Submit</button>
+      <button *ngIf="!formData || !file" type="submit" class="btn btn-primary btn-sm form-control" disabled>SUBMIT</button>
+      <button *ngIf="formData && file" type="submit" class="btn btn-primary btn-sm form-control" (click)="submitData()">SUBMIT</button>
     </div>
   </div>
 </div>

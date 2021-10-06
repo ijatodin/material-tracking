@@ -54,7 +54,7 @@
           </div>
           <div class="col-md-4">
             <label for="do_no" class="form-label">D.O Number</label>
-            <input type="text" class="form-control" id="do_no" [(ngModel)]="formData.do_no">
+            <input type="text" class="form-control" id="do_no" [(ngModel)]="formData.do_no" (ngModelChange)="formData.do_no = $event.toUpperCase()">
           </div>
           <div class="col-md-4">
             <label for="do_file" class="form-label">D.O File Upload</label>
@@ -102,8 +102,8 @@
           <hr class="mt-2 mb-0">
           <div class="col-12">
             <button *ngIf="formData.details.length > 0" type="submit" class="btn btn-primary"
-              (click)="submitReceiving()">submit</button>
-            <button *ngIf="formData.details.length < 1" type="submit" class="btn btn-primary" disabled>submit</button>
+              (click)="submitReceiving()">SUBMIT</button>
+            <button *ngIf="formData.details.length < 1" type="submit" class="btn btn-primary" disabled>SUBMIT</button>
           </div>
         </div>
       </div>
