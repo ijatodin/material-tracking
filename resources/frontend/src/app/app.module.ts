@@ -26,6 +26,7 @@ import { HeaderComponent } from './shared/header/header.component';
 import { FooterComponent } from './shared/footer/footer.component';
 import { TypeManagementComponent } from './setting/type-management/type-management.component';
 import { PurchaseOrderComponent } from './purchase-order/purchase-order.component';
+import { ProfileComponent } from './setting/profile/profile.component';
 
 @NgModule({
   declarations: [
@@ -46,6 +47,7 @@ import { PurchaseOrderComponent } from './purchase-order/purchase-order.componen
     FooterComponent,
     TypeManagementComponent,
     PurchaseOrderComponent,
+    ProfileComponent,
   ],
   imports: [
     BrowserModule,
