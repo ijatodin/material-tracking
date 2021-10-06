@@ -28,13 +28,6 @@ export class SanctumInterceptor implements HttpInterceptor {
 
         }
 
-        return next.handle(request).pipe(catchError( err => new Observable<HttpEvent<any>>(observer => {
-          if (err instanceof HttpErrorResponse) {
-            if (err.status === 401) {
-              localStorage.removeItem('matTracker');
-              this.router.navigate(['/login']);
-            }
-          }
-        })));
+        return next.handle(request);
     }
 }
