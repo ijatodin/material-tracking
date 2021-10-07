@@ -32,7 +32,8 @@
           <td class="text-center">{{ formatStatus(item.status) }}</td>
           <td class="text-center">
             <div class="btn-group">
-              <button class="btn btn-primary btn-sm py-0"><i class="fa fa-pencil"></i></button>
+              <button (click)="setDetails(item)" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight"
+                class="btn btn-primary btn-sm py-0"><i class="fa fa-pencil"></i></button>
               <button class="btn btn-warning btn-sm py-0"><i class="fa fa-trash"></i></button>
             </div>
           </td>
@@ -45,8 +46,10 @@
 <!-- canvas material data -->
 <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
   <div class="offcanvas-header">
-    <h5 id="offcanvasRightLabel">New Type</h5>
-    <button type="button" class="btn text-reset" data-bs-dismiss="offcanvas" aria-label="Close"><i class="fa fa-close"></i></button>
+    <h5 *ngIf="formData.id" id="offcanvasRightLabel">Update Type</h5>
+    <h5 *ngIf="!formData.id" id="offcanvasRightLabel">New Type</h5>
+    <button type="button" class="btn text-reset" data-bs-dismiss="offcanvas" aria-label="Close"><i
+        class="fa fa-close"></i></button>
   </div>
   <div class="offcanvas-body">
     <div class="mb-3">

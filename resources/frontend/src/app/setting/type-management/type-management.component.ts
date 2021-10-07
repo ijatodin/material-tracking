@@ -10,6 +10,7 @@ export class TypeManagementComponent implements OnInit {
 
   formData: any = {};
   typeData: any = [];
+  selectedType: any = {};
 
   constructor(
     private typeSvc: TypeService
@@ -22,6 +23,7 @@ export class TypeManagementComponent implements OnInit {
   getData() {
     this.typeSvc.getAll().subscribe((res) => {
       this.typeData = res.model;
+      console.log(this.typeData);
     });
   }
 
@@ -37,6 +39,11 @@ export class TypeManagementComponent implements OnInit {
         break;
     }
     return res;
+  }
+
+  setDetails(data: any) {
+    this.formData = data;
+    console.log(this.formData);
   }
 
   submit() {
