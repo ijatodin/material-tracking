@@ -46,7 +46,6 @@ export class SummaryReportComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // this.getDetails();
     this.getProject();
     this.getPersonnel();
     this.getSupplierSubcon();
@@ -126,18 +125,6 @@ export class SummaryReportComponent implements OnInit {
         } else if (obj === '3') {
           this.approverData = this.personnelData[obj];
         }
-      }
-    });
-  }
-
-  getDetails() {
-    this.summarySvc.getDetails().subscribe((res) => {
-      this.detailsData = res.model;
-      console.log(this.detailsData);
-      for (let key of Object.keys(this.detailsData)) {
-        let detail = this.detailsData[key];
-        this.data.push(detail);
-        console.log(this.data);
       }
     });
   }

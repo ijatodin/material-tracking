@@ -14,8 +14,8 @@ export class SummaryService {
 
   constructor(private http: HttpClient) { }
 
-  getDetails() {
-    return this.http.post<GenericResponse>(`${environment.apiUrl}/rdetails-all`, {});
+  getAll() {
+    return this.http.post<GenericResponse>(`${environment.apiUrl}/summary-all`, {});
   }
 
   generate(data: any) {

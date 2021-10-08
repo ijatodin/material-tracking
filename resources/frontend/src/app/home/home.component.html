@@ -1,1 +1,45 @@
-<p>home works!</p>
+<!-- <p>summary-report works!</p> -->
+
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="#">Home</a></li>
+  </ol>
+</nav>
+
+<div class="card">
+  <div class="card-header">
+    <div class="d-md-flex justify-content-between">
+      <h4 class="card-title my-1 ml-2">Generated Summary</h4>
+      <div>
+        <button data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" class="btn btn-primary">
+          <i class="fa fa-plus"></i> Summary Option
+        </button>
+      </div>
+
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="table-responsive">
+      <table class="table table-sm table-bordered">
+        <thead class="table-dark">
+          <tr>
+            <th scope="col" class="text-center">No.</th>
+            <th scope="col" class="text-center">Summary No</th>
+            <th scope="col" class="text-center">Filter By</th>
+            <th scope="col" class="text-center">Status</th>
+            <th scope="col" class="text-center">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of summaryData; let num = index;">
+            <td scope="row" class="text-center">{{ num+1 }}</td>
+            <td class="text-center">{{ item.sum_no }}</td>
+            <td class="text-center">{{ item.filter_by | titlecase }}</td>
+            <td class="text-center">{{ item.status }}</td>
+            <td class="text-center"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

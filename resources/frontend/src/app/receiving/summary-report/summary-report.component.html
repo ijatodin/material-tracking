@@ -13,11 +13,11 @@
     <div class="d-md-flex justify-content-between">
       <h4 class="card-title my-1 ml-2">Generate Summary</h4>
       <div>
-        <a data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" role="button" class="btn btn-primary mr-2">
+        <button data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" class="btn btn-primary">
           <i class="fa fa-plus"></i> Summary Option
-        </a>
-        <button *ngIf="isGenerated" class="btn btn-primary" [useExistingCss]="true" printSectionId="htmlData"
-          ngxPrint>Export PDF</button>
+        </button>
+        <button *ngIf="isGenerated && signCheck" class="btn btn-primary" [useExistingCss]="true"
+          printSectionId="htmlData" ngxPrint><i class="fa fa-file-pdf-o"></i> Export PDF</button>
       </div>
 
     </div>

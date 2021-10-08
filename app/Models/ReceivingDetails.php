@@ -15,7 +15,7 @@ class ReceivingDetails extends Model
      * @var array
      */
     protected $fillable = [
-        'id', 'ref_no', 'material_id', 'description', 'location', 'element', 'quantity', 'remarks', 'created_by', 'updated_by'
+        'id', 'ref_no', 'material_id', 'description', 'location', 'element', 'quantity', 'remarks', 'summary_id', 'created_by', 'updated_by'
     ];
 
     public function location() {
@@ -27,7 +27,7 @@ class ReceivingDetails extends Model
     }
 
     public static function getDetails($refno) {
-        $res = ReceivingDetails::whereIn('ref_no', $refno)->with('ref', 'ref.supplier', 'ref.subcon')->get()->groupBy('description');
+        $res = ReceivingDetails::whereIn('ref_no', $refno)->whereNull('summary_id')->with('ref', 'ref.supplier', 'ref.subcon')->get()->groupBy('description');
         return $res;
     }
 }

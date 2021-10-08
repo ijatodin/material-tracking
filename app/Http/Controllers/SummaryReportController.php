@@ -4,17 +4,39 @@ namespace App\Http\Controllers;
 
 use App\Models\Receiving;
 use App\Models\ReceivingDetails;
+use App\Models\registryCounters;
+use App\Models\SummaryReport;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class SummaryReportController extends Controller
 {
+    public function index() {
+        try {
+            $res = SummaryReport::get();
+
+            return response()->json(['message' => 'SUCCESS', 'model' => $res], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 404);
+        }
+    }
     public function generate()
     {
         try {
+            DB::beginTransaction();
             // dd(Carbon::now()->startOfWeek()->format('Y-m-d H:i:s'));
             $filterBy = request('filterBy');
             $range = request('range');
+
+            $refNo = registryCounters::setRunningNumbers('SMRY');
+            $summary = new SummaryReport();
+            $summary->sum_no = $refNo;
+            $summary->filter_by = $filterBy;
+            $summary->status = 1;
+            $summary->created_by = auth()->id();
+            $summary->updated_by = auth()->id();
+            $summary->save();
 
             if ($filterBy == 'description') {
                 $query = ReceivingDetails::query();
@@ -31,8 +53,16 @@ class SummaryReportController extends Controller
                     return $q->whereBetween('created_at', [Carbon::parse(request('from'))->format('Y-m-d H:i:s'), Carbon::parse(request('to'))->format('Y-m-d H:i:s')]);
                 });
 
-                $res = $query->where('material_id', request('material_id'))->with('ref', 'ref.supplier', 'ref.subcon')->get()->groupBy('description');
+                $res = $query->where('material_id', request('material_id'))->whereNull('summary_id')->with('ref', 'ref.supplier', 'ref.subcon')->get()->groupBy('description');
 
+                foreach ($res as $r) {
+                    foreach ($r as $rd) {
+                        $rd->summary_id = $summary->id;
+                        $rd->save();
+                    }
+                }
+
+                DB::commit();
                 return response()->json(['message' => 'SUCCESS', 'model' => $res], 200);
             } else {
                 $query = Receiving::query();
@@ -61,18 +91,25 @@ class SummaryReportController extends Controller
                 });
 
                 $receiving = $query->get();
-                // dd($receiving);
                 $ref = array();
                 foreach ($receiving as $r) {
                     $push = array_push($ref, $r->ref_no);
                 }
-                // dd($ref);
 
                 $res = ReceivingDetails::getDetails($ref);
 
+                foreach ($res as $r) {
+                    foreach ($r as $rd) {
+                        $rd->summary_id = $summary->id;
+                        $rd->save();
+                    }
+                }
+
+                DB::commit();
                 return response()->json(['message' => 'SUCCESS', 'model' => $res], 200);
             }
         } catch (\Exception $e) {
+            DB::rollback();
             return response()->json(['message' => $e->getMessage()], 404);
         }
     }
