@@ -28,6 +28,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     // summary report
     Route::post('summary-generate', 'SummaryReportController@generate');
+    Route::post('summary-all', 'SummaryReportController@index');
 
     // material registry
     Route::post('material-store', 'MaterialController@store');

@@ -9,7 +9,9 @@ import { PersonnelService } from 'src/app/services/personnel.service';
 export class PersonnelManagementComponent implements OnInit {
 
   personnelData: any = [];
-  formData: any = {};
+  formData: any = {
+    personnel: {}
+  };
 
   constructor(
     private personnelSvc: PersonnelService
@@ -23,8 +25,13 @@ export class PersonnelManagementComponent implements OnInit {
     this.personnelSvc.getAll().subscribe((res) => {
       if (res.message === 'SUCCESS') {
         this.personnelData = res.model;
+        console.log(this.personnelData);
       }
     });
+  }
+
+  setItem(data: any) {
+    this.formData = data;
   }
 
   formatRole(data: any) {
@@ -48,7 +55,9 @@ export class PersonnelManagementComponent implements OnInit {
     this.personnelSvc.storePersonnel(this.formData).subscribe((res) => {
       if (res.message === 'SUCCESS') {
         console.log(res.model);
-        this.formData = {};
+        this.formData = {
+          personnel: {}
+        };
         this.getData();
       }
     });

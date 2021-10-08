@@ -28,7 +28,7 @@ class UserSeeder extends Seeder
                 $plainPassword = 'secret';
                 $user->password = app('hash')->make($plainPassword);
                 $user->personnel_id = $personnel->id;
-                $user->role = 1;
+                $user->role = $personnel->role;
                 $user->save();
                 echo 'SUCCESS.'.PHP_EOL;
             }

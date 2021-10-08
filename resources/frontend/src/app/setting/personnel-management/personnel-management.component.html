@@ -21,6 +21,7 @@
         <tr>
           <th scope="col" class="text-center">#</th>
           <th scope="col" class="text-center">Name</th>
+          <th scope="col" class="text-center">Email</th>
           <th scope="col" class="text-center">Designation</th>
           <th scope="col" class="text-center">Role</th>
           <th scope="col" class="text-center">Action</th>
@@ -30,12 +31,14 @@
         <tr *ngFor="let item of personnelData; let num = index">
           <th scope="row" class="text-center">{{ num+1 }}</th>
           <td class="text-center">{{ item.name }}</td>
-          <td class="text-center">{{ item.designation }}</td>
+          <td class="text-center">{{ item.email }}</td>
+          <td class="text-center">{{ item.personnel.designation }}</td>
           <td class="text-center">{{ formatRole(item.role) }}</td>
           <td class="text-center">
             <div class="btn-group">
-              <button class="btn btn-primary btn-sm py-0"><i class="fa fa-pencil"></i></button>
-              <button class="btn btn-warning btn-sm py-0"><i class="fa fa-trash"></i></button>
+              <button (click)="setItem(item)" class="btn btn-primary btn-sm py-0" data-bs-toggle="offcanvas"
+                data-bs-target="#offcanvasRight"><i class="fa fa-pencil"></i></button>
+              <button class="btn btn-danger btn-sm py-0"><i class="fa fa-trash"></i></button>
             </div>
           </td>
         </tr>
@@ -48,7 +51,8 @@
 <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
   <div class="offcanvas-header">
     <h5 id="offcanvasRightLabel">New Personnel</h5>
-    <button type="button" class="btn text-reset" data-bs-dismiss="offcanvas" aria-label="Close"><i class="fa fa-close"></i></button>
+    <button type="button" class="btn text-reset" data-bs-dismiss="offcanvas" aria-label="Close"><i
+        class="fa fa-close"></i></button>
   </div>
   <div class="offcanvas-body">
     <div class="mb-3">
@@ -56,8 +60,17 @@
       <input type="text" class="form-control" id="name" [(ngModel)]="formData.name">
     </div>
     <div class="mb-3">
+      <label for="email" class="form-label">Email</label>
+      <input type="text" class="form-control" id="email" [(ngModel)]="formData.email">
+    </div>
+    <div class="mb-3">
       <label for="designation" class="form-label">Designation</label>
-      <input type="text" class="form-control" id="designation" [(ngModel)]="formData.designation">
+      <input type="text" class="form-control" id="designation" [(ngModel)]="formData.personnel.designation">
+    </div>
+    <div class="mb-3">
+      <label for="password" class="form-label">Password</label>
+      <input type="password" class="form-control" id="password" [(ngModel)]="formData.password">
+      <div *ngIf="formData.id" class="form-control-text"><small>Leave blank if no change.</small></div>
     </div>
     <div class="mb-3">
       <label for="role" class="form-label">Role</label>
