@@ -45,6 +45,11 @@ export class SupplierManagementComponent implements OnInit {
     }
   }
 
+  setItem(data: any) {
+    this.formData = data;
+    console.log(this.formData);
+  }
+
   formatRole(data: any) {
     let res: string = '';
 

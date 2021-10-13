@@ -33,7 +33,8 @@
           <td class="text-center">{{ formatRole(item.role) }}</td>
           <td class="text-center">
             <div class="btn-group">
-              <button class="btn btn-primary btn-sm py-0"><i class="fa fa-pencil"></i></button>
+              <button data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" class="btn btn-primary btn-sm py-0"
+                (click)="setItem(item)"><i class="fa fa-pencil"></i></button>
               <button class="btn btn-warning btn-sm py-0"><i class="fa fa-trash"></i></button>
             </div>
           </td>
@@ -46,7 +47,8 @@
 <!-- canvas material data -->
 <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
   <div class="offcanvas-header">
-    <h5 id="offcanvasRightLabel">New Vendor</h5>
+    <h5 *ngIf="!formData.id" id="offcanvasRightLabel">New Vendor</h5>
+    <h5 *ngIf="formData.id" id="offcanvasRightLabel">Update Vendor</h5>
     <button type="button" class="btn text-reset" data-bs-dismiss="offcanvas" aria-label="Close"><i
         class="fa fa-close"></i></button>
   </div>
