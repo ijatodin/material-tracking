@@ -39,17 +39,25 @@ class SupplierController extends Controller
     public function store(Request $request) {
         DB::beginTransaction();
         try {
-            $supplier = supplier::where('name', $request->input('name'))->first();
+            $supplier = supplier::where('id', $request->input('id'))->first();
 
             if (!$supplier) {
                 $res = supplier::create([
                     'name' => $request->input('name'),
-                    'parent_id' => $request->input('parent_id') ?: null,
+                    // 'parent_id' => $request->input('parent_id') ?: null,
                     'role' => $request->input('role') ?: null
                 ]);
 
                 DB::commit();
                 return response()->json(['message' => 'SUCCESS', 'model' => $res], 200);
+            } else {
+                $supplier->name = request('name');
+                $supplier->role = request('role');
+                // $supplier->parent_id = $request->input('parent_id') ?: null;
+                $supplier->save();
+
+                DB::commit();
+                return response()->json(['message' => 'SUCCESS', 'model' => $supplier], 200);
             }
         } catch (\Exception $e) {
             DB::rollBack();

@@ -21,6 +21,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     // receiving
     Route::post('receiving-all', 'ReceivingController@index');
+    Route::post('receiving-single', 'ReceivingController@single');
     Route::post('receiving-store', 'ReceivingController@store');
 
     // receiving details
@@ -29,6 +30,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     // summary report
     Route::post('summary-generate', 'SummaryReportController@generate');
     Route::post('summary-all', 'SummaryReportController@index');
+    Route::post('summary-single', 'SummaryReportController@single');
 
     // material registry
     Route::post('material-store', 'MaterialController@store');

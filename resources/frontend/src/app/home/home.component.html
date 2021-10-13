@@ -1,4 +1,4 @@
-<!-- <p>summary-report works!</p> -->
+<!-- <p>summary-slip works!</p> -->
 
 <nav aria-label="breadcrumb">
   <ol class="breadcrumb">
@@ -9,11 +9,11 @@
 <div class="card">
   <div class="card-header">
     <div class="d-md-flex justify-content-between">
-      <h4 class="card-title my-1 ml-2">Generated Summary</h4>
+      <h4 class="card-title my-1 ml-2">Approval Needed</h4>
       <div>
-        <button data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" class="btn btn-primary">
-          <i class="fa fa-plus"></i> Summary Option
-        </button>
+        <a [routerLink]="['/summary-slip']" role="button" class="btn btn-primary">
+          <i class="fa fa-plus"></i> New Summary Report
+        </a>
       </div>
 
     </div>
@@ -27,6 +27,7 @@
             <th scope="col" class="text-center">Summary No</th>
             <th scope="col" class="text-center">Filter By</th>
             <th scope="col" class="text-center">Status</th>
+            <th scope="col" class="text-center">Created At</th>
             <th scope="col" class="text-center">Action</th>
           </tr>
         </thead>
@@ -35,11 +36,54 @@
             <td scope="row" class="text-center">{{ num+1 }}</td>
             <td class="text-center">{{ item.sum_no }}</td>
             <td class="text-center">{{ item.filter_by | titlecase }}</td>
-            <td class="text-center">{{ item.status }}</td>
-            <td class="text-center"></td>
+            <td class="text-center">{{ formatStatus(item.status) }}</td>
+            <td class="text-center">{{ item.created_at | date:'dd/MM/yyyy' }}</td>
+            <td class="text-center"><button class="btn btn-primary btn-sm py-0"
+                (click)="getSingle(item);modalOpen(content)"><i class="fa fa-info"></i></button></td>
           </tr>
         </tbody>
       </table>
     </div>
   </div>
 </div>
+
+<!-- modal details -->
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Summary Information - {{ selectedSummary.sum_no }}</h4>
+    <button type="button" class="btn text-reset" data-bs-dismiss="offcanvas" aria-label="Close"
+      (click)="modal.dismiss()"><i class="fa fa-close"></i></button>
+  </div>
+  <div class="modal-body">
+    <div class="table-responsive">
+      <table *ngFor="let details of summaryDetails" class="table table-sm table-bordered">
+        <thead class="">
+          <tr>
+            <th scope="col" class="text-center">No.</th>
+            <th scope="col" class="text-center">D.O No</th>
+            <th scope="col" class="text-center">Date</th>
+            <th scope="col" class="text-center">Supplier</th>
+            <th scope="col" class="text-center">Subcon</th>
+            <th scope="col" class="text-center">Description</th>
+            <th scope="col" class="text-center">Quantity</th>
+            <th scope="col" class="text-center">Location</th>
+            <th scope="col" class="text-center">Date Received</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of details; let num = index;">
+            <td scope="row" class="text-center">{{ num+1 }}</td>
+            <td class="text-center">{{ item.ref.do_no }}</td>
+            <td class="text-center">{{ item.ref.date | date:'dd.MM.yyyy' }}</td>
+            <td class="text-center">{{ item.ref.supplier.name }}</td>
+            <td class="text-center">{{ item.ref.subcon.name }}</td>
+            <td class="text-center">{{ item.description }}</td>
+            <td class="text-center">{{ item.quantity }}</td>
+            <td class="text-center">{{ item.location }}</td>
+            <td class="text-center">{{ item.ref.received_date | date:'dd.MM.yyyy' }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</ng-template>

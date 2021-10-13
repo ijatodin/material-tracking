@@ -14,7 +14,7 @@ class AddFilterByToSummaryReports extends Migration
     public function up()
     {
         Schema::table('summary_reports', function (Blueprint $table) {
-            $table->string('filter_by', 20)->after('sum_no');
+            $table->string('filter_by', 20)->nullable()->after('sum_no');
             $table->integer('created_by')->after('status');
             $table->integer('updated_by')->after('created_by');
         });

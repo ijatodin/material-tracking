@@ -6,6 +6,7 @@ import { SummaryService } from 'src/app/services/summary.service';
 import { SupplierService } from 'src/app/services/supplier.service';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
+import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-summary-report',
@@ -36,13 +37,18 @@ export class SummaryReportComponent implements OnInit {
   isSubcon: boolean = false;
   isDescription: boolean = false;
   filterBy: any = null;
+  closeResult: string = '';
+  summaryData: any = [];
+  selectedSummary: any = [];
+  summaryDetails: any = [];
 
   constructor(
     private summarySvc: SummaryService,
     private projectSvc: ProjectService,
     private personnelSvc: PersonnelService,
     private supplierSvc: SupplierService,
-    private materialSvc: MaterialService
+    private materialSvc: MaterialService,
+    private modalService: NgbModal
   ) {}
 
   ngOnInit(): void {
@@ -50,6 +56,7 @@ export class SummaryReportComponent implements OnInit {
     this.getPersonnel();
     this.getSupplierSubcon();
     this.getMaterial();
+    this.getSummary();
   }
 
   test() {
@@ -104,6 +111,7 @@ export class SummaryReportComponent implements OnInit {
   getProject() {
     this.projectSvc.getAll().subscribe((res) => {
       this.projectData = res.model;
+      this.selectedProject = this.projectData[0];
     });
   }
 
@@ -139,6 +147,75 @@ export class SummaryReportComponent implements OnInit {
     }
   }
 
+  getSummary() {
+    this.summarySvc.getAll().subscribe((res) => {
+      if (res.message === 'SUCCESS') {
+        this.summaryData = res.model;
+        console.log(this.summaryData);
+      }
+    });
+  }
+
+  getSingle(item: any) {
+    this.selectedSummary = item;
+    let data = { id: this.selectedSummary.id };
+    this.summarySvc.getSingle(data).subscribe((res) => {
+      if (res.message === 'SUCCESS') {
+        this.summaryDetails = [];
+        for (let key of Object.keys(res.model)) {
+          let detail = res.model[key];
+          this.summaryDetails.push(detail);
+          console.log(this.selectedSummary);
+        }
+      }
+    });
+  }
+
+  saveSlip() {
+    console.log(this.data);
+  }
+
+  formatStatus(data: any) {
+    let res: string = '';
+
+    switch (data) {
+      case 1:
+        res = 'New';
+        break;
+      case 2:
+        res = 'Pending Approval';
+        break;
+      case 3:
+        res = 'Approved';
+        break;
+    }
+    return res;
+  }
+
+  modalOpen(content: any) {
+    this.modalService
+      .open(content, { size: 'xl', scrollable: true })
+      .result.then(
+        (result) => {
+          //function di sini
+          console.log(result);
+        },
+        (reason) => {
+          this.closeResult = this.getDismissReason(reason);
+          console.log(this.closeResult);
+        }
+      );
+  }
+
+  getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
+  }
 
   // wip need another plugin to exprt as PDF as this is not very convenient
   exportPdf(): void {
@@ -153,7 +230,7 @@ export class SummaryReportComponent implements OnInit {
       let position = 0;
       PDF.addImage(FILEURI, 'PNG', 0, position, fileWidth, fileHeight);
 
-      PDF.save('summary'+this.formData.range+'.pdf');
+      PDF.save('summary' + this.formData.range + '.pdf');
     });
   }
 }

@@ -12,15 +12,39 @@ use Illuminate\Support\Facades\DB;
 
 class SummaryReportController extends Controller
 {
-    public function index() {
+    public function index()
+    {
         try {
-            $res = SummaryReport::get();
+            $res = SummaryReport::with('maker', 'checker', 'approver')->get();
 
             return response()->json(['message' => 'SUCCESS', 'model' => $res], 200);
         } catch (\Exception $e) {
             return response()->json(['message' => $e->getMessage()], 404);
         }
     }
+
+    public function single()
+    {
+        try {
+            $res = ReceivingDetails::where('summary_id', request('id'))->with('ref', 'ref.supplier', 'ref.subcon')->get()->groupBy('description');
+
+            return response()->json(['message' => 'SUCCESS', 'model' => $res], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 404);
+        }
+    }
+
+    public function save()
+    {
+        try {
+            $res = ReceivingDetails::where('summary_id', request('id'))->with('ref', 'ref.supplier', 'ref.subcon')->get()->groupBy('description');
+
+            return response()->json(['message' => 'SUCCESS', 'model' => $res], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 404);
+        }
+    }
+
     public function generate()
     {
         try {
@@ -28,15 +52,6 @@ class SummaryReportController extends Controller
             // dd(Carbon::now()->startOfWeek()->format('Y-m-d H:i:s'));
             $filterBy = request('filterBy');
             $range = request('range');
-
-            $refNo = registryCounters::setRunningNumbers('SMRY');
-            $summary = new SummaryReport();
-            $summary->sum_no = $refNo;
-            $summary->filter_by = $filterBy;
-            $summary->status = 1;
-            $summary->created_by = auth()->id();
-            $summary->updated_by = auth()->id();
-            $summary->save();
 
             if ($filterBy == 'description') {
                 $query = ReceivingDetails::query();
@@ -55,27 +70,17 @@ class SummaryReportController extends Controller
 
                 $res = $query->where('material_id', request('material_id'))->whereNull('summary_id')->with('ref', 'ref.supplier', 'ref.subcon')->get()->groupBy('description');
 
-                foreach ($res as $r) {
-                    foreach ($r as $rd) {
-                        $rd->summary_id = $summary->id;
-                        $rd->save();
-                    }
-                }
-
                 DB::commit();
                 return response()->json(['message' => 'SUCCESS', 'model' => $res], 200);
             } else {
                 $query = Receiving::query();
 
-                if ($filterBy == 'supplier_id') {
-                    $query->when(request('supplier_id'), function ($q) {
-                        return $q->where('supplier_id', request('supplier_id'));
-                    });
-                } else if ($filterBy == 'subcon_id') {
-                    $query->when(request('subcon_id'), function ($q) {
-                        return $q->where('subcon_id', request('subcon_id'));
-                    });
-                }
+                $query->when(request('supplier_id'), function ($q) {
+                    return $q->where('supplier_id', request('supplier_id'));
+                });
+                $query->when(request('subcon_id'), function ($q) {
+                    return $q->where('subcon_id', request('subcon_id'));
+                });
 
                 // range
                 $query->when($range == 'week', function ($q) {
@@ -97,13 +102,6 @@ class SummaryReportController extends Controller
                 }
 
                 $res = ReceivingDetails::getDetails($ref);
-
-                foreach ($res as $r) {
-                    foreach ($r as $rd) {
-                        $rd->summary_id = $summary->id;
-                        $rd->save();
-                    }
-                }
 
                 DB::commit();
                 return response()->json(['message' => 'SUCCESS', 'model' => $res], 200);
