@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { LocationService } from 'src/app/services/location.service';
 import { MaterialService } from 'src/app/services/material.service';
 import { ReceivingService } from 'src/app/services/receiving.service';
@@ -33,6 +33,7 @@ export class ReceivingFormComponent implements OnInit {
   do_file: any = null;
   hasFile: boolean = false;
   url: string = environment.url;
+  params: any;
 
   constructor(
     // private locSvc: LocationService,
@@ -43,13 +44,31 @@ export class ReceivingFormComponent implements OnInit {
     private fileSvc: FileUploadService,
     private poSvc: PurchaseOrderService,
     private router: Router,
+    private route: ActivatedRoute,
     public spinner: NgxSpinnerService
   ) { }
 
   ngOnInit(): void {
+    // get current route param
+    this.route.params.subscribe((parameter)=> {
+      this.params = parameter;
+    });
+
     this.spinner.show();
     this.getData();
     this.cleardo();
+
+    if (this.params.action === 'edit') {
+      this.getDetails(this.params.ref_no);
+    }
+  }
+
+  getDetails(ref_no: any) {
+    let data = {ref_no: ref_no};
+    this.receivingSvc.getSingle(data).subscribe((res)=>{
+      this.formData = res.model;
+      console.log(this.formData);
+    })
   }
 
   getData() {
@@ -89,6 +108,15 @@ export class ReceivingFormComponent implements OnInit {
     console.log(this.selectedMaterial);
     this.formData.details.push(this.selectedMaterial);
     this.selectedMaterial = {};
+  }
+
+  removeItem(idx: any, data: any) {
+    console.log(idx, data);
+    // if (this.params.action === "create") {
+    this.formData.details.splice(idx, 1);
+    // } else if (this.params.action === "edit") {
+    // this.promptDeleteDetails(idx, data);
+    // }
   }
 
   modalOpen(content: any) {

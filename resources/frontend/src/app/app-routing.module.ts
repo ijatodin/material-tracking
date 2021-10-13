@@ -21,7 +21,7 @@ const routes: Routes = [
   { path: 'test', component: TestComponent },
   { path: 'login', component: LoginComponent },
   {
-    path: 'summary-report',
+    path: 'summary-slip',
     component: SummaryReportComponent,
     canActivate: [AuthGuard],
   },
@@ -30,7 +30,8 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     children: [
       { path: '', component: ReceivingComponent },
-      { path: 'create', component: ReceivingFormComponent },
+      { path: ':action', component: ReceivingFormComponent },
+      { path: ':action/:ref_no', component: ReceivingFormComponent },
     ],
   },
   { path: 'test', component: TestComponent },

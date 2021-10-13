@@ -18,32 +18,32 @@
   <div class="card-body">
     <div class="table-responsive">
       <table class="table table-sm table-bordered table-hover mt-2">
-      <thead class="table-dark">
-        <tr>
-          <th scope="col" class="text-center">#</th>
-          <th scope="col" class="text-center">Ref No</th>
-          <th scope="col" class="text-center">D.O No</th>
-          <th scope="col" class="text-center">Supplier</th>
-          <th scope="col" class="text-center">Subcon</th>
-          <th scope="col" class="text-center">Received Date</th>
-          <th scope="col" class="text-center">Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let item of receivingData; let num = index">
-          <th scope="row" class="text-center">{{ num+1 }}</th>
-          <td class="text-center">{{ item.ref_no }}</td>
-          <td class="text-center">{{ item.do_no }}</td>
-          <td class="text-center">{{ item.supplier.name }}</td>
-          <td class="text-center">{{ item.subcon.name }}</td>
-          <td class="text-center">{{ item.received_date | date:'dd/MM/yyyy' }}</td>
-          <td class="text-center"><button data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight"
-              (click)="setDetails(item)" class="btn btn-primary btn-sm py-0" aria-controls="offcanvasRight"><i
-                class="fa fa-info"></i></button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+        <thead class="table-dark">
+          <tr>
+            <th scope="col" class="text-center">#</th>
+            <th scope="col" class="text-center">Ref No</th>
+            <th scope="col" class="text-center">D.O No</th>
+            <th scope="col" class="text-center">Supplier</th>
+            <th scope="col" class="text-center">Subcon</th>
+            <th scope="col" class="text-center">Received Date</th>
+            <th scope="col" class="text-center">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of receivingData; let num = index">
+            <th scope="row" class="text-center">{{ num+1 }}</th>
+            <td class="text-center">{{ item.ref_no }}</td>
+            <td class="text-center">{{ item.do_no }}</td>
+            <td class="text-center">{{ item.supplier.name }}</td>
+            <td class="text-center">{{ item.subcon.name }}</td>
+            <td class="text-center">{{ item.received_date | date:'dd/MM/yyyy' }}</td>
+            <td class="text-center"><button data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight"
+                (click)="setDetails(item)" class="btn btn-primary btn-sm py-0" aria-controls="offcanvasRight"><i
+                  class="fa fa-info"></i></button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 </div>
@@ -53,7 +53,8 @@
   <div class="offcanvas-header">
     <h5 class="py-2 m-0" id="offcanvasRightLabel"><strong>{{ selectedReceiving.ref_no }}</strong></h5>
     <div class="btn-group">
-      <button type="button" class="btn text-reset"><i class="fa fa-pencil"></i></button>
+      <a type="button" [routerLink]="['/receiving/edit/' + selectedReceiving.ref_no]" data-bs-dismiss="offcanvas"
+        class="btn text-reset"><i class="fa fa-pencil"></i></a>
       <button type="button" class="btn text-reset" data-bs-dismiss="offcanvas" aria-label="Close"><i
           class="fa fa-close"></i></button>
     </div>
@@ -76,7 +77,9 @@
         </tr>
         <tr>
           <th>P.O No</th>
-          <td>{{ selectedReceiving.po_no ? selectedReceiving.po_no : 'N/A' }}</td>
+          <td *ngIf="!selectedReceiving.po">{{ selectedReceiving.po_no ? selectedReceiving.po_no : 'N/A' }}</td>
+          <td *ngIf="selectedReceiving.po"><a class="p-0" href={{url+selectedReceiving.po.file.path}}
+              target="_blank">{{ selectedReceiving.po_no }}</a></td>
         </tr>
         <tr>
           <th>Date</th>
@@ -89,11 +92,11 @@
         <tr>
           <th>Files</th>
           <td *ngIf="selectedReceiving.files?.length">
-            <tr *ngFor="let file of selectedReceiving.files">
-            <a href={{url+file.path}} target="_blank">{{file.filename}}</a>
-            </tr>
-          </td>
-          <td *ngIf="!selectedReceiving.files?.length">-</td>
+        <tr *ngFor="let file of selectedReceiving.files">
+          <a href={{url+file.path}} target="_blank">{{file.filename}}</a>
+        </tr>
+        </td>
+        <td *ngIf="!selectedReceiving.files?.length">-</td>
         </tr>
         <!-- <tr>
           <th>Location</th>
@@ -115,7 +118,7 @@
               <small>Remarks: {{ item.remarks ? item.remarks : '-' }}</small>
             </span>
           </div>
-         <button class="btn btn-primary">{{item.quantity}}</button>
+          <button class="btn btn-primary">{{item.quantity}}</button>
         </div>
 
       </div>

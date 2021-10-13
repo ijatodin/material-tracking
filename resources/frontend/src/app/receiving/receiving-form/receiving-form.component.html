@@ -4,7 +4,8 @@
   <ol class="breadcrumb">
     <li class="breadcrumb-item"><a href="#">Home</a></li>
     <li class="breadcrumb-item" aria-current="page"><a [routerLink]="['/receiving']">Receiving</a></li>
-    <li class="breadcrumb-item active" aria-current="page">Create</li>
+    <li *ngIf="params.action === 'create'" class="breadcrumb-item active" aria-current="page">Create</li>
+    <li *ngIf="params.action === 'edit'" class="breadcrumb-item active" aria-current="page">Edit - {{params.ref_no}}</li>
   </ol>
 </nav>
 
@@ -12,7 +13,8 @@
   <div class="col-md-12 my-2">
     <div class="card">
       <div class="card-header">
-        <h3 class="card-title">Receiving > Create</h3>
+        <h3 *ngIf="params.action === 'create'" class="card-title">Receiving > Create</h3>
+        <h3 *ngIf="params.action === 'edit'" class="card-title">Receiving > Edit {{params.ref_no}}</h3>
       </div>
       <div class="card-body">
         <div class="row g-3">
@@ -21,14 +23,16 @@
             <!-- <select class="form-select" [(ngModel)]="formData.supplier">
               <option *ngFor="let supp of supplierData" [ngValue]="supp.name">{{ supp.name }}</option>
             </select> -->
-            <ng-select [items]="supplierData" bindLabel="name" bindValue="id" [(ngModel)]="formData.supplier_id"></ng-select>
+            <ng-select [items]="supplierData" bindLabel="name" bindValue="id" [(ngModel)]="formData.supplier_id">
+            </ng-select>
           </div>
           <div class="col-md-6">
             <label for="subcon" class="form-label">Subcon</label>
             <!-- <select class="form-select" [(ngModel)]="formData.subcon">
               <option *ngFor="let sub of subconData" [ngValue]="sub.name">{{ sub.name }}</option>
             </select> -->
-            <ng-select [items]="subconData" bindLabel="name" bindValue="id" [(ngModel)]="formData.subcon_id"></ng-select>
+            <ng-select [items]="subconData" bindLabel="name" bindValue="id" [(ngModel)]="formData.subcon_id">
+            </ng-select>
           </div>
           <div class="col-md-6">
             <label for="date" class="form-label">Date</label>
@@ -54,7 +58,8 @@
           </div>
           <div class="col-md-4">
             <label for="do_no" class="form-label">D.O Number</label>
-            <input type="text" class="form-control" id="do_no" [(ngModel)]="formData.do_no" (ngModelChange)="formData.do_no = $event.toUpperCase()">
+            <input type="text" class="form-control" id="do_no" [(ngModel)]="formData.do_no"
+              (ngModelChange)="formData.do_no = $event.toUpperCase()">
           </div>
           <div class="col-md-4">
             <label for="do_file" class="form-label">D.O File Upload</label>
@@ -62,7 +67,9 @@
               <input type="file" class="form-control" id="do_file" (change)="handleFile($event)">
               <button class="input-group-text"><i class="fa fa-upload" (click)="uploadDoFile()"></i></button>
             </div>
-            <a class="form-control-plaintext" *ngIf="hasFile" href={{url+formData.do_file.path}} target="_blank">{{formData.do_file.filename}}</a>
+            <div *ngIf="!hasFile" class="form-control-text"><small>Click upload button to upload selected file.</small></div>
+            <a class="form-control-plaintext" *ngIf="hasFile" href={{url+formData.do_file.path}}
+              target="_blank">{{formData.do_file.filename}}</a>
           </div>
           <div class="col-md-12">
             <label for="remarks" class="form-label">Remarks</label>
@@ -77,28 +84,32 @@
             </div>
           </div>
           <hr class="mb-0">
-          <table class="table table-sm table-bordered mt-2">
-            <thead class="table-dark">
-              <tr>
-                <th scope="col" class="text-center">#</th>
-                <th scope="col" class="text-center">Description</th>
-                <th scope="col" class="text-center">Location</th>
-                <th scope="col" class="text-center">Element</th>
-                <th scope="col" class="text-center">Quantity</th>
-                <th scope="col" class="text-center">Remark</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let item of formData.details; let num = index">
-                <th scope="row" class="text-center">{{ num+1 }}</th>
-                <td class="text-center">{{ item.description }}</td>
-                <td class="text-center">{{ item.location }}</td>
-                <td class="text-center">{{ item.element }}</td>
-                <td class="text-center">{{ item.quantity }}</td>
-                <td class="text-center">{{ item.remarks ? item.remarks : '-' }}</td>
-              </tr>
-            </tbody>
-          </table>
+          <div class="table-responsive">
+            <table class="table table-sm table-bordered mt-2">
+              <thead class="table-dark">
+                <tr>
+                  <th scope="col" class="text-center">#</th>
+                  <th scope="col" class="text-center">Description</th>
+                  <th scope="col" class="text-center">Location</th>
+                  <th scope="col" class="text-center">Element</th>
+                  <th scope="col" class="text-center">Quantity</th>
+                  <th scope="col" class="text-center">Remark</th>
+                  <th scope="col" class="text-center">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of formData.details; let num = index">
+                  <th scope="row" class="text-center">{{ num+1 }}</th>
+                  <td class="text-center">{{ item.description }}</td>
+                  <td class="text-center">{{ item.location }}</td>
+                  <td class="text-center">{{ item.element }}</td>
+                  <td class="text-center">{{ item.quantity }}</td>
+                  <td class="text-center">{{ item.remarks ? item.remarks : '-' }}</td>
+                  <td class="text-center"><button class="btn btn-sm btn-danger py-0" (click)="removeItem(num, item)"><i class="fa fa-trash"></i></button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
           <hr class="mt-2 mb-0">
           <div class="col-12">
             <button *ngIf="formData.details.length > 0" type="submit" class="btn btn-primary"

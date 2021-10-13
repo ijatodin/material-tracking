@@ -24,6 +24,18 @@ class ReceivingController extends Controller
         }
     }
 
+    public function single()
+    {
+        try {
+            $model = Receiving::where('ref_no', request('ref_no'))->with('details')->first();
+            // $res = $model->details->groupBy('description');
+            // dd($model);
+            return response()->json(['message' => 'SUCCESS', 'model' => $model], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 404);
+        }
+    }
+
     public function store()
     {
         DB::beginTransaction();
@@ -63,7 +75,7 @@ class ReceivingController extends Controller
 
             if (request('do_file')) {
                 $dofile = new File(request('do_file'));
-                
+
                 $file = File::where('id', $dofile->id)->first();
                 $file->ref_no = $refNo;
                 $file->save();

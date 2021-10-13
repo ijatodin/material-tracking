@@ -18,6 +18,10 @@ export class ReceivingService {
     return this.http.post<GenericResponse>(`${environment.apiUrl}/receiving-store`, data);
   }
 
+  getSingle(data: any) {
+    return this.http.post<GenericResponse>(`${environment.apiUrl}/receiving-single`, data);
+  }
+
   getReceiving() {
     return this.http.post<GenericResponse>(`${environment.apiUrl}/receiving-all`, {});
   }
