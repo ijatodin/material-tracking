@@ -25,7 +25,7 @@
           <tr>
             <th scope="col" class="text-center">No.</th>
             <th scope="col" class="text-center">Summary No</th>
-            <th scope="col" class="text-center">Filter By</th>
+            <!-- <th scope="col" class="text-center">Filter By</th> -->
             <th scope="col" class="text-center">Status</th>
             <th scope="col" class="text-center">Created At</th>
             <th scope="col" class="text-center">Action</th>
@@ -35,7 +35,7 @@
           <tr *ngFor="let item of summaryData; let num = index;">
             <td scope="row" class="text-center">{{ num+1 }}</td>
             <td class="text-center">{{ item.sum_no }}</td>
-            <td class="text-center">{{ item.filter_by | titlecase }}</td>
+            <!-- <td class="text-center">{{ item.filter_by | titlecase }}</td> -->
             <td class="text-center">{{ formatStatus(item.status) }}</td>
             <td class="text-center">{{ item.created_at | date:'dd/MM/yyyy' }}</td>
             <td class="text-center"><button class="btn btn-primary btn-sm py-0"
@@ -50,11 +50,30 @@
 <!-- modal details -->
 <ng-template #content let-modal>
   <div class="modal-header">
-    <h4 class="modal-title" id="modal-basic-title">Summary Information - {{ selectedSummary.sum_no }}</h4>
-    <button type="button" class="btn text-reset" data-bs-dismiss="offcanvas" aria-label="Close"
-      (click)="modal.dismiss()"><i class="fa fa-close"></i></button>
+    <div>
+      <h4 class="modal-title" id="modal-basic-title">Summary Information - {{ selectedSummary.sum_no }}</h4>
+      <span *ngIf="selectedSummary.status === 1"
+        class="badge rounded-pill bg-primary">{{formatStatus(selectedSummary.status)}}</span>
+      <span *ngIf="selectedSummary.status === 2"
+        class="badge rounded-pill bg-warning">{{formatStatus(selectedSummary.status)}}</span>
+      <span *ngIf="selectedSummary.status === 3"
+        class="badge rounded-pill bg-success">{{formatStatus(selectedSummary.status)}}</span>
+    </div>
+    <div>
+      <button *ngIf="currentUser.user.role > 1" class="btn btn-primary"><i class="fa fa-check"></i> Approve</button>
+      <button type="button" class="btn text-reset" aria-label="Close" (click)="modal.dismiss()"><i
+          class="fa fa-close"></i></button>
+    </div>
+
   </div>
   <div class="modal-body">
+    <div>
+      <span>{{ selectedProject.title }}</span>
+      <br>
+      <span>{{ selectedProject.sub_title+' '+selectedProject.project_no }}</span>
+      <br><br>
+    </div>
+    <span>SUMMARY OF CONCRETE SUPPLIED</span>
     <div class="table-responsive">
       <table *ngFor="let details of summaryDetails" class="table table-sm table-bordered">
         <thead class="">
@@ -84,6 +103,31 @@
           </tr>
         </tbody>
       </table>
+      <div class="d-flex justify-content-between">
+        <div>
+          <span>Recorded By:</span>
+          <br><br><br><br>
+          <span>Name: {{ selectedSummary.maker.name }}</span><br>
+          <span>Position: {{ selectedSummary.maker.designation }}</span><br>
+          <span>Date: {{ selectedSummary.created_at | date:'dd.MM.yyyy' }}</span>
+        </div>
+
+        <div>
+          <span>Checked By:</span>
+          <br><br><br><br>
+          <span>Name: {{ selectedSummary.checker.name }}</span><br>
+          <span>Position: {{ selectedSummary.checker.designation }}</span><br>
+          <span>Date: {{ selectedSummary.checked_at | date:'dd.MM.yyyy' }}</span>
+        </div>
+
+        <div>
+          <span>Recorded By:</span>
+          <br><br><br><br>
+          <span>Name: {{ selectedSummary.approver.name }}</span><br>
+          <span>Position: {{ selectedSummary.approver.designation }}</span><br>
+          <span>Date: {{ selectedSummary.approved_at | date:'dd.MM.yyyy' }}</span>
+        </div>
+      </div>
     </div>
   </div>
 </ng-template>

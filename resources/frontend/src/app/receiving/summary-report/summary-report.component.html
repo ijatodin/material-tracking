@@ -11,10 +11,16 @@
   <div class="card-header">
     <div class="d-md-flex justify-content-between">
       <h4 class="card-title my-1 ml-2">Generate Summary Slip</h4>
-      <div>
-        <button data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" class="btn btn-primary">
+      <div class="d-flex">
+        <button data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" class="btn btn-primary me-2">
           <i class="fa fa-plus"></i> Summary Option
         </button>
+        <button *ngIf="isGenerated && !signCheck" class="btn btn-primary me-2 disabled" aria-disabled="true"><i
+            class="fa fa-save"></i> Save</button>
+        <button *ngIf="isGenerated && signCheck" class="btn btn-primary me-2" (click)="saveSlip()"><i
+            class="fa fa-save"></i> Save</button>
+        <button *ngIf="isGenerated && !signCheck" class="btn btn-primary disabled" aria-disabled="true"><i
+            class="fa fa-file-pdf-o"></i> Export PDF</button>
         <button *ngIf="isGenerated && signCheck" class="btn btn-primary" [useExistingCss]="true"
           printSectionId="htmlData" ngxPrint><i class="fa fa-file-pdf-o"></i> Export PDF</button>
       </div>
@@ -22,7 +28,8 @@
     </div>
   </div>
   <div class="card-body" id="htmlData">
-    <div *ngIf="!isGenerated">Data not generated yet. Please click SUMMARY OPTIONS for customisation.</div>
+    <div *ngIf="!isGenerated && hasData">Data not generated yet. Please click SUMMARY OPTIONS for customisation.</div>
+    <div *ngIf="!hasData">NO DATA RETRIEVED</div>
     <div *ngIf="isGenerated">
       <span>{{ selectedProject.title }}</span>
       <br>
@@ -30,34 +37,36 @@
       <br><br>
     </div>
     <span *ngIf="isGenerated">SUMMARY OF CONCRETE SUPPLIED</span>
-    <table *ngFor="let details of data" class="table table-sm table-bordered">
-      <thead class="">
-        <tr>
-          <th scope="col" class="text-center">No.</th>
-          <th scope="col" class="text-center">D.O No</th>
-          <th scope="col" class="text-center">Date</th>
-          <th scope="col" class="text-center">Supplier</th>
-          <th scope="col" class="text-center">Subcon</th>
-          <th scope="col" class="text-center">Description</th>
-          <th scope="col" class="text-center">Quantity</th>
-          <th scope="col" class="text-center">Location</th>
-          <th scope="col" class="text-center">Date Received</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let item of details; let num = index;">
-          <td scope="row" class="text-center">{{ num+1 }}</td>
-          <td class="text-center">{{ item.ref.do_no }}</td>
-          <td class="text-center">{{ item.ref.date | date:'dd.MM.yyyy' }}</td>
-          <td class="text-center">{{ item.ref.supplier.name }}</td>
-          <td class="text-center">{{ item.ref.subcon.name }}</td>
-          <td class="text-center">{{ item.description }}</td>
-          <td class="text-center">{{ item.quantity }}</td>
-          <td class="text-center">{{ item.location }}</td>
-          <td class="text-center">{{ item.ref.received_date | date:'dd.MM.yyyy' }}</td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="table-responsive">
+      <table *ngFor="let details of data" class="table table-sm table-bordered">
+        <thead class="">
+          <tr>
+            <th scope="col" class="text-center">No.</th>
+            <th scope="col" class="text-center">D.O No</th>
+            <th scope="col" class="text-center">Date</th>
+            <th scope="col" class="text-center">Supplier</th>
+            <th scope="col" class="text-center">Subcon</th>
+            <th scope="col" class="text-center">Description</th>
+            <th scope="col" class="text-center">Quantity</th>
+            <th scope="col" class="text-center">Location</th>
+            <th scope="col" class="text-center">Date Received</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of details; let num = index;">
+            <td scope="row" class="text-center">{{ num+1 }}</td>
+            <td class="text-center">{{ item.ref.do_no }}</td>
+            <td class="text-center">{{ item.ref.date | date:'dd.MM.yyyy' }}</td>
+            <td class="text-center">{{ item.ref.supplier.name }}</td>
+            <td class="text-center">{{ item.ref.subcon.name }}</td>
+            <td class="text-center">{{ item.description }}</td>
+            <td class="text-center">{{ item.quantity }}</td>
+            <td class="text-center">{{ item.location }}</td>
+            <td class="text-center">{{ item.ref.received_date | date:'dd.MM.yyyy' }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
     <div *ngIf="signCheck" class="d-flex justify-content-between">
       <div>
         <span>Recorded By:</span>
@@ -106,7 +115,7 @@
           <tr>
             <th scope="col" class="text-center">No.</th>
             <th scope="col" class="text-center">Summary No</th>
-            <th scope="col" class="text-center">Filter By</th>
+            <!-- <th scope="col" class="text-center">Filter By</th> -->
             <th scope="col" class="text-center">Status</th>
             <th scope="col" class="text-center">Created At</th>
             <th scope="col" class="text-center">Action</th>
@@ -116,7 +125,7 @@
           <tr *ngFor="let item of summaryData; let num = index;">
             <td scope="row" class="text-center">{{ num+1 }}</td>
             <td class="text-center">{{ item.sum_no }}</td>
-            <td class="text-center">{{ item.filter_by | titlecase }}</td>
+            <!-- <td class="text-center">{{ item.filter_by | titlecase }}</td> -->
             <td class="text-center">{{ formatStatus(item.status) }}</td>
             <td class="text-center">{{ item.created_at | date:'dd/MM/yyyy' }}</td>
             <td class="text-center"><button class="btn btn-primary btn-sm py-0"
@@ -131,7 +140,15 @@
 <!-- modal details -->
 <ng-template #content let-modal>
   <div class="modal-header">
-    <h4 class="modal-title" id="modal-basic-title">Summary Information - {{ selectedSummary.sum_no }}</h4>
+    <div>
+      <h4 class="modal-title" id="modal-basic-title">Summary Information - {{ selectedSummary.sum_no }}</h4>
+      <span *ngIf="selectedSummary.status === 1"
+        class="badge rounded-pill bg-primary">{{formatStatus(selectedSummary.status)}}</span>
+      <span *ngIf="selectedSummary.status === 2"
+        class="badge rounded-pill bg-warning">{{formatStatus(selectedSummary.status)}}</span>
+      <span *ngIf="selectedSummary.status === 3"
+        class="badge rounded-pill bg-success">{{formatStatus(selectedSummary.status)}}</span>
+    </div>
     <button type="button" class="btn text-reset" data-bs-dismiss="offcanvas" aria-label="Close"
       (click)="modal.dismiss()"><i class="fa fa-close"></i></button>
   </div>
@@ -194,7 +211,7 @@
           <br><br><br><br>
           <span>Name: {{ selectedSummary.approver.name }}</span><br>
           <span>Position: {{ selectedSummary.approver.designation }}</span><br>
-          <span>Date:  {{ selectedSummary.approved_at | date:'dd.MM.yyyy' }}</span>
+          <span>Date: {{ selectedSummary.approved_at | date:'dd.MM.yyyy' }}</span>
         </div>
       </div>
     </div>
@@ -234,12 +251,12 @@
           <option *ngFor="let sub of subconData" [ngValue]="sub.id">{{ sub.name }}</option>
         </select>
       </div>
-      <div class="mb-3">
+      <!-- <div class="mb-3">
         <label for="material" class="form-label">Choose Material</label>
         <select class="form-select" name="material" id="material" [(ngModel)]="formData.material_id">
           <option *ngFor="let mat of materialData" [ngValue]="mat.id">{{ mat.description }}</option>
         </select>
-      </div>
+      </div> -->
 
       <!-- range -->
       <div class="mb-3">
@@ -276,14 +293,13 @@
       </div>
     </div>
 
-
     <div *ngIf="isGenerated">
-      <div class="mb-3">
+      <!-- <div class="mb-3">
         <label for="project" class="form-label">Choose Project</label>
         <select class="form-select" name="project" id="project" [(ngModel)]="selectedProject">
           <option *ngFor="let proj of projectData" [ngValue]="proj">{{ proj.title }}</option>
         </select>
-      </div>
+      </div> -->
       <div class="mb-3">
         <label for="maker" class="form-label">Choose Maker</label>
         <select class="form-select" name="maker" id="maker" [(ngModel)]="selectedMaker" (change)="personnelCheck()">

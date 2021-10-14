@@ -25,4 +25,8 @@ export class SummaryService {
   generate(data: any) {
     return this.http.post<GenericResponse>(`${environment.apiUrl}/summary-generate`, data);
   }
+
+  save(data: any) {
+    return this.http.post<GenericResponse>(`${environment.apiUrl}/summary-save`, data);
+  }
 }

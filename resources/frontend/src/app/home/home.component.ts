@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { AuthenticationService } from '../services/authentication.service';
+import { ProjectService } from '../services/project.service';
 import { SummaryService } from '../services/summary.service';
 
 @Component({
@@ -12,22 +14,50 @@ export class HomeComponent implements OnInit {
   summaryData: any = [];
   selectedSummary: any = [];
   summaryDetails: any = [];
+  selectedProject: any = {};
+  currentUser: any;
 
   constructor(
     private summarySvc: SummaryService,
+    private projectSvc: ProjectService,
+    private authSvc: AuthenticationService,
     private modalService: NgbModal
   ) {}
 
   ngOnInit(): void {
     this.getSummary();
+    this.getProject();
+    this.currentUser = this.authSvc.currentUserValue;
   }
 
   getSummary() {
     this.summarySvc.getAll().subscribe((res) => {
       if (res.message === 'SUCCESS') {
         this.summaryData = res.model;
+        this.filterRole();
         console.log(this.summaryData);
       }
+    });
+  }
+
+  filterRole() {
+    console.log(this.currentUser.user.role);
+    if (this.currentUser.user.role === 2) {
+      let index = this.summaryData.filter(
+        (r: any) => (r.status === 1)
+      );
+      this.summaryData = index;
+    } else if (this.currentUser.user.role === 3) {
+      let index = this.summaryData.filter(
+        (r: any) => (r.status === 2)
+      );
+      this.summaryData = index;
+    }
+  }
+
+  getProject() {
+    this.projectSvc.getAll().subscribe((res) => {
+      this.selectedProject = res.model[0];
     });
   }
 

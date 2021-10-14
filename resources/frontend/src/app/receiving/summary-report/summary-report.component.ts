@@ -19,27 +19,29 @@ export class SummaryReportComponent implements OnInit {
   subconData: any = [];
   supplierData: any = [];
   materialData: any = [];
-  selectedProject: any = null;
   personnelData: any = [];
+  formData: any = {};
   makerData: any = [];
   checkerData: any = [];
   approverData: any = [];
+  summaryData: any = [];
+  saveData: any = {};
+  data: any = [];
   selectedMaker: any = null;
   selectedChecker: any = null;
   selectedApprover: any = null;
   selectedSubcon: any = {};
   selectedSupplier: any = {};
-  data: any = [];
+  selectedProject: any = null;
+  selectedSummary: any = [];
   signCheck: boolean = false;
-  formData: any = {};
   isGenerated: boolean = false;
   isSupplier: boolean = false;
   isSubcon: boolean = false;
   isDescription: boolean = false;
+  hasData: boolean = true;
   filterBy: any = null;
   closeResult: string = '';
-  summaryData: any = [];
-  selectedSummary: any = [];
   summaryDetails: any = [];
 
   constructor(
@@ -60,17 +62,22 @@ export class SummaryReportComponent implements OnInit {
   }
 
   test() {
+    this.hasData = true;
     console.log(this.formData);
     this.summarySvc.generate(this.formData).subscribe((res) => {
       if (res.message === 'SUCCESS') {
         console.log(res.model);
         this.detailsData = res.model;
-        for (let key of Object.keys(this.detailsData)) {
-          let detail = this.detailsData[key];
-          this.data.push(detail);
-          console.log(this.data);
+        if (this.detailsData.length === 0) {
+          this.hasData = false;
+        } else {
+          for (let key of Object.keys(this.detailsData)) {
+            let detail = this.detailsData[key];
+            this.data.push(detail);
+            console.log(this.data);
+          }
+          this.isGenerated = true;
         }
-        this.isGenerated = true;
       }
     });
   }
@@ -172,7 +179,19 @@ export class SummaryReportComponent implements OnInit {
   }
 
   saveSlip() {
-    console.log(this.data);
+    this.saveData.details = this.data;
+    this.saveData.maker = this.selectedMaker;
+    this.saveData.checker = this.selectedChecker;
+    this.saveData.approver = this.selectedApprover;
+    console.log(this.saveData);
+
+    this.summarySvc.save(this.saveData).subscribe((res) => {
+      if (res.message === 'SUCCESS') {
+        console.log(res.model);
+        this.saveData = {};
+        this.getSummary();
+      }
+    });
   }
 
   formatStatus(data: any) {
