@@ -37,10 +37,41 @@ class SummaryReportController extends Controller
     public function save()
     {
         try {
-            $res = ReceivingDetails::where('summary_id', request('id'))->with('ref', 'ref.supplier', 'ref.subcon')->get()->groupBy('description');
+            DB::beginTransaction();
+            $maker = (object) request('maker');
+            $checker = (object) request('checker');
+            $approver = (object) request('approver');
+            $details = request('details');
+            // dd($details);
 
+            // set slip details
+            $slip_no = SummaryReport::setRunningNumbers('SLIP');
+            $slip = new SummaryReport();
+            $slip->sum_no = $slip_no;
+            $slip->maker_id = $maker->id;
+            $slip->checker_id = $checker->id;
+            $slip->approver_id = $approver->id;
+            $slip->status = 1;
+            $slip->created_by = auth()->id();
+            $slip->updated_by = auth()->id();
+            $slip->save();
+
+            // set summary id
+            foreach ($details as $details) {
+                foreach ($details as $d) {
+                    $d = (object) $d;
+                    $rd = ReceivingDetails::where('id', $d->id)->first();
+                    $rd->summary_id = $slip->id;
+                    $rd->save();
+                }
+            }
+
+            $res = $slip;
+
+            DB::commit();
             return response()->json(['message' => 'SUCCESS', 'model' => $res], 200);
         } catch (\Exception $e) {
+            DB::rollBack();
             return response()->json(['message' => $e->getMessage()], 404);
         }
     }
@@ -84,15 +115,15 @@ class SummaryReportController extends Controller
 
                 // range
                 $query->when($range == 'week', function ($q) {
-                    return $q->whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()]);
+                    return $q->whereBetween('received_date', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()]);
                 });
 
                 $query->when($range == 'month', function ($q) {
-                    return $q->whereMonth('created_at', date('m'))->whereYear('created_at', date('Y'));
+                    return $q->whereMonth('received_date', date('m'))->whereYear('received_date', date('Y'));
                 });
 
                 $query->when($range == 'custom', function ($q) {
-                    return $q->whereBetween('created_at', [Carbon::parse(request('from'))->format('Y-m-d H:i:s'), Carbon::parse(request('to'))->format('Y-m-d H:i:s')]);
+                    return $q->whereBetween('received_date', [Carbon::parse(request('from'))->format('Y-m-d H:i:s'), Carbon::parse(request('to'))->format('Y-m-d H:i:s')]);
                 });
 
                 $receiving = $query->get();
