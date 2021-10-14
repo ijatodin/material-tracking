@@ -27,10 +27,10 @@ class RegistryCounterSeeder extends Seeder
         }
 
         $smry = registryCounters::firstOrCreate(
-            ['prefix' => 'SMRY'],
+            ['prefix' => 'SLIP'],
             [
                 'counter' => 0,
-                'description' => 'SUMMARY',
+                'description' => 'SUMMARY SLIP',
             ]
         );
 
