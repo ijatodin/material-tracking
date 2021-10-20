@@ -18,7 +18,7 @@ class Material extends Model
         'id', 'description', 'specs', 'type', 'uom', 'vendor_id', 'created_by', 'updated_by'
     ];
 
-    public function type() {
+    public function types() {
         return $this->hasOne('App\Models\materialType', 'id', 'type');
     }
 }

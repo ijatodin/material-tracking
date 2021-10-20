@@ -35,6 +35,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     // material registry
     Route::post('material-store', 'MaterialController@store');
+    Route::post('material-delete', 'MaterialController@delete');
     Route::post('material-all', 'MaterialController@index');
     Route::post('material-search', 'MaterialController@search');
 

@@ -10,7 +10,7 @@ class MaterialController extends Controller
 {
     public function index() {
         try {
-            $model = Material::with('type')->orderBy('description', 'asc')->get();
+            $model = Material::with('types')->orderBy('description', 'asc')->get();
             return response()->json(['message' => 'SUCCESS', 'model' => $model], 200);
         } catch (\Exception $e) {
             return response()->json(['message' => $e->getMessage()], 404);
@@ -32,9 +32,25 @@ class MaterialController extends Controller
         }
     }
 
+    public function delete(Request $request) {
+        try {
+            $material = Material::where('id', $request->input('id'))->first();
+
+            if (!$material) {
+                return response()->json(['message' => 'NO DATA'], 404);
+            } else {
+                $material->delete();
+
+                return response()->json(['message' => 'SUCCESS', 'model' => $material], 200);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 404);
+        }
+    }
+
     public function store(Request $request) {
         try {
-            $material = Material::where('description', $request->input('description'))->first();
+            $material = Material::where('id', $request->input('id'))->first();
 
             if (!$material) {
                 $res = Material::create([
@@ -47,7 +63,13 @@ class MaterialController extends Controller
 
                 return response()->json(['message' => 'SUCCESS', 'model' => $res], 200);
             } else {
-                return response()->json(['message' => 'EXIST', 'model' => $material], 200);
+                $material->description = $request->input('description');
+                $material->specs = $request->input('specs');
+                $material->uom = $request->input('uom');
+                $material->type = $request->input('type');
+                $material->save();
+
+                return response()->json(['message' => 'SUCCESS', 'model' => $material], 200);
             }
         } catch (\Exception $e) {
             return response()->json(['message' => $e->getMessage()], 404);
