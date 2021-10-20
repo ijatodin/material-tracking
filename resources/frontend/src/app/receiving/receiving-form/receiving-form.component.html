@@ -5,7 +5,8 @@
     <li class="breadcrumb-item"><a href="#">Home</a></li>
     <li class="breadcrumb-item" aria-current="page"><a [routerLink]="['/receiving']">Receiving</a></li>
     <li *ngIf="params.action === 'create'" class="breadcrumb-item active" aria-current="page">Create</li>
-    <li *ngIf="params.action === 'edit'" class="breadcrumb-item active" aria-current="page">Edit - {{params.ref_no}}</li>
+    <li *ngIf="params.action === 'edit'" class="breadcrumb-item active" aria-current="page">Edit - {{params.ref_no}}
+    </li>
   </ol>
 </nav>
 
@@ -65,11 +66,17 @@
             <label for="do_file" class="form-label">D.O File Upload</label>
             <div *ngIf="!hasFile" class="input-group">
               <input type="file" class="form-control" id="do_file" (change)="handleFile($event)">
-              <button class="input-group-text"><i class="fa fa-upload" (click)="uploadDoFile()"></i></button>
+              <button class="input-group-text" (click)="uploadDoFile()"><i class="fa fa-upload"></i></button>
             </div>
-            <div *ngIf="!hasFile" class="form-control-text"><small>Click upload button to upload selected file.</small></div>
-            <a class="form-control-plaintext" *ngIf="hasFile" href={{url+formData.do_file.path}}
-              target="_blank">{{formData.do_file.filename}}</a>
+            <div *ngIf="!hasFile" class="form-control-text"><small>Click upload button to upload selected file.</small>
+            </div>
+            <div *ngIf="hasFile" class="input-group">
+              <span class="form-control">
+                <a href={{url+formData.do_file.path}}
+                  target="_blank">{{formData.do_file.filename}}</a>
+              </span>
+              <button (click)="clearFile()" class="input-group-text"><i class="fa fa-trash"></i></button>
+            </div>
           </div>
           <div class="col-md-12">
             <label for="remarks" class="form-label">Remarks</label>
@@ -105,7 +112,8 @@
                   <td class="text-center">{{ item.element }}</td>
                   <td class="text-center">{{ item.quantity }}</td>
                   <td class="text-center">{{ item.remarks ? item.remarks : '-' }}</td>
-                  <td class="text-center"><button class="btn btn-sm btn-danger py-0" (click)="removeItem(num, item)"><i class="fa fa-trash"></i></button></td>
+                  <td class="text-center"><button class="btn btn-sm btn-danger py-0" (click)="removeItem(num, item)"><i
+                        class="fa fa-trash"></i></button></td>
                 </tr>
               </tbody>
             </table>

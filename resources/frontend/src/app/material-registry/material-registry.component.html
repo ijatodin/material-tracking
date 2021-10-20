@@ -10,47 +10,54 @@
   <div class="card-header">
     <div class="d-md-flex justify-content-between">
       <h4 class="card-title my-1 ml-2">Material Registry</h4>
-      <a data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" role="button" class="btn btn-primary mr-2">
+      <button data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" (click)="setNew()" class="btn btn-primary mr-2">
         <i class="fa fa-plus"></i> Add Material
-      </a>
+      </button>
     </div>
   </div>
   <div class="card-body">
-    <table class="table table-sm table-bordered mt-2">
-      <thead class="table-dark">
-        <tr>
-          <th scope="col" class="text-center">#</th>
-          <th scope="col" class="text-center">Description</th>
-          <th scope="col" class="text-center">Specs</th>
-          <th scope="col" class="text-center">Type</th>
-          <th scope="col" class="text-center">UOM</th>
-          <th scope="col" class="text-center">Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let item of materialData; let num = index">
-          <th scope="row" class="text-center">{{ num+1 }}</th>
-          <td class="text-center">{{ item.description }}</td>
-          <td class="text-center">{{ item.specs ? item.specs : '-' }}</td>
-          <td class="text-center">{{ item.type.name }}</td>
-          <td class="text-center">{{ item.uom ? item.uom : '-' }}</td>
-          <td class="text-center">
-            <div class="btn-group">
-              <button class="btn btn-primary btn-sm py-0"><i class="fa fa-pencil"></i></button>
-              <button class="btn btn-warning btn-sm py-0"><i class="fa fa-trash"></i></button>
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="table-responsive">
+      <table class="table table-sm table-bordered mt-2">
+        <thead class="table-dark">
+          <tr>
+            <th scope="col" class="text-center">#</th>
+            <th scope="col" class="text-center">Description</th>
+            <th scope="col" class="text-center">Specs</th>
+            <th scope="col" class="text-center">Type</th>
+            <th scope="col" class="text-center">UOM</th>
+            <th scope="col" class="text-center">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of materialData; let num = index">
+            <th scope="row" class="text-center">{{ num+1 }}</th>
+            <td class="text-center">{{ item.description }}</td>
+            <td class="text-center">{{ item.specs ? item.specs : '-' }}</td>
+            <td class="text-center">{{ item.types.name }}</td>
+            <td class="text-center">{{ item.uom ? item.uom : '-' }}</td>
+            <td class="text-center">
+              <div class="btn-group">
+                <button data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" (click)="setItem(item)"
+                  class="btn btn-primary btn-sm py-0"><i data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight"
+                    class="fa fa-pencil"></i></button>
+                <button class="btn btn-danger btn-sm py-0" (click)="setItem(item);promptDelete(delete)"><i
+                    class="fa fa-trash"></i></button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>
 
 <!-- canvas material data -->
 <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
   <div class="offcanvas-header">
-    <h5 id="offcanvasRightLabel">New Vendor</h5>
-    <button type="button" class="btn text-reset" data-bs-dismiss="offcanvas" aria-label="Close"><i class="fa fa-close"></i></button>
+    <h5 class="my-2" *ngIf="!formData.id" id="offcanvasRightLabel">New Vendor</h5>
+    <h5 class="my-2" *ngIf="formData.id" id="offcanvasRightLabel">Update Vendor</h5>
+    <button type="button" class="btn text-reset" data-bs-dismiss="offcanvas" aria-label="Close"><i
+        class="fa fa-close"></i></button>
   </div>
   <div class="offcanvas-body">
     <div class="mb-3">
@@ -77,3 +84,24 @@
     </div>
   </div>
 </div>
+
+<!-- modal details -->
+<ng-template #delete let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Delete Material</h4>
+    <button type="button" class="btn text-reset" aria-label="Close" (click)="modal.dismiss('Cross click')"><i
+        class="fa fa-close"></i></button>
+  </div>
+  <div class="modal-body">
+    <div>
+      <p><strong>Are you sure you want to delete material <span class="text-primary">"{{formData.description}}"</span> ?</strong></p>
+      <p>All information associated to this material will be permanently deleted.
+        <span class="text-danger">This operation can not be undone.</span>
+      </p>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-secondary" (click)="modal.dismiss('cancel click')">Cancel</button>
+    <button type="button" ngbAutofocus class="btn btn-danger" (click)="modal.close(formData)">OK</button>
+  </div>
+</ng-template>

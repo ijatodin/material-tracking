@@ -110,6 +110,10 @@ export class ReceivingFormComponent implements OnInit {
     this.selectedMaterial = {};
   }
 
+  clearFile() {
+    this.hasFile = false;
+  }
+
   removeItem(idx: any, data: any) {
     console.log(idx, data);
     // if (this.params.action === "create") {

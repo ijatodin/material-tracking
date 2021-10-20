@@ -11,6 +11,7 @@ export class SupplierManagementComponent implements OnInit {
   formData: any = {};
   isSubcon: boolean = false;
   forSubcon: any = [];
+  opened: boolean;
 
   constructor(private suppSvc: SupplierService) {
     this.formData.parent_id = '';

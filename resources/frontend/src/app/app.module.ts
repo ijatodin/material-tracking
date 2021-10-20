@@ -30,6 +30,7 @@ import { TypeManagementComponent } from './setting/type-management/type-manageme
 import { PurchaseOrderComponent } from './purchase-order/purchase-order.component';
 import { ProfileComponent } from './setting/profile/profile.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {MatSidenavModule} from '@angular/material/sidenav';
 
 @NgModule({
   declarations: [
@@ -61,7 +62,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     NgxPrintModule,
     NgSelectModule,
     BrowserAnimationsModule,
-    NgxSpinnerModule
+    NgxSpinnerModule,
+    MatSidenavModule
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [

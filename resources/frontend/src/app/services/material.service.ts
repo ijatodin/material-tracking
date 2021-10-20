@@ -26,4 +26,8 @@ export class MaterialService {
     return this.http.post<GenericResponse>(`${environment.apiUrl}/material-search`, data);
   }
 
+  delete(data: any) {
+    return this.http.post<GenericResponse>(`${environment.apiUrl}/material-delete`, data);
+  }
+
 }

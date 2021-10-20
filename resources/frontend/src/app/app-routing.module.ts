@@ -68,7 +68,7 @@ const routes: Routes = [
       {
         path: 'type-management',
         component: TypeManagementComponent,
-      }
+      },
     ],
   },
 ];
