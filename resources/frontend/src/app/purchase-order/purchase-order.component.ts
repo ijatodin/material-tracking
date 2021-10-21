@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { environment } from 'src/environments/environment';
 import { FileUploadService } from '../services/file-upload.service';
 import { PurchaseOrderService } from '../services/purchase-order.service';
@@ -14,10 +15,12 @@ export class PurchaseOrderComponent implements OnInit {
   poData: any = [];
   file: any = null;
   url: any = environment.url;
+  closeResult: any;
 
   constructor(
     private fileSvc: FileUploadService,
-    private poSvc: PurchaseOrderService
+    private poSvc: PurchaseOrderService,
+    private modalService: NgbModal
   ) { }
 
   ngOnInit(): void {
@@ -31,6 +34,40 @@ export class PurchaseOrderComponent implements OnInit {
         console.log(this.poData);
       }
     });
+  }
+
+  setNew() {
+    this.formData = null;
+  }
+
+  setItem(data: any) {
+    this.formData = data.name;
+    console.log(this.formData);
+  }
+
+  promptDelete(content: any) {
+    this.modalService
+      .open(content, { size: "lg", scrollable: true })
+      .result.then(
+        (result) => {
+          //function di sini
+          console.log(result);
+        },
+        (reason) => {
+          this.closeResult = this.getDismissReason(reason);
+          console.log(this.closeResult);
+        }
+      );
+  }
+
+  getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return "by pressing ESC";
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return "by clicking on a backdrop";
+    } else {
+      return `with: ${reason}`;
+    }
   }
 
   handleFile(event: any) {
