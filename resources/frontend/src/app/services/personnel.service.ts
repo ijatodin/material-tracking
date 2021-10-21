@@ -25,4 +25,8 @@ export class PersonnelService {
   storePersonnel(data: any) {
     return this.http.post<GenericResponse>(`${environment.apiUrl}/setting/personnel-store`, data);
   }
+
+  delete(data: any) {
+    return this.http.post<GenericResponse>(`${environment.apiUrl}/setting/personnel-delete`, data);
+  }
 }

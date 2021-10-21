@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { SupplierService } from 'src/app/services/supplier.service';
 
 @Component({
@@ -12,8 +13,12 @@ export class SupplierManagementComponent implements OnInit {
   isSubcon: boolean = false;
   forSubcon: any = [];
   opened: boolean;
+  closeResult: any;
 
-  constructor(private suppSvc: SupplierService) {
+  constructor(
+    private suppSvc: SupplierService,
+    private modalService: NgbModal
+    ) {
     this.formData.parent_id = '';
   }
 
@@ -46,9 +51,44 @@ export class SupplierManagementComponent implements OnInit {
     }
   }
 
+  setNew() {
+    this.formData = {};
+  }
+
   setItem(data: any) {
     this.formData = data;
     console.log(this.formData);
+  }
+
+  promptDelete(content: any) {
+    this.modalService
+      .open(content, { size: "lg", scrollable: true })
+      .result.then(
+        (result) => {
+          //function di sini
+          this.suppSvc.delete(result).subscribe((res)=>{
+            if(res.message === 'SUCCESS') {
+              this.formData = {};
+              this.getAll();
+            }
+          });
+          console.log(result);
+        },
+        (reason) => {
+          this.closeResult = this.getDismissReason(reason);
+          console.log(this.closeResult);
+        }
+      );
+  }
+
+  getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return "by pressing ESC";
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return "by clicking on a backdrop";
+    } else {
+      return `with: ${reason}`;
+    }
   }
 
   formatRole(data: any) {

@@ -39,7 +39,7 @@
             <td class="text-center">{{ item.received_date | date:'dd/MM/yyyy' }}</td>
             <td class="text-center"><button data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight"
                 (click)="setDetails(item)" class="btn btn-primary btn-sm py-0" aria-controls="offcanvasRight"><i
-                  class="fa fa-info"></i></button>
+                  data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" class="fa fa-info"></i></button>
             </td>
           </tr>
         </tbody>

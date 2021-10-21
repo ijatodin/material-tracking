@@ -29,4 +29,8 @@ export class SupplierService {
   storeSupplier(data: any) {
     return this.http.post<GenericResponse>(`${environment.apiUrl}/setting/supplier-store`, data);
   }
+
+  delete(data: any) {
+    return this.http.post<GenericResponse>(`${environment.apiUrl}/setting/supplier-delete`, data);
+  }
 }

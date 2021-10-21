@@ -10,9 +10,10 @@
   <div class="card-header">
     <div class="d-md-flex justify-content-between">
       <h4 class="card-title my-1 ml-2">Personnel Management</h4>
-      <a data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" role="button" class="btn btn-primary mr-2">
+      <button (click)="setNew()" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" role="button"
+        class="btn btn-primary mr-2">
         <i class="fa fa-plus"></i> Add Personnel
-      </a>
+      </button>
     </div>
   </div>
   <div class="card-body">
@@ -36,9 +37,11 @@
           <td class="text-center">{{ formatRole(item.role) }}</td>
           <td class="text-center">
             <div class="btn-group">
-              <button (click)="setItem(item)" class="btn btn-primary btn-sm py-0" data-bs-toggle="offcanvas"
-                data-bs-target="#offcanvasRight"><i class="fa fa-pencil"></i></button>
-              <button class="btn btn-danger btn-sm py-0"><i class="fa fa-trash"></i></button>
+              <button data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" (click)="setItem(item)"
+                class="btn btn-primary btn-sm py-0"><i data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight"
+                  class="fa fa-pencil"></i></button>
+              <button class="btn btn-danger btn-sm py-0" (click)="setItem(item);promptDelete(delete)"><i
+                  class="fa fa-trash"></i></button>
             </div>
           </td>
         </tr>
@@ -50,7 +53,8 @@
 <!-- canvas material data -->
 <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
   <div class="offcanvas-header">
-    <h5 id="offcanvasRightLabel">New Personnel</h5>
+    <h5 class="my-2" *ngIf="!formData.id" id="offcanvasRightLabel">New Personnel</h5>
+    <h5 class="my-2" *ngIf="formData.id" id="offcanvasRightLabel">Update Personnel</h5>
     <button type="button" class="btn text-reset" data-bs-dismiss="offcanvas" aria-label="Close"><i
         class="fa fa-close"></i></button>
   </div>
@@ -85,3 +89,25 @@
     </div>
   </div>
 </div>
+
+<!-- modal details -->
+<ng-template #delete let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Delete Personnel</h4>
+    <button type="button" class="btn text-reset" aria-label="Close" (click)="modal.dismiss('Cross click')"><i
+        class="fa fa-close"></i></button>
+  </div>
+  <div class="modal-body">
+    <div>
+      <p><strong>Are you sure you want to delete personnel <span class="text-primary">"{{formData.name}}"</span>
+          ?</strong></p>
+      <p>All information associated to this personnel will be permanently deleted.
+        <span class="text-danger">This operation can not be undone.</span>
+      </p>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-secondary" (click)="modal.dismiss('cancel click')">Cancel</button>
+    <button type="button" ngbAutofocus class="btn btn-danger" (click)="modal.close(formData)">OK</button>
+  </div>
+</ng-template>

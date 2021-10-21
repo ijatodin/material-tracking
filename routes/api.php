@@ -54,6 +54,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::post('supplier-all', 'SupplierController@index');
         Route::post('supplier-only', 'SupplierController@supplier');
         Route::post('subcon-only', 'SupplierController@subcon');
+        Route::post('supplier-delete', 'SupplierController@delete');
 
         // location management
         Route::post('location-store', 'LocationController@store');
@@ -68,10 +69,12 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::post('personnel-store', 'PersonnelController@store');
         Route::post('personnel-all', 'PersonnelController@index');
         Route::post('personnel-group', 'PersonnelController@group');
+        Route::post('personnel-delete', 'PersonnelController@delete');
 
         // type management
         Route::post('type-store', 'MaterialTypeController@store');
         Route::post('type-all', 'MaterialTypeController@index');
+        Route::post('type-delete', 'MaterialTypeController@delete');
     });
 
     Route::post('logout', 'AuthController@logout');

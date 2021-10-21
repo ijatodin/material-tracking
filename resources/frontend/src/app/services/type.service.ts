@@ -21,4 +21,8 @@ export class TypeService {
   storeType(data: any) {
     return this.http.post<GenericResponse>(`${environment.apiUrl}/setting/type-store`, data);
   }
+
+  delete(data: any) {
+    return this.http.post<GenericResponse>(`${environment.apiUrl}/setting/type-delete`, data);
+  }
 }

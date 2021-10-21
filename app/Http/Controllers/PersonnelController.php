@@ -80,4 +80,25 @@ class PersonnelController extends Controller
             return response()->json(['message' => $e->getMessage()], 404);
         }
     }
+
+    public function delete(Request $request) {
+        try {
+            $user = User::where('id', $request->input('id'))->first();
+
+            if (!$user) {
+                return response()->json(['message' => 'NO DATA'], 404);
+            } else {
+                $user->delete();
+
+                $personnel = Personnel::where('id', $request->input('personnel_id'))->first();
+                $personnel->delete();
+
+                $user->personnel = $personnel;
+
+                return response()->json(['message' => 'SUCCESS', 'model' => $user], 200);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 404);
+        }
+    }
 }
