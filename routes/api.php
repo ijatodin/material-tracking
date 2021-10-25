@@ -23,6 +23,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('receiving-all', 'ReceivingController@index');
     Route::post('receiving-single', 'ReceivingController@single');
     Route::post('receiving-store', 'ReceivingController@store');
+    Route::post('receiving-complete', 'ReceivingController@complete');
+    Route::post('receiving-delete', 'ReceivingController@delete');
 
     // receiving details
     Route::post('rdetails-all', 'ReceivingDetailsController@index');
@@ -46,6 +48,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     // purchase order
     Route::post('po-all', 'PurchaseOrderController@index');
     Route::post('po-store', 'PurchaseOrderController@store');
+    Route::post('po-delete', 'PurchaseOrderController@delete');
 
     // settings
     Route::group(['prefix' => 'setting'], function () {

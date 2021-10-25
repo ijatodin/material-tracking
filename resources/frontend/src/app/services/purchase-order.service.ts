@@ -21,4 +21,8 @@ export class PurchaseOrderService {
   storeData(data: any) {
     return this.http.post<GenericResponse>(`${environment.apiUrl}/po-store`, data);
   }
+
+  delete(data: any) {
+    return this.http.post<GenericResponse>(`${environment.apiUrl}/po-delete`, data);
+  }
 }

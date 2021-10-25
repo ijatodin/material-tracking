@@ -10,7 +10,8 @@ use Illuminate\Support\Facades\Storage;
 
 class PurchaseOrderController extends Controller
 {
-    public function index() {
+    public function index()
+    {
         try {
             $model = PurchaseOrder::with('file')->get();
             return response()->json(['message' => 'SUCCESS', 'model' => $model], 200);
@@ -19,16 +20,24 @@ class PurchaseOrderController extends Controller
         }
     }
 
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
         DB::beginTransaction();
+
+        //validate incoming request
+        $this->validate($request, [
+            'name' => 'required|string|unique:purchase_orders,name'
+        ]);
+
         try {
+            $po = PurchaseOrder::where('id', request('id'))->first();
             $file = new File();
 
             if ($request->hasFile('file')) {
                 $fileName = $request->file('file')->getClientOriginalName();
                 $fileNameOnly = pathinfo($fileName, PATHINFO_FILENAME);
                 $fileExtension = $request->file('file')->getClientOriginalExtension();
-                $completeName = str_replace(' ', '_', $fileNameOnly).'_'.rand().'.'.$fileExtension;
+                $completeName = str_replace(' ', '_', $fileNameOnly) . '_' . rand() . '.' . $fileExtension;
                 $path = $request->file('file')->storeAs('public', $completeName);
 
                 $url = Storage::url($completeName);
@@ -40,18 +49,49 @@ class PurchaseOrderController extends Controller
                 $file->updated_by = auth()->id();
             }
             if ($file->save()) {
-                $formData = request('form');
+                $name = request('name');
                 // dd($formData);
-                $res = PurchaseOrder::create([
-                    'name' => $formData,
-                    'file_id' => $file->id
-                ]);
-                $res->file = $file;
-                DB::commit();
-                return response()->json(['message' => 'SUCCESS', 'model' => $res], 200);
+
+                if ($po) {
+                    $po->name = $name;
+                    if ($file) {
+                        $po->file_id = $file->id;
+                    }
+                    $po->save();
+                    DB::commit();
+                    return response()->json(['message' => 'SUCCESS', 'model' => $po], 200);
+                } else {
+                    $res = PurchaseOrder::create([
+                        'name' => $name,
+                        'file_id' => $file->id
+                    ]);
+                    $res->file = $file;
+                    DB::commit();
+                    return response()->json(['message' => 'SUCCESS', 'model' => $res], 200);
+                }
             }
         } catch (\Exception $e) {
             DB::rollback();
+            return response()->json(['message' => $e->getMessage()], 404);
+        }
+    }
+
+    public function delete(Request $request)
+    {
+        try {
+            $purchaseOrder = PurchaseOrder::where('id', $request->input('id'))->first();
+
+            if (!$purchaseOrder) {
+                return response()->json(['message' => 'NO DATA'], 404);
+            } else {
+                $file = File::where('id', $purchaseOrder->file_id)->first();
+                $file->delete();
+
+                $purchaseOrder->delete();
+
+                return response()->json(['message' => 'SUCCESS', 'model' => $purchaseOrder], 200);
+            }
+        } catch (\Exception $e) {
             return response()->json(['message' => $e->getMessage()], 404);
         }
     }

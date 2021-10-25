@@ -35,8 +35,11 @@
           </td>
           <td class="text-center">
             <div class="btn-group">
-              <button class="btn btn-primary btn-sm py-0"><i class="fa fa-pencil"></i></button>
-              <button class="btn btn-warning btn-sm py-0"><i class="fa fa-trash"></i></button>
+              <button (click)="setItem(item)" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight"
+                class="btn btn-primary btn-sm py-0"><i data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight"
+                  class="fa fa-pencil"></i></button>
+              <button class="btn btn-danger btn-sm py-0" (click)="setItem(item);promptDelete(delete)"><i
+                  class="fa fa-trash"></i></button>
             </div>
           </td>
         </tr>
@@ -48,24 +51,33 @@
 <!-- canvas material data -->
 <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
   <div class="offcanvas-header">
-    <h5 id="offcanvasRightLabel">New Purchase Order</h5>
+    <h5 *ngIf="!formData.id" id="offcanvasRightLabel">New Purchase Order</h5>
+    <h5 *ngIf="formData.id" id="offcanvasRightLabel">Update Purchase Order</h5>
     <button type="button" class="btn text-reset" data-bs-dismiss="offcanvas" aria-label="Close"><i
         class="fa fa-close"></i></button>
   </div>
   <div class="offcanvas-body">
     <div class="mb-3">
       <label for="name" class="form-label">Reference Number/ Name</label>
-      <input type="text" class="form-control" id="name" [(ngModel)]="formData"
-        (ngModelChange)="formData = $event.toUpperCase()">
+      <input type="text" class="form-control" id="name" [(ngModel)]="formData.name"
+        (ngModelChange)="formData.name = $event.toUpperCase()">
     </div>
-    <div class="mb-3">
+    <div *ngIf="!hasFile" class="mb-3">
       <label for="po_file" class="form-label">File Attachment</label>
       <input type="file" class="form-control" id="po_file" (change)="handleFile($event)">
     </div>
+    <div *ngIf="hasFile" class="mb-3">
+      <label for="po_file" class="form-label">File Attachment</label>
+      <div class="input-group">
+        <span class="form-control text-truncate">
+          <a href={{url+formData.file.path}} target="_blank">{{formData.file.filename}}</a>
+        </span>
+        <button (click)="setUpload()" type="button" class="input-group-text"><i class="fa fa-trash"></i></button>
+      </div>
+    </div>
     <div class="">
-      <button *ngIf="!formData || !file" type="submit" class="btn btn-primary btn-sm form-control"
-        disabled>SUBMIT</button>
-      <button *ngIf="formData && file" type="submit" class="btn btn-primary btn-sm form-control"
+      <button *ngIf="!formData.name" type="submit" class="btn btn-primary btn-sm form-control" disabled>SUBMIT</button>
+      <button *ngIf="formData.name" type="submit" class="btn btn-primary btn-sm form-control"
         (click)="submitData()">SUBMIT</button>
     </div>
   </div>
@@ -74,15 +86,15 @@
 <!-- modal details -->
 <ng-template #delete let-modal>
   <div class="modal-header">
-    <h4 class="modal-title" id="modal-basic-title">Delete Purchase Order</h4>
+    <h4 class="modal-title">Delete Purchase Order</h4>
     <button type="button" class="btn text-reset" aria-label="Close" (click)="modal.dismiss('Cross click')"><i
         class="fa fa-close"></i></button>
   </div>
   <div class="modal-body">
     <div>
-      <p><strong>Are you sure you want to delete Purchase Order <span
-            class="text-primary">"{{formData.description}}"</span> ?</strong></p>
-      <p>All information associated to this material will be permanently deleted.
+      <p><strong>Are you sure you want to delete Purchase Order <span class="text-primary">"{{formData.name}}"</span>
+          ?</strong></p>
+      <p>All information associated to this purchase order will be permanently deleted.
         <span class="text-danger">This operation can not be undone.</span>
       </p>
     </div>
@@ -92,3 +104,4 @@
     <button type="button" ngbAutofocus class="btn btn-danger" (click)="modal.close(formData)">OK</button>
   </div>
 </ng-template>
+
