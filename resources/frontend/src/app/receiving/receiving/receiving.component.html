@@ -26,6 +26,7 @@
             <th scope="col" class="text-center">Supplier</th>
             <th scope="col" class="text-center">Subcon</th>
             <th scope="col" class="text-center">Received Date</th>
+            <th scope="col" class="text-center">Status</th>
             <th scope="col" class="text-center">Action</th>
           </tr>
         </thead>
@@ -37,6 +38,7 @@
             <td class="text-center">{{ item.supplier.name }}</td>
             <td class="text-center">{{ item.subcon.name }}</td>
             <td class="text-center">{{ item.received_date | date:'dd/MM/yyyy' }}</td>
+            <td class="text-center">{{ formatStatus(item.status) }}</td>
             <td class="text-center"><button data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight"
                 (click)="setDetails(item)" class="btn btn-primary btn-sm py-0" aria-controls="offcanvasRight"><i
                   data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" class="fa fa-info"></i></button>
@@ -53,10 +55,15 @@
   <div class="offcanvas-header">
     <h5 class="py-2 m-0" id="offcanvasRightLabel"><strong>{{ selectedReceiving.ref_no }}</strong></h5>
     <div class="btn-group">
-      <a type="button" [routerLink]="['/receiving/edit/' + selectedReceiving.ref_no]" data-bs-dismiss="offcanvas"
-        class="btn text-reset"><i class="fa fa-pencil"></i></a>
-      <button type="button" class="btn text-reset" data-bs-dismiss="offcanvas" aria-label="Close"><i
-          class="fa fa-close"></i></button>
+      <a *ngIf="selectedReceiving.status > 0" placement="bottom" ngbTooltip="Edit Receiving" type="button"
+        [routerLink]="['/receiving/edit/' + selectedReceiving.ref_no]" class="btn text-primary"><i
+          class="fa fa-pencil"></i></a>
+      <button *ngIf="selectedReceiving.status > 0" (click)="promptComplete(complete)" placement="bottom"
+        ngbTooltip="Set to Completed" type="button" class="btn text-success"><i class="fa fa-check"></i></button>
+      <button *ngIf="selectedReceiving.status > 0" (click)="promptDelete(delete)" placement="bottom"
+        ngbTooltip="Delete Receiving" type="button" class="btn text-danger"><i class="fa fa-trash"></i></button>
+      <button placement="bottom" ngbTooltip="Close" type="button" class="btn text-reset" data-bs-dismiss="offcanvas"
+        aria-label="Close"><i class="fa fa-close"></i></button>
     </div>
 
   </div>
@@ -123,5 +130,48 @@
 
       </div>
     </div>
-
   </div>
+
+  <!-- modal delete details -->
+  <ng-template #delete let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title">Delete Receiving</h4>
+      <button type="button" class="btn text-reset" aria-label="Close" (click)="modal.dismiss('Cross click')"><i
+          class="fa fa-close"></i></button>
+    </div>
+    <div class="modal-body">
+      <div>
+        <p><strong>Are you sure you want to delete <span class="text-primary">"{{selectedReceiving.ref_no}}"</span>
+            ?</strong></p>
+        <p>All information associated to this receiving will be permanently deleted.
+          <span class="text-danger">This operation can not be undone.</span>
+        </p>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-secondary" (click)="modal.dismiss('cancel click')">Cancel</button>
+      <button type="button" ngbAutofocus class="btn btn-danger" (click)="modal.close(selectedReceiving)">OK</button>
+    </div>
+  </ng-template>
+
+  <!-- modal complete details -->
+  <ng-template #complete let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title">Complete Receiving</h4>
+      <button type="button" class="btn text-reset" aria-label="Close" (click)="modal.dismiss('Cross click')"><i
+          class="fa fa-close"></i></button>
+    </div>
+    <div class="modal-body">
+      <div>
+        <p><strong>Are you sure you want to complete <span class="text-primary">"{{selectedReceiving.ref_no}}"</span>
+            ?</strong></p>
+        <p>All information associated to this receiving cannot be changed or deleted once completed.
+          <span class="text-danger">This operation can not be undone.</span>
+        </p>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-secondary" (click)="modal.dismiss('cancel click')">Cancel</button>
+      <button type="button" ngbAutofocus class="btn btn-danger" (click)="modal.close(selectedReceiving)">OK</button>
+    </div>
+  </ng-template>

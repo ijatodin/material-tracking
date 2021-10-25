@@ -95,4 +95,44 @@ class ReceivingController extends Controller
             ], 404);
         }
     }
+
+    public function complete(Request $request) {
+        try {
+            $receiving = Receiving::where('id', $request->input('id'))->first();
+
+            if (!$receiving) {
+                return response()->json(['message' => 'NO DATA'], 404);
+            } else {
+
+                $receiving->status = 0;
+                $receiving->save();
+
+                return response()->json(['message' => 'SUCCESS', 'model' => $receiving], 200);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 404);
+        }
+    }
+
+    public function delete(Request $request)
+    {
+        try {
+            $receiving = Receiving::where('id', $request->input('id'))->first();
+
+            if (!$receiving) {
+                return response()->json(['message' => 'NO DATA'], 404);
+            } else {
+                $rDetails = ReceivingDetails::where('ref_no', $receiving->ref_no)->get();
+                foreach ($rDetails as $rd) {
+                    $rd->delete();
+                }
+
+                $receiving->delete();
+
+                return response()->json(['message' => 'SUCCESS', 'model' => $receiving], 200);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 404);
+        }
+    }
 }
