@@ -51,7 +51,9 @@ class ReceivingController extends Controller
                     'po_no' => request('po_no'),
                     'remarks' => request('remarks') ?: null,
                     'date' => Carbon::parse(request('date'))->format('Y-m-d H:i:s'),
-                    'received_date' => Carbon::parse(request('received_date'))->format('Y-m-d H:i:s')
+                    'received_date' => Carbon::parse(request('received_date'))->format('Y-m-d H:i:s'),
+                    'created_by' => auth()->id(),
+                    'updated_by' => auth()->id()
                 ]
             );
 
@@ -68,6 +70,8 @@ class ReceivingController extends Controller
                             'element' => $rd['element'] ?: null,
                             'quantity' => $rd['quantity'],
                             'remarks' => $rd['remarks'] ?: null,
+                            'created_by' => auth()->id(),
+                            'updated_by' => auth()->id()
                         ]
                     );
                 }
@@ -96,7 +100,8 @@ class ReceivingController extends Controller
         }
     }
 
-    public function complete(Request $request) {
+    public function complete(Request $request)
+    {
         try {
             $receiving = Receiving::where('id', $request->input('id'))->first();
 

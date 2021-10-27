@@ -109,7 +109,7 @@
                   <th scope="row" class="text-center">{{ num+1 }}</th>
                   <td class="text-center">{{ item.description }}</td>
                   <td class="text-center">{{ item.location }}</td>
-                  <td class="text-center">{{ item.element }}</td>
+                  <td class="text-center">{{ item.element ? item.remarks : '-' }}</td>
                   <td class="text-center">{{ item.quantity }}</td>
                   <td class="text-center">{{ item.remarks ? item.remarks : '-' }}</td>
                   <td class="text-center"><button class="btn btn-sm btn-danger py-0" (click)="removeItem(num, item)"><i

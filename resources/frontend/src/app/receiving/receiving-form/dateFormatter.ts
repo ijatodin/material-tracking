@@ -5,7 +5,7 @@ import { isNumber, toInteger, padNumber } from '@ng-bootstrap/ng-bootstrap/util/
 @Injectable()
 export class CustomAdapter extends NgbDateAdapter<string> {
 
-  readonly DELIMITER = '-';
+  readonly DELIMITER = '/';
 
   fromModel(value: string | null): NgbDateStruct | null {
     if (value) {

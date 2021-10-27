@@ -101,10 +101,11 @@ export class ReceivingFormComponent implements OnInit {
   selectMaterial(data:any) {
     this.selectedMaterial = data;
     this.selectedMaterial.remarks = '';
+    this.selectedMaterial.element = '';
   }
 
   addToDetails() {
-    this.selectedMaterial.location_id = this.selectedMaterial.location.id;
+    // this.selectedMaterial.location_id = this.selectedMaterial.location.id;
     console.log(this.selectedMaterial);
     this.formData.details.push(this.selectedMaterial);
     this.selectedMaterial = {};
