@@ -18,10 +18,10 @@ class Receiving extends Model
         'id', 'ref_no', 'supplier_id', 'subcon_id', 'date', 'received_date', 'do_no', 'po_no', 'remarks', 'status', 'summary_id', 'created_by', 'updated_by'
     ];
 
-    // protected $casts = [
-    //     'date' => 'datetime:d/m/Y',
-    //     'received_date' => 'datetime:d/m/Y'
-    //  ];
+    protected $casts = [
+        'date' => 'datetime:d-m-Y',
+        'received_date' => 'datetime:d-m-Y'
+     ];
 
     public function details() {
         return $this->hasMany('App\Models\ReceivingDetails', 'ref_no', 'ref_no');

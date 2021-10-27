@@ -37,7 +37,7 @@
             <td class="text-center">{{ item.do_no }}</td>
             <td class="text-center">{{ item.supplier.name }}</td>
             <td class="text-center">{{ item.subcon.name }}</td>
-            <td class="text-center">{{ item.received_date | date:'dd/MM/yyyy' }}</td>
+            <td class="text-center">{{ item.received_date }}</td>
             <td class="text-center">{{ formatStatus(item.status) }}</td>
             <td class="text-center"><button data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight"
                 (click)="setDetails(item)" class="btn btn-primary btn-sm py-0" aria-controls="offcanvasRight"><i
@@ -90,11 +90,11 @@
         </tr>
         <tr>
           <th>Date</th>
-          <td>{{ selectedReceiving.date | date:'dd/MM/yyyy' }}</td>
+          <td>{{ selectedReceiving.date }}</td>
         </tr>
         <tr>
           <th>Received Date</th>
-          <td>{{ selectedReceiving.received_date | date:'dd/MM/yyyy' }}</td>
+          <td>{{ selectedReceiving.received_date }}</td>
         </tr>
         <tr>
           <th>Files</th>
