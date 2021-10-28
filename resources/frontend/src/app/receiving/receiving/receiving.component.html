@@ -56,8 +56,8 @@
     <h5 class="py-2 m-0" id="offcanvasRightLabel"><strong>{{ selectedReceiving.ref_no }}</strong></h5>
     <div class="btn-group">
       <a *ngIf="selectedReceiving.status > 0" placement="bottom" ngbTooltip="Edit Receiving" type="button"
-        [routerLink]="['/receiving/edit/' + selectedReceiving.ref_no]" class="btn text-primary"><i
-          class="fa fa-pencil"></i></a>
+        data-bs-dismiss="offcanvas" [routerLink]="['/receiving/edit/' + selectedReceiving.ref_no]"
+        class="btn text-primary"><i class="fa fa-pencil"></i></a>
       <button *ngIf="selectedReceiving.status > 0" (click)="promptComplete(complete)" placement="bottom"
         ngbTooltip="Set to Completed" type="button" class="btn text-success"><i class="fa fa-check"></i></button>
       <button *ngIf="selectedReceiving.status > 0" (click)="promptDelete(delete)" placement="bottom"
