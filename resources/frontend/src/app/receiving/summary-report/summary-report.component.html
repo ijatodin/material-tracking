@@ -56,13 +56,13 @@
           <tr *ngFor="let item of details; let num = index;">
             <td scope="row" class="text-center">{{ num+1 }}</td>
             <td class="text-center">{{ item.ref.do_no }}</td>
-            <td class="text-center">{{ item.ref.date | date:'dd.MM.yyyy' }}</td>
+            <td class="text-center">{{ item.ref.date }}</td>
             <td class="text-center">{{ item.ref.supplier.name }}</td>
             <td class="text-center">{{ item.ref.subcon.name }}</td>
             <td class="text-center">{{ item.description }}</td>
             <td class="text-center">{{ item.quantity }}</td>
             <td class="text-center">{{ item.location }}</td>
-            <td class="text-center">{{ item.ref.received_date | date:'dd.MM.yyyy' }}</td>
+            <td class="text-center">{{ item.ref.received_date }}</td>
           </tr>
         </tbody>
       </table>
@@ -176,13 +176,13 @@
           <tr *ngFor="let item of details; let num = index;">
             <td scope="row" class="text-center">{{ num+1 }}</td>
             <td class="text-center">{{ item.ref.do_no }}</td>
-            <td class="text-center">{{ item.ref.date | date:'dd.MM.yyyy' }}</td>
+            <td class="text-center">{{ item.ref.date }}</td>
             <td class="text-center">{{ item.ref.supplier.name }}</td>
             <td class="text-center">{{ item.ref.subcon.name }}</td>
             <td class="text-center">{{ item.description }}</td>
             <td class="text-center">{{ item.quantity }}</td>
             <td class="text-center">{{ item.location }}</td>
-            <td class="text-center">{{ item.ref.received_date | date:'dd.MM.yyyy' }}</td>
+            <td class="text-center">{{ item.ref.received_date }}</td>
           </tr>
         </tbody>
       </table>
