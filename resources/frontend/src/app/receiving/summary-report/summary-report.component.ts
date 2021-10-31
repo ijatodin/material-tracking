@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MaterialService } from 'src/app/services/material.service';
 import { PersonnelService } from 'src/app/services/personnel.service';
 import { ProjectService } from 'src/app/services/project.service';
@@ -6,7 +6,8 @@ import { SummaryService } from 'src/app/services/summary.service';
 import { SupplierService } from 'src/app/services/supplier.service';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
-import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Offcanvas } from 'bootstrap';
+import { ModalDismissReasons, NgbCalendar, NgbDate, NgbDateParserFormatter, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-summary-report',
@@ -43,6 +44,13 @@ export class SummaryReportComponent implements OnInit {
   filterBy: any = null;
   closeResult: string = '';
   summaryDetails: any = [];
+  isCollapsed: boolean = true;
+
+  hoveredDate: NgbDate | null = null;
+
+  fromDate: NgbDate | null;
+  toDate: NgbDate | null;
+
 
   constructor(
     private summarySvc: SummaryService,
@@ -50,8 +58,14 @@ export class SummaryReportComponent implements OnInit {
     private personnelSvc: PersonnelService,
     private supplierSvc: SupplierService,
     private materialSvc: MaterialService,
-    private modalService: NgbModal
-  ) {}
+    private modalService: NgbModal,
+    private elementRef: ElementRef,
+    private calendar: NgbCalendar,
+    public formatter: NgbDateParserFormatter
+  ) {
+    this.fromDate = calendar.getToday();
+    this.toDate = calendar.getNext(calendar.getToday(), 'd', 10);
+  }
 
   ngOnInit(): void {
     this.getProject();
@@ -61,6 +75,11 @@ export class SummaryReportComponent implements OnInit {
     this.getSummary();
   }
 
+  onDateSelection(inst) {
+    console.log(inst)
+  }
+
+  // Please comment if anything used for testing and also comment when it is supposed deprecated
   test() {
     this.hasData = true;
     // console.log(this.formData);

@@ -271,7 +271,9 @@
           <label for="date" class="form-label">From</label>
           <div class="input-group">
             <span (click)="d2.toggle()" class="input-group-text"><i class="fa fa-calendar"></i></span>
-            <input class="form-control" placeholder="dd/mm/yyyy" name="d2" #c2="ngModel" [(ngModel)]="formData.from"
+            <input class="form-control" placeholder="dd/mm/yyyy" name="d2" #c2="ngModel"
+              (dateSelect)="onDateSelection(d2)"
+              [(ngModel)]="formData.from" autocomplete="off" [autoClose]="'outside'"
               ngbDatepicker #d2="ngbDatepicker" (click)="d2.toggle()">
           </div>
         </div>
@@ -279,7 +281,9 @@
           <label for="received_date" class="form-label">To</label>
           <div class="input-group">
             <span (click)="d1.toggle()" class="input-group-text"><i class="fa fa-calendar"></i></span>
-            <input class="form-control" placeholder="dd/mm/yyyy" name="d1" #c1="ngModel" [(ngModel)]="formData.to"
+            <input class="form-control" placeholder="dd/mm/yyyy" name="d1" #c1="ngModel"
+              (dateSelect)="onDateSelection($event)"
+              [(ngModel)]="formData.to" autocomplete="off" [autoClose]="'outside'"
               ngbDatepicker #d1="ngbDatepicker" (click)="d1.toggle();">
           </div>
         </div>
