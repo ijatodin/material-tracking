@@ -126,7 +126,7 @@ class SummaryReportController extends Controller
                     return $q->whereBetween('received_date', [Carbon::parse(request('from'))->format('Y-m-d H:i:s'), Carbon::parse(request('to'))->format('Y-m-d H:i:s')]);
                 });
 
-                $receiving = $query->get();
+                $receiving = $query->where('status', 0)->get();
                 $ref = array();
                 foreach ($receiving as $r) {
                     $push = array_push($ref, $r->ref_no);
