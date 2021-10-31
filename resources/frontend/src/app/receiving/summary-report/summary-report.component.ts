@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MaterialService } from 'src/app/services/material.service';
 import { PersonnelService } from 'src/app/services/personnel.service';
 import { ProjectService } from 'src/app/services/project.service';
@@ -6,7 +6,8 @@ import { SummaryService } from 'src/app/services/summary.service';
 import { SupplierService } from 'src/app/services/supplier.service';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
-import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Offcanvas } from 'bootstrap';
+import { ModalDismissReasons, NgbCalendar, NgbDate, NgbDateParserFormatter, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-summary-report',
@@ -43,6 +44,13 @@ export class SummaryReportComponent implements OnInit {
   filterBy: any = null;
   closeResult: string = '';
   summaryDetails: any = [];
+  isCollapsed: boolean = true;
+
+  hoveredDate: NgbDate | null = null;
+
+  fromDate: NgbDate | null;
+  toDate: NgbDate | null;
+
 
   constructor(
     private summarySvc: SummaryService,
@@ -50,8 +58,14 @@ export class SummaryReportComponent implements OnInit {
     private personnelSvc: PersonnelService,
     private supplierSvc: SupplierService,
     private materialSvc: MaterialService,
-    private modalService: NgbModal
-  ) {}
+    private modalService: NgbModal,
+    private elementRef: ElementRef,
+    private calendar: NgbCalendar,
+    public formatter: NgbDateParserFormatter
+  ) {
+    this.fromDate = calendar.getToday();
+    this.toDate = calendar.getNext(calendar.getToday(), 'd', 10);
+  }
 
   ngOnInit(): void {
     this.getProject();
@@ -61,12 +75,17 @@ export class SummaryReportComponent implements OnInit {
     this.getSummary();
   }
 
+  onDateSelection(inst) {
+    console.log(inst)
+  }
+
+  // Please comment if anything used for testing and also comment when it is supposed deprecated
   test() {
     this.hasData = true;
-    console.log(this.formData);
+    // console.log(this.formData);
     this.summarySvc.generate(this.formData).subscribe((res) => {
       if (res.message === 'SUCCESS') {
-        console.log(res.model);
+        // console.log(res.model);
         this.detailsData = res.model;
         if (this.detailsData.length === 0) {
           this.hasData = false;
@@ -74,7 +93,7 @@ export class SummaryReportComponent implements OnInit {
           for (let key of Object.keys(this.detailsData)) {
             let detail = this.detailsData[key];
             this.data.push(detail);
-            console.log(this.data);
+            // console.log(this.data);
           }
           this.isGenerated = true;
         }
@@ -83,7 +102,7 @@ export class SummaryReportComponent implements OnInit {
   }
 
   handleFilter() {
-    console.log(this.filterBy);
+    // console.log(this.filterBy);
     if (this.filterBy === 1) {
       this.isSupplier = true;
       this.isDescription = false;
@@ -131,7 +150,7 @@ export class SummaryReportComponent implements OnInit {
   getPersonnel() {
     this.personnelSvc.getGroup().subscribe((res) => {
       this.personnelData = res.model;
-      console.log(this.personnelData);
+      // console.log(this.personnelData);
       for (let obj of Object.keys(this.personnelData)) {
         if (obj === '1') {
           this.makerData = this.personnelData[obj];
@@ -158,7 +177,7 @@ export class SummaryReportComponent implements OnInit {
     this.summarySvc.getAll().subscribe((res) => {
       if (res.message === 'SUCCESS') {
         this.summaryData = res.model;
-        console.log(this.summaryData);
+        // console.log(this.summaryData);
       }
     });
   }
@@ -172,7 +191,7 @@ export class SummaryReportComponent implements OnInit {
         for (let key of Object.keys(res.model)) {
           let detail = res.model[key];
           this.summaryDetails.push(detail);
-          console.log(this.selectedSummary);
+          // console.log(this.selectedSummary);
         }
       }
     });
@@ -183,11 +202,11 @@ export class SummaryReportComponent implements OnInit {
     this.saveData.maker = this.selectedMaker;
     this.saveData.checker = this.selectedChecker;
     this.saveData.approver = this.selectedApprover;
-    console.log(this.saveData);
+    // console.log(this.saveData);
 
     this.summarySvc.save(this.saveData).subscribe((res) => {
       if (res.message === 'SUCCESS') {
-        console.log(res.model);
+        // console.log(res.model);
         this.saveData = {};
         this.getSummary();
       }
@@ -217,11 +236,11 @@ export class SummaryReportComponent implements OnInit {
       .result.then(
         (result) => {
           //function di sini
-          console.log(result);
+          // console.log(result);
         },
         (reason) => {
           this.closeResult = this.getDismissReason(reason);
-          console.log(this.closeResult);
+          // console.log(this.closeResult);
         }
       );
   }
