@@ -35,21 +35,21 @@ export class HomeComponent implements OnInit {
       if (res.message === 'SUCCESS') {
         this.summaryData = res.model;
         this.filterRole();
-        console.log(this.summaryData);
+        // console.log(this.summaryData);
       }
     });
   }
 
   filterRole() {
-    console.log(this.currentUser.user.role);
+    // console.log(this.currentUser.user.role);
     if (this.currentUser.user.role === 2) {
       let index = this.summaryData.filter(
-        (r: any) => (r.status === 1)
+        (r: any) => (r.status === 1 && r.checker_id === this.currentUser.user.personnel_id)
       );
       this.summaryData = index;
     } else if (this.currentUser.user.role === 3) {
       let index = this.summaryData.filter(
-        (r: any) => (r.status === 2)
+        (r: any) => (r.status === 2 && r.approver_id === this.currentUser.user.personnel_id)
       );
       this.summaryData = index;
     }
@@ -70,7 +70,7 @@ export class HomeComponent implements OnInit {
         for (let key of Object.keys(res.model)) {
           let detail = res.model[key];
           this.summaryDetails.push(detail);
-          console.log(this.selectedSummary);
+          // console.log(this.selectedSummary);
         }
       }
     });
@@ -99,11 +99,11 @@ export class HomeComponent implements OnInit {
       .result.then(
         (result) => {
           //function di sini
-          console.log(result);
+          // console.log(result);
         },
         (reason) => {
           this.closeResult = this.getDismissReason(reason);
-          console.log(this.closeResult);
+          // console.log(this.closeResult);
         }
       );
   }

@@ -44,6 +44,7 @@
             <td class="text-center"><button class="btn btn-primary btn-sm py-0"
                 (click)="getSingle(item);modalOpen(content)"><i class="fa fa-info"></i></button></td>
           </tr>
+          <tr *ngIf="summaryData.length === 0"><td colspan="5">NO DATA</td></tr>
         </tbody>
       </table>
     </div>
@@ -63,7 +64,8 @@
         class="badge rounded-pill bg-success">{{formatStatus(selectedSummary.status)}}</span>
     </div>
     <div>
-      <button *ngIf="currentUser.user.role > 1" class="btn btn-primary"><i class="fa fa-check"></i> Approve</button>
+      <button *ngIf="currentUser.user.role > 1 && selectedSummary.status === 1" class="btn btn-success"><i class="fa fa-check"></i> Checked</button>
+      <button *ngIf="currentUser.user.role > 1 && selectedSummary.status === 2" class="btn btn-success"><i class="fa fa-check"></i> Approve</button>
       <button type="button" class="btn text-reset" aria-label="Close" (click)="modal.dismiss()"><i
           class="fa fa-close"></i></button>
     </div>
@@ -96,13 +98,13 @@
           <tr *ngFor="let item of details; let num = index;">
             <td scope="row" class="text-center">{{ num+1 }}</td>
             <td class="text-center">{{ item.ref.do_no }}</td>
-            <td class="text-center">{{ item.ref.date | date:'dd.MM.yyyy' }}</td>
+            <td class="text-center">{{ item.ref.date }}</td>
             <td class="text-center">{{ item.ref.supplier.name }}</td>
             <td class="text-center">{{ item.ref.subcon.name }}</td>
             <td class="text-center">{{ item.description }}</td>
             <td class="text-center">{{ item.quantity }}</td>
             <td class="text-center">{{ item.location }}</td>
-            <td class="text-center">{{ item.ref.received_date | date:'dd.MM.yyyy' }}</td>
+            <td class="text-center">{{ item.ref.received_date }}</td>
           </tr>
         </tbody>
       </table>
