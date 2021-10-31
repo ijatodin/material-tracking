@@ -30,7 +30,7 @@ export class ProjectManagementComponent implements OnInit {
   submit() {
     this.projectSvc.storeProject(this.formData).subscribe((res) => {
       if (res.message === 'SUCCESS') {
-        console.log(res.model);
+        // console.log(res.model);
         this.formData = {};
         this.getData();
       }

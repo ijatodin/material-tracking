@@ -22,9 +22,9 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
-    console.log(this.loginForm);
+    // console.log(this.loginForm);
     this.authSvc.login(this.loginForm.email, this.loginForm.password).pipe(first()).subscribe((data) => {
-      console.log(data);
+      // console.log(data);
       this.router.navigate(["/receiving"]);
     },() => {
       this.errorMessage = 'The provided credentials are incorrect.';

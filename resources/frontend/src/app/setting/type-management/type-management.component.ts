@@ -26,7 +26,7 @@ export class TypeManagementComponent implements OnInit {
   getData() {
     this.typeSvc.getAll().subscribe((res) => {
       this.typeData = res.model;
-      console.log(this.typeData);
+      // console.log(this.typeData);
     });
   }
 
@@ -46,7 +46,7 @@ export class TypeManagementComponent implements OnInit {
 
   setDetails(data: any) {
     this.formData = data;
-    console.log(this.formData);
+    // console.log(this.formData);
   }
 
   promptDelete(content: any) {
@@ -61,11 +61,11 @@ export class TypeManagementComponent implements OnInit {
               this.getData();
             }
           });
-          console.log(result);
+          // console.log(result);
         },
         (reason) => {
           this.closeResult = this.getDismissReason(reason);
-          console.log(this.closeResult);
+          // console.log(this.closeResult);
         }
       );
   }

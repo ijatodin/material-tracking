@@ -29,14 +29,14 @@ export class SupplierManagementComponent implements OnInit {
   getAll() {
     this.suppSvc.getAll().subscribe((res) => {
       this.supplierData = res.model;
-      console.log(this.supplierData);
+      // console.log(this.supplierData);
     });
   }
 
   getSupplier() {
     this.suppSvc.getSupplier().subscribe((res) => {
       this.forSubcon = res.model;
-      console.log(this.forSubcon);
+      // console.log(this.forSubcon);
     });
   }
 
@@ -47,7 +47,7 @@ export class SupplierManagementComponent implements OnInit {
     } else {
       this.isSubcon = false;
       this.formData.parent_id = '';
-      console.log(this.formData);
+      // console.log(this.formData);
     }
   }
 
@@ -57,7 +57,7 @@ export class SupplierManagementComponent implements OnInit {
 
   setItem(data: any) {
     this.formData = data;
-    console.log(this.formData);
+    // console.log(this.formData);
   }
 
   promptDelete(content: any) {
@@ -72,11 +72,11 @@ export class SupplierManagementComponent implements OnInit {
               this.getAll();
             }
           });
-          console.log(result);
+          // console.log(result);
         },
         (reason) => {
           this.closeResult = this.getDismissReason(reason);
-          console.log(this.closeResult);
+          // console.log(this.closeResult);
         }
       );
   }
@@ -109,10 +109,10 @@ export class SupplierManagementComponent implements OnInit {
   }
 
   submitData() {
-    console.log(this.formData);
+    // console.log(this.formData);
     this.suppSvc.storeSupplier(this.formData).subscribe((res) => {
       if (res.message === 'SUCCESS') {
-        console.log(res.model);
+        // console.log(res.model);
         this.getAll();
         this.formData = {};
       }

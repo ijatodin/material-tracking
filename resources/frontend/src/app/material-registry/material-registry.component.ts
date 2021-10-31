@@ -28,7 +28,7 @@ export class MaterialRegistryComponent implements OnInit {
   getAll() {
     this.materialSvc.getAll().subscribe((res) => {
       this.materialData = res.model;
-      console.log(this.materialData);
+      // console.log(this.materialData);
     });
   }
 
@@ -38,7 +38,7 @@ export class MaterialRegistryComponent implements OnInit {
 
   setItem(data: any) {
     this.formData = data;
-    console.log(this.formData);
+    // console.log(this.formData);
   }
 
   promptDelete(content: any) {
@@ -54,11 +54,11 @@ export class MaterialRegistryComponent implements OnInit {
               this.getAll();
             }
           })
-          console.log(result);
+          // console.log(result);
         },
         (reason) => {
           this.closeResult = this.getDismissReason(reason);
-          console.log(this.closeResult);
+          // console.log(this.closeResult);
         }
       );
   }
@@ -80,19 +80,19 @@ export class MaterialRegistryComponent implements OnInit {
   getType() {
     this.typeSvc.getAll().subscribe((res) => {
       this.typeData = res.model;
-      console.log(this.typeData);
+      // console.log(this.typeData);
     });
   }
 
   submitData() {
-    console.log(this.formData);
+    // console.log(this.formData);
     this.materialSvc.storeMaterial(this.formData).subscribe((res) => {
       if (res.message === 'SUCCESS') {
-        console.log(res.model);
+        // console.log(res.model);
         this.formData = {};
         this.getAll();
       } else {
-        console.log(res.message);
+        // console.log(res.message);
       }
     });
   }

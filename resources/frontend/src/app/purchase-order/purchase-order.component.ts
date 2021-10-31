@@ -32,7 +32,7 @@ export class PurchaseOrderComponent implements OnInit {
     this.poSvc.getData().subscribe((res) => {
       if (res.message === 'SUCCESS') {
         this.poData = res.model;
-        console.log(this.poData);
+        // console.log(this.poData);
       }
     });
   }
@@ -45,7 +45,7 @@ export class PurchaseOrderComponent implements OnInit {
   setItem(data: any) {
     this.formData = data;
     this.hasFile = true;
-    console.log(this.formData);
+    // console.log(this.formData);
   }
 
   setUpload() {
@@ -65,11 +65,11 @@ export class PurchaseOrderComponent implements OnInit {
               this.setNew();
             }
           });
-          console.log(result);
+          // console.log(result);
         },
         (reason) => {
           this.closeResult = this.getDismissReason(reason);
-          console.log(this.closeResult);
+          // console.log(this.closeResult);
         }
       );
   }
@@ -86,7 +86,7 @@ export class PurchaseOrderComponent implements OnInit {
 
   handleFile(event: any) {
     this.file = event.target.files.item(0);
-    console.log(this.file);
+    // console.log(this.file);
   }
 
   openError(content: any) {
@@ -95,11 +95,11 @@ export class PurchaseOrderComponent implements OnInit {
       .result.then(
         (result) => {
           //function di sini
-          console.log(result);
+          // console.log(result);
         },
         (reason) => {
           this.closeResult = this.getDismissReason(reason);
-          console.log(this.closeResult);
+          // console.log(this.closeResult);
         }
       );
   }
@@ -112,12 +112,12 @@ export class PurchaseOrderComponent implements OnInit {
     this.poSvc.storeData(uploadData).subscribe(
       (res) => {
         if (res.message === 'SUCCESS') {
-          console.log(res.model);
+          // console.log(res.model);
           this.getData();
         }
       },
       (err) => {
-        console.log(err);
+        // console.log(err);
       }
     );
   }
