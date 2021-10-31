@@ -22,6 +22,10 @@ export class ReceivingService {
     return this.http.post<GenericResponse>(`${environment.apiUrl}/receiving-delete`, data);
   }
 
+  deleteDetail(data: any) {
+    return this.http.post<GenericResponse>(`${environment.apiUrl}/rdetails-delete`, data);
+  }
+
   complete(data: any) {
     return this.http.post<GenericResponse>(`${environment.apiUrl}/receiving-complete`, data);
   }

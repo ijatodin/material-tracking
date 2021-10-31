@@ -30,7 +30,7 @@ export class ReceivingComponent implements OnInit {
 
   setDetails(data: any) {
     this.selectedReceiving = data;
-    console.log(this.selectedReceiving);
+    // console.log(this.selectedReceiving);
   }
 
   formatStatus(data: any) {
@@ -51,7 +51,7 @@ export class ReceivingComponent implements OnInit {
     this.receivingSvc.getReceiving().subscribe((res) => {
       if (res.message === 'SUCCESS') {
         this.receivingData = res.model;
-        console.log(this.receivingData);
+        // console.log(this.receivingData);
       }
     })
   }
@@ -67,11 +67,11 @@ export class ReceivingComponent implements OnInit {
               this.getData();
             }
           })
-          console.log(result);
+          // console.log(result);
         },
         (reason) => {
           this.closeResult = this.getDismissReason(reason);
-          console.log(this.closeResult);
+          // console.log(this.closeResult);
         }
       );
   }
@@ -87,11 +87,11 @@ export class ReceivingComponent implements OnInit {
               this.getData();
             }
           });
-          console.log(result);
+          // console.log(result);
         },
         (reason) => {
           this.closeResult = this.getDismissReason(reason);
-          console.log(this.closeResult);
+          // console.log(this.closeResult);
         }
       );
   }

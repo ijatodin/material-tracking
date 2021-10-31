@@ -72,8 +72,7 @@
             </div>
             <div *ngIf="hasFile" class="input-group">
               <span class="form-control">
-                <a href={{url+formData.do_file.path}}
-                  target="_blank">{{formData.do_file.filename}}</a>
+                <a href={{url+formData.do_file.path}} target="_blank">{{formData.do_file.filename}}</a>
               </span>
               <button (click)="clearFile()" class="input-group-text"><i class="fa fa-trash"></i></button>
             </div>
@@ -109,11 +108,11 @@
                   <th scope="row" class="text-center">{{ num+1 }}</th>
                   <td class="text-center">{{ item.description }}</td>
                   <td class="text-center">{{ item.location }}</td>
-                  <td class="text-center">{{ item.element ? item.remarks : '-' }}</td>
+                  <td class="text-center">{{ item.element ? item.element : '-' }}</td>
                   <td class="text-center">{{ item.quantity }}</td>
                   <td class="text-center">{{ item.remarks ? item.remarks : '-' }}</td>
-                  <td class="text-center"><button class="btn btn-sm btn-danger py-0" (click)="removeItem(num, item)"><i
-                        class="fa fa-trash"></i></button></td>
+                  <td class="text-center"><button class="btn btn-sm btn-danger py-0"
+                      (click)="removeItem(num, item, delete)"><i class="fa fa-trash"></i></button></td>
                 </tr>
               </tbody>
             </table>
@@ -185,5 +184,27 @@
           Material</button>
       </div>
     </div>
+  </div>
+</ng-template>
+
+<!-- modal delete details -->
+<ng-template #delete let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">Delete Receiving Detail</h4>
+    <button type="button" class="btn text-reset" aria-label="Close" (click)="modal.dismiss('Cross click')"><i
+        class="fa fa-close"></i></button>
+  </div>
+  <div class="modal-body">
+    <div>
+      <p><strong>Are you sure you want to delete <span class="text-primary">"{{selectedDetail.description}}"</span>
+          ?</strong></p>
+      <p>
+        <span class="text-danger">This operation can not be undone.</span>
+      </p>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-secondary" (click)="modal.dismiss('cancel click')">Cancel</button>
+    <button type="button" ngbAutofocus class="btn btn-danger" (click)="modal.close(selectedDetail)">OK</button>
   </div>
 </ng-template>

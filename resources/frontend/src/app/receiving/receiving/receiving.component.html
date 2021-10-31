@@ -98,12 +98,12 @@
         </tr>
         <tr>
           <th>Files</th>
-          <td *ngIf="selectedReceiving.files?.length">
-        <tr *ngFor="let file of selectedReceiving.files">
-          <a href={{url+file.path}} target="_blank">{{file.filename}}</a>
+          <td *ngIf="selectedReceiving.files">
+        <tr>
+          <a href={{url+selectedReceiving.files.path}} target="_blank">{{selectedReceiving.files.filename}}</a>
         </tr>
         </td>
-        <td *ngIf="!selectedReceiving.files?.length">-</td>
+        <td *ngIf="!selectedReceiving.files">-</td>
         </tr>
         <!-- <tr>
           <th>Location</th>

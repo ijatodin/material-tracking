@@ -40,7 +40,11 @@ class Receiving extends Model
     }
 
     public function files() {
-        return $this->hasMany('App\Models\File', 'ref_no', 'ref_no');
+        return $this->hasOne('App\Models\File', 'ref_no', 'ref_no');
+    }
+
+    public function do_file() {
+        return $this->hasOne('App\Models\File', 'ref_no', 'ref_no');
     }
 
     public function po() {

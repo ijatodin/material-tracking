@@ -27,7 +27,7 @@ class ReceivingController extends Controller
     public function single()
     {
         try {
-            $model = Receiving::where('ref_no', request('ref_no'))->with('details')->first();
+            $model = Receiving::where('ref_no', request('ref_no'))->with('details', 'do_file')->first();
             // $res = $model->details->groupBy('description');
             // dd($model);
             return response()->json(['message' => 'SUCCESS', 'model' => $model], 200);
@@ -44,7 +44,7 @@ class ReceivingController extends Controller
             $res = Receiving::updateOrCreate(
                 ['ref_no' => $refNo],
                 [
-                    'ref_no' => $refNo,
+                    // 'ref_no' => $refNo,
                     'supplier_id' => request('supplier_id'),
                     'subcon_id' => request('subcon_id'),
                     'do_no' => request('do_no'),
@@ -61,28 +61,42 @@ class ReceivingController extends Controller
 
             if ($res) {
                 foreach ($receivingDetails as $rd) {
-                    ReceivingDetails::create(
-                        [
-                            'ref_no' => $res->ref_no,
-                            'material_id' => $rd['id'],
-                            'description' => $rd['description'],
-                            'location' => $rd['location'],
-                            'element' => $rd['element'] ?: null,
-                            'quantity' => $rd['quantity'],
-                            'remarks' => $rd['remarks'] ?: null,
-                            'created_by' => auth()->id(),
-                            'updated_by' => auth()->id()
-                        ]
-                    );
+                    if (!$rd['material_id']) {
+                        $detail = ReceivingDetails::create(
+                            [
+                                'ref_no' => $refNo,
+                                'material_id' => $rd['id'],
+                                'description' => $rd['description'],
+                                'location' => $rd['location'],
+                                'element' => $rd['element'] ?: null,
+                                'quantity' => $rd['quantity'],
+                                'remarks' => $rd['remarks'] ?: null,
+                                'created_by' => auth()->id(),
+                                'updated_by' => auth()->id()
+                            ]
+                        );
+                    }
                 }
             }
 
             if (request('do_file')) {
-                $dofile = new File(request('do_file'));
 
-                $file = File::where('id', $dofile->id)->first();
-                $file->ref_no = $refNo;
-                $file->save();
+                $dofile = (object)request('do_file');
+
+                $xdo = File::where('ref_no', $refNo)->first();
+                if ($xdo->id != $dofile->id) {
+                    $xdo->delete();
+
+                    $file = File::where('id', $dofile->id)->first();
+                    $file->ref_no = $refNo;
+                    $file->save();
+
+                } else if (!$dofile->ref_no) {
+                    $file = File::where('id', $dofile->id)->first();
+                    $file->ref_no = $refNo;
+                    $file->save();
+                }
+                // dd($file);
             }
 
 
