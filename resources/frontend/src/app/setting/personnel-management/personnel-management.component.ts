@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalDismissReasons, NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { PersonnelService } from 'src/app/services/personnel.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-personnel-management',
@@ -14,6 +15,7 @@ export class PersonnelManagementComponent implements OnInit {
   };
   file: any = null;
   closeResult: any;
+  url: any = environment.url;
 
   constructor(
     private personnelSvc: PersonnelService,
