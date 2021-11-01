@@ -15,6 +15,10 @@ class Personnel extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'designation', 'role', 'id'
+        'name', 'designation', 'role', 'id', 'signature_id'
     ];
+
+    public function signature() {
+        return $this->hasOne('App\Models\File', 'id', 'signature_id');
+    }
 }

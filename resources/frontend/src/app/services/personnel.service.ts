@@ -26,6 +26,10 @@ export class PersonnelService {
     return this.http.post<GenericResponse>(`${environment.apiUrl}/setting/personnel-store`, data);
   }
 
+  storeSignature(data: any) {
+    return this.http.post<GenericResponse>(`${environment.apiUrl}/setting/personnel-signature`, data);
+  }
+
   delete(data: any) {
     return this.http.post<GenericResponse>(`${environment.apiUrl}/setting/personnel-delete`, data);
   }

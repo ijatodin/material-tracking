@@ -25,6 +25,7 @@
           <th scope="col" class="text-center">Email</th>
           <th scope="col" class="text-center">Designation</th>
           <th scope="col" class="text-center">Role</th>
+          <th scope="col" class="text-center">Signature</th>
           <th scope="col" class="text-center">Action</th>
         </tr>
       </thead>
@@ -35,13 +36,16 @@
           <td class="text-center">{{ item.email }}</td>
           <td class="text-center">{{ item.personnel.designation }}</td>
           <td class="text-center">{{ formatRole(item.role) }}</td>
+          <td class="text-center">{{ item.personnel.signature_id ? item.personnel.signature_id : '-' }}</td>
           <td class="text-center">
             <div class="btn-group">
-              <button data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" (click)="setItem(item)"
-                class="btn btn-primary btn-sm py-0"><i data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight"
-                  class="fa fa-pencil"></i></button>
-              <button class="btn btn-danger btn-sm py-0" (click)="setItem(item);promptDelete(delete)"><i
-                  class="fa fa-trash"></i></button>
+              <button placement="top" ngbTooltip="Edit" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight"
+                (click)="setItem(item)" class="btn btn-primary btn-sm py-0"><i data-bs-toggle="offcanvas"
+                  data-bs-target="#offcanvasRight" class="fa fa-pencil"></i></button>
+              <button placement="top" ngbTooltip="Upload Signature" class="btn btn-warning btn-sm py-0" (click)="setItem(item);uploadModal(upload)"><i
+                  class="fa fa-paperclip fa-flip-horizontal"></i></button>
+              <button placement="top" ngbTooltip="Delete" class="btn btn-danger btn-sm py-0"
+                (click)="setItem(item);promptDelete(delete)"><i class="fa fa-trash"></i></button>
             </div>
           </td>
         </tr>
@@ -90,7 +94,7 @@
   </div>
 </div>
 
-<!-- modal details -->
+<!-- modal delete details -->
 <ng-template #delete let-modal>
   <div class="modal-header">
     <h4 class="modal-title" id="modal-basic-title">Delete Personnel</h4>
@@ -109,5 +113,25 @@
   <div class="modal-footer">
     <button type="button" class="btn btn-outline-secondary" (click)="modal.dismiss('cancel click')">Cancel</button>
     <button type="button" ngbAutofocus class="btn btn-danger" (click)="modal.close(formData)">OK</button>
+  </div>
+</ng-template>
+
+<!-- modal upload details -->
+<ng-template #upload let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Upload Personnel Signature</h4>
+    <button type="button" class="btn text-reset" aria-label="Close" (click)="modal.dismiss('Cross click')"><i
+        class="fa fa-close"></i></button>
+  </div>
+  <div class="modal-body">
+    <div class="mb-3 mx-2">
+      <label for="signature" class="form-label">Signature File Attachment</label>
+      <input type="file" accept="image/png, image/x-png" (change)="handleFile($event)" class="form-control" id="signature">
+      <div class="form-text">Signature File must be in <strong>PNG</strong> format.</div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-secondary" (click)="modal.dismiss('cancel click')">Cancel</button>
+    <button type="button" ngbAutofocus class="btn btn-primary" (click)="modal.close('hi')">Upload</button>
   </div>
 </ng-template>

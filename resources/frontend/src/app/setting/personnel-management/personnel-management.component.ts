@@ -1,24 +1,24 @@
 import { Component, OnInit } from '@angular/core';
-import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ModalDismissReasons, NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { PersonnelService } from 'src/app/services/personnel.service';
 
 @Component({
   selector: 'app-personnel-management',
   templateUrl: './personnel-management.component.html',
-  styleUrls: ['./personnel-management.component.scss']
+  styleUrls: ['./personnel-management.component.scss'],
 })
 export class PersonnelManagementComponent implements OnInit {
-
   personnelData: any = [];
   formData: any = {
-    personnel: {}
+    personnel: {},
   };
+  file: any = null;
   closeResult: any;
 
   constructor(
     private personnelSvc: PersonnelService,
     private modalService: NgbModal
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.getData();
@@ -35,7 +35,7 @@ export class PersonnelManagementComponent implements OnInit {
 
   setNew() {
     this.formData = {
-      personnel: {}
+      personnel: {},
     };
   }
 
@@ -44,15 +44,58 @@ export class PersonnelManagementComponent implements OnInit {
     console.log(this.formData);
   }
 
-  promptDelete(content: any) {
+  uploadModal(content: any) {
     this.modalService
-      .open(content, { size: "lg", scrollable: true })
+      .open(content, { size: 'lg', scrollable: true })
       .result.then(
         (result) => {
           //function di sini
-          this.personnelSvc.delete(result).subscribe((res)=>{
-            if(res.message === 'SUCCESS') {
-              this.formData = {personnel: {}};
+          console.log(result);
+          this.submitSignature();
+        },
+        (reason) => {
+          this.closeResult = this.getDismissReason(reason);
+          console.log(this.closeResult);
+        }
+      );
+  }
+
+  submitSignature() {
+    const uploadData = new FormData();
+    uploadData.append('sign', this.file, this.file.name);
+    uploadData.append('personnel_id', this.formData.personnel_id);
+    this.personnelSvc.storeSignature(uploadData).subscribe(
+      (res) => {
+        if (res.message === 'SUCCESS') {
+          // console.log(res.model);
+          this.getData();
+        }
+      },
+      (err) => {
+        // console.log(err);
+      }
+    );
+  }
+
+  handleFile(event: any) {
+    this.file = event.target.files.item(0);
+    if (this.file.type === "image/png" || this.file.type === "image/x-png"){
+      console.log(true);
+    } else {
+      this.file = null;
+    }
+
+  }
+
+  promptDelete(content: any) {
+    this.modalService
+      .open(content, { size: 'lg', scrollable: true })
+      .result.then(
+        (result) => {
+          //function di sini
+          this.personnelSvc.delete(result).subscribe((res) => {
+            if (res.message === 'SUCCESS') {
+              this.formData = { personnel: {} };
               this.getData();
             }
           });
@@ -67,9 +110,9 @@ export class PersonnelManagementComponent implements OnInit {
 
   getDismissReason(reason: any): string {
     if (reason === ModalDismissReasons.ESC) {
-      return "by pressing ESC";
+      return 'by pressing ESC';
     } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return "by clicking on a backdrop";
+      return 'by clicking on a backdrop';
     } else {
       return `with: ${reason}`;
     }
@@ -97,11 +140,10 @@ export class PersonnelManagementComponent implements OnInit {
       if (res.message === 'SUCCESS') {
         console.log(res.model);
         this.formData = {
-          personnel: {}
+          personnel: {},
         };
         this.getData();
       }
     });
   }
-
 }
