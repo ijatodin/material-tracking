@@ -15,7 +15,7 @@ class SummaryReportController extends Controller
     public function index()
     {
         try {
-            $res = SummaryReport::with('maker', 'checker', 'approver')->get();
+            $res = SummaryReport::with('maker', 'checker', 'approver', 'maker.signature', 'checker.signature', 'approver.signature')->get();
 
             return response()->json(['message' => 'SUCCESS', 'model' => $res], 200);
         } catch (\Exception $e) {
@@ -30,6 +30,34 @@ class SummaryReportController extends Controller
 
             return response()->json(['message' => 'SUCCESS', 'model' => $res], 200);
         } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 404);
+        }
+    }
+
+    public function approval()
+    {
+        try {
+            DB::beginTransaction();
+
+            $res = SummaryReport::where('id', request('id'))->first();
+
+            if ($res) {
+                if ($res->status === 1) {
+                    $res->status = 2;
+                    $res->checked_at = Carbon::now();
+                    $res->updated_by = auth()->id();
+                } else if ($res->status === 2) {
+                    $res->status = 3;
+                    $res->approved_at = Carbon::now();
+                    $res->updated_by = auth()->id();
+                }
+                $res->save();
+            }
+
+            DB::commit();
+            return response()->json(['message' => 'SUCCESS', 'model' => $res], 200);
+        } catch (\Exception $e) {
+            DB::rollBack();
             return response()->json(['message' => $e->getMessage()], 404);
         }
     }

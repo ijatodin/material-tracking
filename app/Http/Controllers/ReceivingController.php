@@ -84,19 +84,21 @@ class ReceivingController extends Controller
                 $dofile = (object)request('do_file');
 
                 $xdo = File::where('ref_no', $refNo)->first();
-                if ($xdo->id != $dofile->id) {
-                    $xdo->delete();
+                // dd($xdo);
 
-                    $file = File::where('id', $dofile->id)->first();
-                    $file->ref_no = $refNo;
-                    $file->save();
+                if ($xdo) {
+                    if ($xdo->id != $dofile->id) {
+                        $xdo->delete();
 
-                } else if (!$dofile->ref_no) {
+                        $file = File::where('id', $dofile->id)->first();
+                        $file->ref_no = $refNo;
+                        $file->save();
+                    }
+                } else {
                     $file = File::where('id', $dofile->id)->first();
                     $file->ref_no = $refNo;
                     $file->save();
                 }
-                // dd($file);
             }
 
 

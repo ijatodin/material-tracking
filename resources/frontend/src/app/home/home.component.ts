@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { environment } from 'src/environments/environment';
 import { AuthenticationService } from '../services/authentication.service';
 import { ProjectService } from '../services/project.service';
 import { SummaryService } from '../services/summary.service';
@@ -16,6 +17,7 @@ export class HomeComponent implements OnInit {
   summaryDetails: any = [];
   selectedProject: any = {};
   currentUser: any;
+  url: any = environment.url;
 
   constructor(
     private summarySvc: SummaryService,
@@ -63,6 +65,7 @@ export class HomeComponent implements OnInit {
 
   getSingle(item: any) {
     this.selectedSummary = item;
+    console.log(this.selectedSummary);
     let data = { id: this.selectedSummary.id };
     this.summarySvc.getSingle(data).subscribe((res) => {
       if (res.message === 'SUCCESS') {
@@ -91,6 +94,15 @@ export class HomeComponent implements OnInit {
         break;
     }
     return res;
+  }
+
+  approval() {
+    this.summarySvc.approval(this.selectedSummary).subscribe((res) => {
+      if (res.message === 'SUCCESS') {
+        console.log(res.model);
+        this.getSummary();
+      }
+    });
   }
 
   modalOpen(content: any) {

@@ -29,4 +29,8 @@ export class SummaryService {
   save(data: any) {
     return this.http.post<GenericResponse>(`${environment.apiUrl}/summary-save`, data);
   }
+
+  approval(data: any) {
+    return this.http.post<GenericResponse>(`${environment.apiUrl}/summary-approval`, data);
+  }
 }

@@ -28,12 +28,14 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     // receiving details
     Route::post('rdetails-all', 'ReceivingDetailsController@index');
+    Route::post('rdetails-delete', 'ReceivingDetailsController@delete');
 
     // summary report
     Route::post('summary-generate', 'SummaryReportController@generate');
     Route::post('summary-all', 'SummaryReportController@index');
     Route::post('summary-single', 'SummaryReportController@single');
     Route::post('summary-save', 'SummaryReportController@save');
+    Route::post('summary-approval', 'SummaryReportController@approval');
 
     // material registry
     Route::post('material-store', 'MaterialController@store');
@@ -70,6 +72,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
         // personnel management
         Route::post('personnel-store', 'PersonnelController@store');
+        Route::post('personnel-signature', 'PersonnelController@storeSign');
         Route::post('personnel-all', 'PersonnelController@index');
         Route::post('personnel-group', 'PersonnelController@group');
         Route::post('personnel-delete', 'PersonnelController@delete');

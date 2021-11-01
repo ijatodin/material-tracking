@@ -7,7 +7,15 @@ import { SupplierService } from 'src/app/services/supplier.service';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import { Offcanvas } from 'bootstrap';
-import { ModalDismissReasons, NgbCalendar, NgbDate, NgbDateParserFormatter, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import {
+  ModalDismissReasons,
+  NgbCalendar,
+  NgbDate,
+  NgbDateParserFormatter,
+  NgbModal,
+} from '@ng-bootstrap/ng-bootstrap';
+import { AuthenticationService } from 'src/app/services/authentication.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-summary-report',
@@ -45,12 +53,15 @@ export class SummaryReportComponent implements OnInit {
   closeResult: string = '';
   summaryDetails: any = [];
   isCollapsed: boolean = true;
+  saved: boolean = false;
+  currentUser: any;
+  url: any = environment.url;
+
 
   hoveredDate: NgbDate | null = null;
 
   fromDate: NgbDate | null;
   toDate: NgbDate | null;
-
 
   constructor(
     private summarySvc: SummaryService,
@@ -58,6 +69,7 @@ export class SummaryReportComponent implements OnInit {
     private personnelSvc: PersonnelService,
     private supplierSvc: SupplierService,
     private materialSvc: MaterialService,
+    private authSvc: AuthenticationService,
     private modalService: NgbModal,
     private elementRef: ElementRef,
     private calendar: NgbCalendar,
@@ -65,6 +77,7 @@ export class SummaryReportComponent implements OnInit {
   ) {
     this.fromDate = calendar.getToday();
     this.toDate = calendar.getNext(calendar.getToday(), 'd', 10);
+    this.currentUser = this.authSvc.currentUserValue;
   }
 
   ngOnInit(): void {
@@ -76,11 +89,11 @@ export class SummaryReportComponent implements OnInit {
   }
 
   onDateSelection(inst) {
-    console.log(inst)
+    console.log(inst);
   }
 
   // Please comment if anything used for testing and also comment when it is supposed deprecated
-  test() {
+  generate() {
     this.hasData = true;
     // console.log(this.formData);
     this.summarySvc.generate(this.formData).subscribe((res) => {
@@ -101,6 +114,7 @@ export class SummaryReportComponent implements OnInit {
     });
   }
 
+  // deprecated
   handleFilter() {
     // console.log(this.filterBy);
     if (this.filterBy === 1) {
@@ -154,6 +168,7 @@ export class SummaryReportComponent implements OnInit {
       for (let obj of Object.keys(this.personnelData)) {
         if (obj === '1') {
           this.makerData = this.personnelData[obj];
+          this.defaultMaker();
         } else if (obj === '2') {
           this.checkerData = this.personnelData[obj];
         } else if (obj === '3') {
@@ -161,6 +176,16 @@ export class SummaryReportComponent implements OnInit {
         }
       }
     });
+  }
+
+  defaultMaker() {
+    let index = this.makerData.filter(
+      (r: any) => r.id === this.currentUser.user.personnel_id
+    );
+    if (index.length > 0) {
+      this.selectedMaker = index[0];
+    }
+    console.log(this.selectedMaker);
   }
 
   personnelCheck() {
@@ -208,6 +233,7 @@ export class SummaryReportComponent implements OnInit {
       if (res.message === 'SUCCESS') {
         // console.log(res.model);
         this.saveData = {};
+        this.saved = true;
         this.getSummary();
       }
     });

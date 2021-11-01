@@ -44,7 +44,9 @@
             <td class="text-center"><button class="btn btn-primary btn-sm py-0"
                 (click)="getSingle(item);modalOpen(content)"><i class="fa fa-info"></i></button></td>
           </tr>
-          <tr *ngIf="summaryData.length === 0"><td colspan="5">NO DATA</td></tr>
+          <tr *ngIf="summaryData.length === 0">
+            <td colspan="5">NO DATA</td>
+          </tr>
         </tbody>
       </table>
     </div>
@@ -64,8 +66,10 @@
         class="badge rounded-pill bg-success">{{formatStatus(selectedSummary.status)}}</span>
     </div>
     <div>
-      <button *ngIf="currentUser.user.role > 1 && selectedSummary.status === 1" class="btn btn-success"><i class="fa fa-check"></i> Checked</button>
-      <button *ngIf="currentUser.user.role > 1 && selectedSummary.status === 2" class="btn btn-success"><i class="fa fa-check"></i> Approve</button>
+      <button *ngIf="currentUser.user.role > 1 && selectedSummary.status === 1" class="btn btn-success"
+        (click)="modal.close();approval()"><i class="fa fa-check"></i> Checked</button>
+      <button *ngIf="currentUser.user.role > 1 && selectedSummary.status === 2" class="btn btn-success"
+        (click)="modal.close();approval()"><i class="fa fa-check"></i> Approve</button>
       <button type="button" class="btn text-reset" aria-label="Close" (click)="modal.dismiss()"><i
           class="fa fa-close"></i></button>
     </div>
@@ -111,7 +115,12 @@
       <div class="d-flex justify-content-between">
         <div>
           <span>Recorded By:</span>
-          <br><br><br><br>
+          <div class="no-signature" *ngIf="!selectedSummary.created_at">
+
+          </div>
+          <div *ngIf="selectedSummary.created_at">
+            <img class="img-signature" src={{url+selectedSummary.maker.signature.path}} alt="Maker Sign">
+          </div>
           <span>Name: {{ selectedSummary.maker.name }}</span><br>
           <span>Position: {{ selectedSummary.maker.designation }}</span><br>
           <span>Date: {{ selectedSummary.created_at | date:'dd.MM.yyyy' }}</span>
@@ -119,7 +128,12 @@
 
         <div>
           <span>Checked By:</span>
-          <br><br><br><br>
+          <div class="no-signature" *ngIf="!selectedSummary.checked_at">
+
+          </div>
+          <div *ngIf="selectedSummary.checked_at">
+            <img class="img-signature" src={{url+selectedSummary.checker.signature.path}} alt="Maker Sign">
+          </div>
           <span>Name: {{ selectedSummary.checker.name }}</span><br>
           <span>Position: {{ selectedSummary.checker.designation }}</span><br>
           <span>Date: {{ selectedSummary.checked_at | date:'dd.MM.yyyy' }}</span>
@@ -127,7 +141,12 @@
 
         <div>
           <span>Recorded By:</span>
-          <br><br><br><br>
+          <div class="no-signature" *ngIf="!selectedSummary.approved_at">
+
+          </div>
+          <div *ngIf="selectedSummary.approved_at">
+            <img class="img-signature" src={{url+selectedSummary.approver.signature.path}} alt="Maker Sign">
+          </div>
           <span>Name: {{ selectedSummary.approver.name }}</span><br>
           <span>Position: {{ selectedSummary.approver.designation }}</span><br>
           <span>Date: {{ selectedSummary.approved_at | date:'dd.MM.yyyy' }}</span>
