@@ -15,7 +15,7 @@
         <button data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" class="btn btn-primary me-2">
           <i class="fa fa-plus"></i> Summary Option
         </button>
-        <button *ngIf="isGenerated && !saved" class="btn btn-primary me-2 disabled" aria-disabled="true"><i
+        <button *ngIf="isGenerated && saved" class="btn btn-primary me-2 disabled" aria-disabled="true"><i
             class="fa fa-save"></i> Save</button>
         <button *ngIf="isGenerated && signCheck && !saved" class="btn btn-primary me-2" (click)="saveSlip()"><i
             class="fa fa-save"></i> Save</button>
