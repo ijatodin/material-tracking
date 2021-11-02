@@ -141,6 +141,14 @@ class SummaryReportController extends Controller
                     return $q->where('subcon_id', request('subcon_id'));
                 });
 
+                $query->when(request('po'), function ($q) {
+                    return $q->where('po_no', request('po'));
+                });
+
+                $query->when(request('do'), function ($q) {
+                    return $q->where('do_no', request('do'));
+                });
+
                 // range
                 $query->when($range == 'week', function ($q) {
                     return $q->whereBetween('received_date', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()]);

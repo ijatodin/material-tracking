@@ -6,7 +6,6 @@ import { SummaryService } from 'src/app/services/summary.service';
 import { SupplierService } from 'src/app/services/supplier.service';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
-import { Offcanvas } from 'bootstrap';
 import {
   ModalDismissReasons,
   NgbCalendar,
@@ -16,6 +15,8 @@ import {
 } from '@ng-bootstrap/ng-bootstrap';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { environment } from 'src/environments/environment';
+import * as XLSX from "xlsx";
+import { PurchaseOrderService } from 'src/app/services/purchase-order.service';
 
 @Component({
   selector: 'app-summary-report',
@@ -56,6 +57,7 @@ export class SummaryReportComponent implements OnInit {
   saved: boolean = false;
   currentUser: any;
   url: any = environment.url;
+  poData: any = [];
 
 
   hoveredDate: NgbDate | null = null;
@@ -70,6 +72,7 @@ export class SummaryReportComponent implements OnInit {
     private supplierSvc: SupplierService,
     private materialSvc: MaterialService,
     private authSvc: AuthenticationService,
+    private poSvc: PurchaseOrderService,
     private modalService: NgbModal,
     private elementRef: ElementRef,
     private calendar: NgbCalendar,
@@ -145,6 +148,10 @@ export class SummaryReportComponent implements OnInit {
 
     this.supplierSvc.getSupplier().subscribe((res) => {
       this.supplierData = res.model;
+    });
+
+    this.poSvc.getData().subscribe((res) => {
+      this.poData = res.model;
     });
   }
 
@@ -296,5 +303,20 @@ export class SummaryReportComponent implements OnInit {
 
       PDF.save('summary' + this.formData.range + '.pdf');
     });
+  }
+
+  exportSummary() {
+    /* table id is passed over here */
+    let element = document.getElementById("summary-table");
+    const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(element);
+
+    /* generate workbook and add the worksheet */
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+
+    XLSX.writeFile(
+      wb,
+      "Summary_" + this.selectedSummary.sum_no + ".xlsx"
+    );
   }
 }

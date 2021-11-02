@@ -38,7 +38,7 @@
     </div>
     <span *ngIf="isGenerated">SUMMARY OF CONCRETE SUPPLIED</span>
     <div class="table-responsive">
-      <table *ngFor="let details of data" class="table table-sm table-bordered">
+      <table *ngFor="let details of data" class="table table-sm table-bordered" id="generated-table">
         <thead class="">
           <tr>
             <th scope="col" class="text-center">No.</th>
@@ -85,7 +85,7 @@
       </div>
 
       <div>
-        <span>Recorded By:</span>
+        <span>Approved By:</span>
         <br><br><br><br>
         <span>Name: {{ selectedApprover.name }}</span><br>
         <span>Position: {{ selectedApprover.designation }}</span><br>
@@ -146,10 +146,18 @@
       <span *ngIf="selectedSummary.status === 3"
         class="badge rounded-pill bg-success">{{formatStatus(selectedSummary.status)}}</span>
     </div>
-    <button type="button" class="btn text-reset" data-bs-dismiss="offcanvas" aria-label="Close"
-      (click)="modal.dismiss()"><i class="fa fa-close"></i></button>
+    <div>
+      <button class="btn btn-sm btn-success disabled" (click)="exportSummary()"><i class="fa fa-file-excel-o"></i>
+        Export to
+        Excel</button>
+      <button class="btn btn-sm btn-primary ms-1 autofocus" [useExistingCss]="true" printSectionId="summary-preview"
+        ngxPrint><i class="fa fa-file-pdf-o"></i> Export PDF</button>
+      <button type="button" class="btn text-reset" data-bs-dismiss="offcanvas" aria-label="Close"
+        (click)="modal.dismiss()"><i class="fa fa-close"></i></button>
+    </div>
+
   </div>
-  <div class="modal-body">
+  <div class="modal-body" id="summary-preview">
     <div>
       <span>{{ selectedProject.title }}</span>
       <br>
@@ -158,7 +166,7 @@
     </div>
     <span>SUMMARY OF CONCRETE SUPPLIED</span>
     <div class="table-responsive">
-      <table *ngFor="let details of summaryDetails" class="table table-sm table-bordered">
+      <table *ngFor="let details of summaryDetails" class="table table-sm table-bordered" id="summary-table">
         <thead class="">
           <tr>
             <th scope="col" class="text-center">No.</th>
@@ -206,7 +214,7 @@
 
           </div>
           <div *ngIf="selectedSummary.checked_at">
-            <img class="img-signature" src={{url+selectedSummary.checker.signature.path}} alt="Maker Sign">
+            <img class="img-signature" src={{url+selectedSummary.checker.signature.path}} alt="Checker Sign">
           </div>
           <span>Name: {{ selectedSummary.checker.name }}</span><br>
           <span>Position: {{ selectedSummary.checker.designation }}</span><br>
@@ -214,12 +222,12 @@
         </div>
 
         <div>
-          <span>Recorded By:</span>
+          <span>Approved By:</span>
           <div class="no-signature" *ngIf="!selectedSummary.approved_at">
 
           </div>
           <div *ngIf="selectedSummary.approved_at">
-            <img class="img-signature" src={{url+selectedSummary.approver.signature.path}} alt="Maker Sign">
+            <img class="img-signature" src={{url+selectedSummary.approver.signature.path}} alt="Approver Sign">
           </div>
           <span>Name: {{ selectedSummary.approver.name }}</span><br>
           <span>Position: {{ selectedSummary.approver.designation }}</span><br>
@@ -233,7 +241,11 @@
 <!-- canvas material data -->
 <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
   <div class="offcanvas-header">
-    <h5 id="offcanvasRightLabel">Summary Option</h5>
+    <div>
+      <h5 id="offcanvasRightLabel">Summary Option</h5>
+      <div class="form-text text-primary">Leave null if want to exclude.</div>
+    </div>
+
     <button type="button" class="btn text-reset" data-bs-dismiss="offcanvas" aria-label="Close"><i
         class="fa fa-close"></i></button>
   </div>
@@ -263,6 +275,18 @@
           <option *ngFor="let sub of subconData" [ngValue]="sub.id">{{ sub.name }}</option>
         </select>
       </div>
+
+      <div class="mb-3">
+        <label for="po" class="form-label">Choose Purchase Order</label>
+        <select class="form-select" name="po" id="po" [(ngModel)]="formData.po">
+          <option *ngFor="let po of poData" [ngValue]="po.name">{{ po.name }}</option>
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label for="do" class="form-label">Insert D.O Number</label>
+        <input class="form-control" type="text" name="do" id="do" [(ngModel)]="formData.do">
+      </div>
       <!-- <div class="mb-3">
         <label for="material" class="form-label">Choose Material</label>
         <select class="form-select" name="material" id="material" [(ngModel)]="formData.material_id">
@@ -270,6 +294,7 @@
         </select>
       </div> -->
 
+      <hr>
       <!-- range -->
       <div class="mb-3">
         <label for="range" class="form-label">Range</label>
@@ -287,8 +312,7 @@
           <div class="input-group">
             <span (click)="d2.toggle()" class="input-group-text"><i class="fa fa-calendar"></i></span>
             <input class="form-control" placeholder="dd/mm/yyyy" name="d2" #c2="ngModel"
-              (dateSelect)="onDateSelection(d2)"
-              [(ngModel)]="formData.from" autocomplete="off" [autoClose]="'outside'"
+              (dateSelect)="onDateSelection(d2)" [(ngModel)]="formData.from" autocomplete="off" [autoClose]="'outside'"
               ngbDatepicker #d2="ngbDatepicker" (click)="d2.toggle()">
           </div>
         </div>
@@ -297,9 +321,8 @@
           <div class="input-group">
             <span (click)="d1.toggle()" class="input-group-text"><i class="fa fa-calendar"></i></span>
             <input class="form-control" placeholder="dd/mm/yyyy" name="d1" #c1="ngModel"
-              (dateSelect)="onDateSelection($event)"
-              [(ngModel)]="formData.to" autocomplete="off" [autoClose]="'outside'"
-              ngbDatepicker #d1="ngbDatepicker" (click)="d1.toggle();">
+              (dateSelect)="onDateSelection($event)" [(ngModel)]="formData.to" autocomplete="off"
+              [autoClose]="'outside'" ngbDatepicker #d1="ngbDatepicker" (click)="d1.toggle();">
           </div>
         </div>
       </div>
