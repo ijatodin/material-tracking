@@ -147,92 +147,98 @@
         class="badge rounded-pill bg-success">{{formatStatus(selectedSummary.status)}}</span>
     </div>
     <div>
-      <button class="btn btn-sm btn-success disabled" (click)="exportSummary()"><i class="fa fa-file-excel-o"></i>
+      <button class="btn btn-sm btn-success" (click)="exportSummary()"><i class="fa fa-file-excel-o"></i>
         Export to
         Excel</button>
-      <button class="btn btn-sm btn-primary ms-1 autofocus" [useExistingCss]="true" printSectionId="summary-preview"
-        ngxPrint><i class="fa fa-file-pdf-o"></i> Export PDF</button>
+      <button class="btn btn-sm btn-primary ms-1" (click)="promptExport(promptsign)"><i class="fa fa-file-pdf-o"></i>
+        Export to
+        PDF</button>
       <button type="button" class="btn text-reset" data-bs-dismiss="offcanvas" aria-label="Close"
         (click)="modal.dismiss()"><i class="fa fa-close"></i></button>
     </div>
 
   </div>
-  <div class="modal-body" id="summary-preview">
-    <div>
-      <span>{{ selectedProject.title }}</span>
-      <br>
-      <span>{{ selectedProject.sub_title+' '+selectedProject.project_no }}</span>
-      <br><br>
+  <div class="modal-body" id="summary-preview-sign">
+    <div id="summary-preview-nosign">
+      <div>
+        <span>{{ selectedProject.title }}</span>
+        <br>
+        <span>{{ selectedProject.sub_title+' '+selectedProject.project_no }}</span>
+        <br><br>
+      </div>
+      <span>SUMMARY OF CONCRETE SUPPLIED</span>
+      <div class="table-responsive">
+        <table *ngFor="let details of summaryDetails; let key = index;" class="table table-sm table-bordered"
+          id={{key}}>
+          <thead class="">
+            <tr>
+              <th scope="col" class="text-center">No.</th>
+              <th scope="col" class="text-center">D.O No</th>
+              <th scope="col" class="text-center">Date</th>
+              <th scope="col" class="text-center">Supplier</th>
+              <th scope="col" class="text-center">Subcon</th>
+              <th scope="col" class="text-center">Description</th>
+              <th scope="col" class="text-center">Quantity</th>
+              <th scope="col" class="text-center">Location</th>
+              <th scope="col" class="text-center">Date Received</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of details; let num = index;">
+              <td scope="row" class="text-center">{{ num+1 }}</td>
+              <td class="text-center">{{ item.ref.do_no }}</td>
+              <td class="text-center">{{ item.ref.date }}</td>
+              <td class="text-center">{{ item.ref.supplier.name }}</td>
+              <td class="text-center">{{ item.ref.subcon.name }}</td>
+              <td class="text-center">{{ item.description }}</td>
+              <td class="text-center">{{ item.quantity }}</td>
+              <td class="text-center">{{ item.location }}</td>
+              <td class="text-center">{{ item.ref.received_date }}</td>
+            </tr>
+          </tbody>
+        </table>
+
+      </div>
     </div>
-    <span>SUMMARY OF CONCRETE SUPPLIED</span>
-    <div class="table-responsive">
-      <table *ngFor="let details of summaryDetails" class="table table-sm table-bordered" id="summary-table">
-        <thead class="">
-          <tr>
-            <th scope="col" class="text-center">No.</th>
-            <th scope="col" class="text-center">D.O No</th>
-            <th scope="col" class="text-center">Date</th>
-            <th scope="col" class="text-center">Supplier</th>
-            <th scope="col" class="text-center">Subcon</th>
-            <th scope="col" class="text-center">Description</th>
-            <th scope="col" class="text-center">Quantity</th>
-            <th scope="col" class="text-center">Location</th>
-            <th scope="col" class="text-center">Date Received</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let item of details; let num = index;">
-            <td scope="row" class="text-center">{{ num+1 }}</td>
-            <td class="text-center">{{ item.ref.do_no }}</td>
-            <td class="text-center">{{ item.ref.date }}</td>
-            <td class="text-center">{{ item.ref.supplier.name }}</td>
-            <td class="text-center">{{ item.ref.subcon.name }}</td>
-            <td class="text-center">{{ item.description }}</td>
-            <td class="text-center">{{ item.quantity }}</td>
-            <td class="text-center">{{ item.location }}</td>
-            <td class="text-center">{{ item.ref.received_date }}</td>
-          </tr>
-        </tbody>
-      </table>
-      <div class="d-flex justify-content-between">
-        <div>
-          <span>Recorded By:</span>
-          <div class="no-signature" *ngIf="!selectedSummary.created_at">
 
-          </div>
-          <div *ngIf="selectedSummary.created_at">
-            <img class="img-signature" src={{url+selectedSummary.maker.signature.path}} alt="Maker Sign">
-          </div>
-          <span>Name: {{ selectedSummary.maker.name }}</span><br>
-          <span>Position: {{ selectedSummary.maker.designation }}</span><br>
-          <span>Date: {{ selectedSummary.created_at | date:'dd.MM.yyyy' }}</span>
+    <div class="d-flex justify-content-between">
+      <div>
+        <span>Recorded By:</span>
+        <div class="no-signature" *ngIf="!selectedSummary.created_at">
+
         </div>
-
-        <div>
-          <span>Checked By:</span>
-          <div class="no-signature" *ngIf="!selectedSummary.checked_at">
-
-          </div>
-          <div *ngIf="selectedSummary.checked_at">
-            <img class="img-signature" src={{url+selectedSummary.checker.signature.path}} alt="Checker Sign">
-          </div>
-          <span>Name: {{ selectedSummary.checker.name }}</span><br>
-          <span>Position: {{ selectedSummary.checker.designation }}</span><br>
-          <span>Date: {{ selectedSummary.checked_at | date:'dd.MM.yyyy' }}</span>
+        <div *ngIf="selectedSummary.created_at">
+          <img class="img-signature" src={{url+selectedSummary.maker.signature.path}} alt="Maker Sign">
         </div>
+        <span>Name: {{ selectedSummary.maker.name }}</span><br>
+        <span>Position: {{ selectedSummary.maker.designation }}</span><br>
+        <span>Date: {{ selectedSummary.created_at | date:'dd.MM.yyyy' }}</span>
+      </div>
 
-        <div>
-          <span>Approved By:</span>
-          <div class="no-signature" *ngIf="!selectedSummary.approved_at">
+      <div>
+        <span>Checked By:</span>
+        <div class="no-signature" *ngIf="!selectedSummary.checked_at">
 
-          </div>
-          <div *ngIf="selectedSummary.approved_at">
-            <img class="img-signature" src={{url+selectedSummary.approver.signature.path}} alt="Approver Sign">
-          </div>
-          <span>Name: {{ selectedSummary.approver.name }}</span><br>
-          <span>Position: {{ selectedSummary.approver.designation }}</span><br>
-          <span>Date: {{ selectedSummary.approved_at | date:'dd.MM.yyyy' }}</span>
         </div>
+        <div *ngIf="selectedSummary.checked_at">
+          <img class="img-signature" src={{url+selectedSummary.checker.signature.path}} alt="Checker Sign">
+        </div>
+        <span>Name: {{ selectedSummary.checker.name }}</span><br>
+        <span>Position: {{ selectedSummary.checker.designation }}</span><br>
+        <span>Date: {{ selectedSummary.checked_at | date:'dd.MM.yyyy' }}</span>
+      </div>
+
+      <div>
+        <span>Approved By:</span>
+        <div class="no-signature" *ngIf="!selectedSummary.approved_at">
+
+        </div>
+        <div *ngIf="selectedSummary.approved_at">
+          <img class="img-signature" src={{url+selectedSummary.approver.signature.path}} alt="Approver Sign">
+        </div>
+        <span>Name: {{ selectedSummary.approver.name }}</span><br>
+        <span>Position: {{ selectedSummary.approver.designation }}</span><br>
+        <span>Date: {{ selectedSummary.approved_at | date:'dd.MM.yyyy' }}</span>
       </div>
     </div>
   </div>
@@ -362,3 +368,27 @@
     </div>
   </div>
 </div>
+
+<!-- modal prompt details -->
+<ng-template #promptsign let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Export Option</h4>
+    <button type="button" class="btn text-reset" aria-label="Close" (click)="modal.dismiss('Cross click')"><i
+        class="fa fa-close"></i></button>
+  </div>
+  <div class="modal-body">
+    <div>
+      <p><strong>Choose to export with signature or without signature for <span
+            class="text-primary">"{{selectedSummary.sum_no}}"</span></strong></p>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-secondary" (click)="modal.dismiss('cancel click')">Cancel</button>
+    <!-- <button type="button" class="btn btn-success" (click)="modal.close(0)">Without Signature</button> -->
+    <!-- <button type="button" class="btn btn-primary" (click)="modal.close(1)">With Signature</button> -->
+    <button type="button" printTitle="{{ 'Summary '+selectedSummary.sum_no }}" class="btn btn-primary" [useExistingCss]="true"
+      printSectionId="summary-preview-sign" ngxPrint (click)="modal.close('With Signature')">With Signature</button>
+    <button type="button" printTitle="{{ 'Summary '+selectedSummary.sum_no }}" class="btn btn-primary" [useExistingCss]="true"
+      printSectionId="summary-preview-nosign" ngxPrint (click)="modal.close('Without Signature')">Without Signature</button>
+  </div>
+</ng-template>

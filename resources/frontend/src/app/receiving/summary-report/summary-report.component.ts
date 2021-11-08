@@ -15,7 +15,7 @@ import {
 } from '@ng-bootstrap/ng-bootstrap';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { environment } from 'src/environments/environment';
-import * as XLSX from "xlsx";
+import * as XLSX from 'xlsx';
 import { PurchaseOrderService } from 'src/app/services/purchase-order.service';
 
 @Component({
@@ -58,7 +58,6 @@ export class SummaryReportComponent implements OnInit {
   currentUser: any;
   url: any = environment.url;
   poData: any = [];
-
 
   hoveredDate: NgbDate | null = null;
 
@@ -223,7 +222,7 @@ export class SummaryReportComponent implements OnInit {
         for (let key of Object.keys(res.model)) {
           let detail = res.model[key];
           this.summaryDetails.push(detail);
-          // console.log(this.selectedSummary);
+          console.log(this.summaryDetails);
         }
       }
     });
@@ -261,6 +260,20 @@ export class SummaryReportComponent implements OnInit {
         break;
     }
     return res;
+  }
+
+  promptExport(content: any): void {
+    this.modalService
+      .open(content, { size: 'lg', scrollable: true })
+      .result.then(
+        (result) => {
+          //function di sini
+        },
+        (reason) => {
+          this.closeResult = this.getDismissReason(reason);
+          // console.log(this.closeResult);
+        }
+      );
   }
 
   modalOpen(content: any) {
@@ -306,13 +319,22 @@ export class SummaryReportComponent implements OnInit {
   }
 
   exportSummary() {
-    /* table id is passed over here */
-    let element = document.getElementById("summary-table");
-    const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(element);
 
     /* generate workbook and add the worksheet */
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+
+    for (let key in this.summaryDetails) {
+      console.log(this.summaryDetails[key]);
+      /* table id is passed over here */
+      let element = document.getElementById(key);
+      const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(element);
+
+      let material = this.summaryDetails[key];
+      let name = material[0].description;
+      let sheetName = name.replace(/[&\/\\#,+()$~%.'":*?<>{}]/g,'_');
+
+      XLSX.utils.book_append_sheet(wb, ws, sheetName);
+    }
 
     XLSX.writeFile(
       wb,
