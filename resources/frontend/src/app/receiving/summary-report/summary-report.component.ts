@@ -17,6 +17,7 @@ import { AuthenticationService } from 'src/app/services/authentication.service';
 import { environment } from 'src/environments/environment';
 import * as XLSX from 'xlsx';
 import { PurchaseOrderService } from 'src/app/services/purchase-order.service';
+import { groupBy } from 'lodash';
 
 @Component({
   selector: 'app-summary-report',
@@ -53,6 +54,7 @@ export class SummaryReportComponent implements OnInit {
   filterBy: any = null;
   closeResult: string = '';
   summaryDetails: any = [];
+  summaryDetailsSubcon: any = [];
   isCollapsed: boolean = true;
   saved: boolean = false;
   currentUser: any;
@@ -226,6 +228,22 @@ export class SummaryReportComponent implements OnInit {
         }
       }
     });
+    this.summarySvc.getSingleSubcon(data).subscribe((res) => {
+      if (res.message === 'SUCCESS') {
+        this.summaryDetailsSubcon = [];
+        for (let key of Object.keys(res.model)) {
+          let detail = res.model[key];
+          let byMaterial = groupBy(detail, 'description');
+          let material = [];
+          for (let key of Object.keys(byMaterial)) {
+            let push = byMaterial[key];
+            material.push(push);
+          }
+          this.summaryDetailsSubcon.push(material);
+          console.log(this.summaryDetailsSubcon);
+        }
+      }
+    });
   }
 
   saveSlip() {
@@ -323,14 +341,15 @@ export class SummaryReportComponent implements OnInit {
     /* generate workbook and add the worksheet */
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
 
-    for (let key in this.summaryDetails) {
-      console.log(this.summaryDetails[key]);
+    for (let key in this.summaryDetailsSubcon) {
+      console.log(key);
       /* table id is passed over here */
       let element = document.getElementById(key);
       const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(element);
 
-      let material = this.summaryDetails[key];
-      let name = material[0].description;
+      let subcon = this.summaryDetailsSubcon[key];
+      let material = subcon[0];
+      let name = material[0].ref.subcon.name;
       let sheetName = name.replace(/[&\/\\#,+()$~%.'":*?<>{}]/g,'_');
 
       XLSX.utils.book_append_sheet(wb, ws, sheetName);

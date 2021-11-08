@@ -34,6 +34,17 @@ class SummaryReportController extends Controller
         }
     }
 
+    public function singleSubcon()
+    {
+        try {
+            $res = ReceivingDetails::where('summary_id', request('id'))->with('ref', 'ref.supplier', 'ref.subcon')->get()->groupBy('ref.subcon_id');
+
+            return response()->json(['message' => 'SUCCESS', 'model' => $res], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 404);
+        }
+    }
+
     public function approval()
     {
         try {

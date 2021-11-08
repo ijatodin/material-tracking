@@ -34,6 +34,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('summary-generate', 'SummaryReportController@generate');
     Route::post('summary-all', 'SummaryReportController@index');
     Route::post('summary-single', 'SummaryReportController@single');
+    Route::post('summary-singlesubcon', 'SummaryReportController@singleSubcon');
     Route::post('summary-save', 'SummaryReportController@save');
     Route::post('summary-approval', 'SummaryReportController@approval');
 

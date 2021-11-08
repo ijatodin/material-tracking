@@ -22,6 +22,10 @@ export class SummaryService {
     return this.http.post<GenericResponse>(`${environment.apiUrl}/summary-single`, data);
   }
 
+  getSingleSubcon(data: any) {
+    return this.http.post<GenericResponse>(`${environment.apiUrl}/summary-singlesubcon`, data);
+  }
+
   generate(data: any) {
     return this.http.post<GenericResponse>(`${environment.apiUrl}/summary-generate`, data);
   }
