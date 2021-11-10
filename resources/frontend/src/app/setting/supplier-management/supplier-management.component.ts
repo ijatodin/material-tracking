@@ -14,6 +14,11 @@ export class SupplierManagementComponent implements OnInit {
   forSubcon: any = [];
   opened: boolean;
   closeResult: any;
+  data: any = [];
+  searchTerm: string = '';
+  page = 1;
+  pageSize = 10;
+  collectionSize: any;
 
   constructor(
     private suppSvc: SupplierService,
@@ -29,8 +34,19 @@ export class SupplierManagementComponent implements OnInit {
   getAll() {
     this.suppSvc.getAll().subscribe((res) => {
       this.supplierData = res.model;
-      // console.log(this.supplierData);
+      this.collectionSize = this.supplierData.length;
+    }).add(() => {
+      this.refreshData();
     });
+  }
+
+  refreshData() {
+    this.data = this.supplierData
+      .map((supplier, i) => ({ count: i + 1, ...supplier }))
+      .slice(
+        (this.page - 1) * this.pageSize,
+        (this.page - 1) * this.pageSize + this.pageSize
+      );
   }
 
   getSupplier() {
