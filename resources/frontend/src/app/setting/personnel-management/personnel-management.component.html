@@ -17,42 +17,66 @@
     </div>
   </div>
   <div class="card-body">
-    <table class="table table-sm table-bordered mt-2">
-      <thead class="table-dark">
-        <tr>
-          <th scope="col" class="text-center">#</th>
-          <th scope="col" class="text-center">Name</th>
-          <th scope="col" class="text-center">Email</th>
-          <th scope="col" class="text-center">Designation</th>
-          <th scope="col" class="text-center">Role</th>
-          <th scope="col" class="text-center">Signature</th>
-          <th scope="col" class="text-center">Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let item of personnelData; let num = index">
-          <th scope="row" class="text-center">{{ num+1 }}</th>
-          <td class="text-center">{{ item.name }}</td>
-          <td class="text-center">{{ item.email }}</td>
-          <td class="text-center">{{ item.personnel.designation }}</td>
-          <td class="text-center">{{ formatRole(item.role) }}</td>
-          <td *ngIf="item.personnel.signature_id" class="text-center"><a href={{url+item.personnel.signature.path}}
-              target="_blank" rel="noopener noreferrer">View Sign</a></td>
-          <td *ngIf="!item.personnel.signature_id" class="text-center">-</td>
-          <td class="text-center">
-            <div class="btn-group">
-              <button placement="top" ngbTooltip="Edit" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight"
-                (click)="setItem(item)" class="btn btn-primary btn-sm py-0"><i data-bs-toggle="offcanvas"
-                  data-bs-target="#offcanvasRight" class="fa fa-pencil"></i></button>
-              <button placement="top" ngbTooltip="Upload Signature" class="btn btn-warning btn-sm py-0"
-                (click)="setItem(item);uploadModal(upload)"><i class="fa fa-paperclip fa-flip-horizontal"></i></button>
-              <button placement="top" ngbTooltip="Delete" class="btn btn-danger btn-sm py-0"
-                (click)="setItem(item);promptDelete(delete)"><i class="fa fa-trash"></i></button>
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="row">
+      <label class="col-md-1 col-form-label" for="search">
+        Search
+      </label>
+      <div class="col-md-11">
+        <input type="text" name="search" id="search" class="form-control" [(ngModel)]="searchTerm">
+      </div>
+    </div>
+    <div class="table-responsive">
+      <table class="table table-sm table-bordered mt-2">
+        <thead class="table-dark">
+          <tr>
+            <th scope="col" class="text-center">#</th>
+            <th scope="col" class="text-center">Name</th>
+            <th scope="col" class="text-center">Email</th>
+            <th scope="col" class="text-center">Designation</th>
+            <th scope="col" class="text-center">Role</th>
+            <th scope="col" class="text-center">Signature</th>
+            <th scope="col" class="text-center">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of data | filter: searchTerm; let num = index">
+            <th scope="row" class="text-center">{{ item.count  }}</th>
+            <td class="text-center"><ngb-highlight [result]="item.name" [term]="searchTerm"></ngb-highlight></td>
+            <td class="text-center"><ngb-highlight [result]="item.email" [term]="searchTerm"></ngb-highlight></td>
+            <td class="text-center">{{ item.personnel.designation }}</td>
+            <td class="text-center">{{ formatRole(item.role) }}</td>
+            <td *ngIf="item.personnel.signature_id" class="text-center"><a href={{url+item.personnel.signature.path}}
+                target="_blank" rel="noopener noreferrer">View Sign</a></td>
+            <td *ngIf="!item.personnel.signature_id" class="text-center">-</td>
+            <td class="text-center">
+              <div class="btn-group">
+                <button placement="top" ngbTooltip="Edit" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight"
+                  (click)="setItem(item)" class="btn btn-primary btn-sm py-0"><i data-bs-toggle="offcanvas"
+                    data-bs-target="#offcanvasRight" class="fa fa-pencil"></i></button>
+                <button placement="top" ngbTooltip="Upload Signature" class="btn btn-warning btn-sm py-0"
+                  (click)="setItem(item);uploadModal(upload)"><i
+                    class="fa fa-paperclip fa-flip-horizontal"></i></button>
+                <button placement="top" ngbTooltip="Delete" class="btn btn-danger btn-sm py-0"
+                  (click)="setItem(item);promptDelete(delete)"><i class="fa fa-trash"></i></button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="d-flex justify-content-between p-2">
+      <ngb-pagination [collectionSize]="collectionSize" [(page)]="page" [pageSize]="pageSize"
+        (pageChange)="refreshData()">
+      </ngb-pagination>
+
+      <div class="col-md-3">
+        <select class="form-select" [(ngModel)]="pageSize" (ngModelChange)="refreshData()">
+          <option [ngValue]="10">10 items per page</option>
+          <option [ngValue]="30">30 items per page</option>
+          <option [ngValue]="100">100 items per page</option>
+        </select>
+      </div>
+    </div>
   </div>
 </div>
 

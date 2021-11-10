@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { ModalDismissReasons, NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import {
+  ModalDismissReasons,
+  NgbActiveModal,
+  NgbModal,
+} from '@ng-bootstrap/ng-bootstrap';
 import { PersonnelService } from 'src/app/services/personnel.service';
 import { environment } from 'src/environments/environment';
 
@@ -16,6 +20,11 @@ export class PersonnelManagementComponent implements OnInit {
   file: any = null;
   closeResult: any;
   url: any = environment.url;
+  data: any = [];
+  searchTerm: string = '';
+  page = 1;
+  pageSize = 10;
+  collectionSize: any;
 
   constructor(
     private personnelSvc: PersonnelService,
@@ -27,12 +36,26 @@ export class PersonnelManagementComponent implements OnInit {
   }
 
   getData() {
-    this.personnelSvc.getAll().subscribe((res) => {
-      if (res.message === 'SUCCESS') {
-        this.personnelData = res.model;
-        console.log(this.personnelData);
-      }
-    });
+    this.personnelSvc
+      .getAll()
+      .subscribe((res) => {
+        if (res.message === 'SUCCESS') {
+          this.personnelData = res.model;
+          this.collectionSize = this.personnelData.length;
+        }
+      })
+      .add(() => {
+        this.refreshData();
+      });
+  }
+
+  refreshData() {
+    this.data = this.personnelData
+      .map((personnel, i) => ({ count: i + 1, ...personnel }))
+      .slice(
+        (this.page - 1) * this.pageSize,
+        (this.page - 1) * this.pageSize + this.pageSize
+      );
   }
 
   setNew() {
@@ -81,12 +104,11 @@ export class PersonnelManagementComponent implements OnInit {
 
   handleFile(event: any) {
     this.file = event.target.files.item(0);
-    if (this.file.type === "image/png" || this.file.type === "image/x-png"){
+    if (this.file.type === 'image/png' || this.file.type === 'image/x-png') {
       console.log(true);
     } else {
       this.file = null;
     }
-
   }
 
   promptDelete(content: any) {
