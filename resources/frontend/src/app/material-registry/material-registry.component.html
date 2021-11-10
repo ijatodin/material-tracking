@@ -38,8 +38,8 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let item of materialData; let num = index">
-            <th scope="row" class="text-center">{{ num+1 }}</th>
+          <tr *ngFor="let item of data | filter: searchTerm; let num = index">
+            <th scope="row" class="text-center">{{ item.count }}</th>
             <td class="text-center"><ngb-highlight [result]="item.description" [term]="searchTerm"></ngb-highlight></td>
             <td class="text-center">{{ item.specs ? item.specs : '-' }}</td>
             <td class="text-center">{{ item.types.name }}</td>
