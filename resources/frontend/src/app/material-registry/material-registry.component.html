@@ -10,12 +10,21 @@
   <div class="card-header">
     <div class="d-md-flex justify-content-between">
       <h4 class="card-title my-1 ml-2">Material Registry</h4>
-      <button data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" (click)="setNew()" class="btn btn-primary mr-2">
+      <button data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" (click)="setNew()"
+        class="btn btn-primary mr-2">
         <i class="fa fa-plus"></i> Add Material
       </button>
     </div>
   </div>
   <div class="card-body">
+    <div class="row">
+      <label class="col-md-1 col-form-label" for="search">
+        Search
+      </label>
+      <div class="col-md-11">
+        <input type="text" name="search" id="search" class="form-control" [(ngModel)]="searchTerm">
+      </div>
+    </div>
     <div class="table-responsive">
       <table class="table table-sm table-bordered mt-2">
         <thead class="table-dark">
@@ -31,7 +40,7 @@
         <tbody>
           <tr *ngFor="let item of materialData; let num = index">
             <th scope="row" class="text-center">{{ num+1 }}</th>
-            <td class="text-center">{{ item.description }}</td>
+            <td class="text-center"><ngb-highlight [result]="item.description" [term]="searchTerm"></ngb-highlight></td>
             <td class="text-center">{{ item.specs ? item.specs : '-' }}</td>
             <td class="text-center">{{ item.types.name }}</td>
             <td class="text-center">{{ item.uom ? item.uom : '-' }}</td>
@@ -47,6 +56,19 @@
           </tr>
         </tbody>
       </table>
+    </div>
+    <div class="d-flex justify-content-between p-2">
+      <ngb-pagination [collectionSize]="collectionSize" [(page)]="page" [pageSize]="pageSize"
+        (pageChange)="refreshData()">
+      </ngb-pagination>
+
+      <div class="col-md-3">
+        <select class="form-select" [(ngModel)]="pageSize" (ngModelChange)="refreshData()">
+          <option [ngValue]="10">10 items per page</option>
+          <option [ngValue]="30">30 items per page</option>
+          <option [ngValue]="100">100 items per page</option>
+        </select>
+      </div>
     </div>
   </div>
 </div>
@@ -94,7 +116,8 @@
   </div>
   <div class="modal-body">
     <div>
-      <p><strong>Are you sure you want to delete material <span class="text-primary">"{{formData.description}}"</span> ?</strong></p>
+      <p><strong>Are you sure you want to delete material <span class="text-primary">"{{formData.description}}"</span>
+          ?</strong></p>
       <p>All information associated to this material will be permanently deleted.
         <span class="text-danger">This operation can not be undone.</span>
       </p>

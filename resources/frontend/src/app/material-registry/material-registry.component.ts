@@ -13,6 +13,11 @@ export class MaterialRegistryComponent implements OnInit {
   formData: any = {};
   typeData: any = [];
   closeResult: any;
+  data: any = [];
+  searchTerm: string = '';
+  page = 1;
+  pageSize = 10;
+  collectionSize: any;
 
   constructor(
     private materialSvc: MaterialService,
@@ -28,8 +33,19 @@ export class MaterialRegistryComponent implements OnInit {
   getAll() {
     this.materialSvc.getAll().subscribe((res) => {
       this.materialData = res.model;
-      // console.log(this.materialData);
+      this.collectionSize = this.materialData.length;
+    }).add(() => {
+      this.refreshData();
     });
+  }
+
+  refreshData() {
+    this.data = this.materialData
+      .map((material, i) => ({ count: i + 1, ...material }))
+      .slice(
+        (this.page - 1) * this.pageSize,
+        (this.page - 1) * this.pageSize + this.pageSize
+      );
   }
 
   setNew() {
