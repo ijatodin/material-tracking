@@ -30,6 +30,7 @@
           <tr>
             <th scope="col" class="text-center">#</th>
             <th scope="col" class="text-center">Ref No</th>
+            <th scope="col" class="text-center">P.O No</th>
             <th scope="col" class="text-center">D.O No</th>
             <th scope="col" class="text-center">Supplier</th>
             <th scope="col" class="text-center">Subcon</th>
@@ -43,6 +44,9 @@
             <th scope="row" class="text-center">{{ item.count }}</th>
             <td class="text-center">
               <ngb-highlight [result]="item.ref_no" [term]="searchTerm"></ngb-highlight>
+            </td>
+            <td class="text-center">
+              <ngb-highlight [result]="item.po_no" [term]="searchTerm"></ngb-highlight>
             </td>
             <td class="text-center">
               <ngb-highlight [result]="item.do_no" [term]="searchTerm"></ngb-highlight>
