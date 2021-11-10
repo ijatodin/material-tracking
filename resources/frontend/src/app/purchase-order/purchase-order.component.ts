@@ -17,6 +17,11 @@ export class PurchaseOrderComponent implements OnInit {
   closeResult: any;
   errMessage: any = [];
   hasFile: boolean = false;
+  data: any = [];
+  searchTerm: string = '';
+  page = 1;
+  pageSize = 10;
+  collectionSize: any;
 
   constructor(
     private fileSvc: FileUploadService,
@@ -32,9 +37,21 @@ export class PurchaseOrderComponent implements OnInit {
     this.poSvc.getData().subscribe((res) => {
       if (res.message === 'SUCCESS') {
         this.poData = res.model;
+        this.collectionSize = this.poData.length;
         // console.log(this.poData);
       }
+    }).add(() => {
+      this.refreshData();
     });
+  }
+
+  refreshData() {
+    this.data = this.poData
+      .map((po, i) => ({ count: i + 1, ...po }))
+      .slice(
+        (this.page - 1) * this.pageSize,
+        (this.page - 1) * this.pageSize + this.pageSize
+      );
   }
 
   setNew() {
