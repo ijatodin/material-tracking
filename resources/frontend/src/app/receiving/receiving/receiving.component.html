@@ -2,20 +2,28 @@
 <nav aria-label="breadcrumb">
   <ol class="breadcrumb">
     <li class="breadcrumb-item"><a href="#">Home</a></li>
-    <li class="breadcrumb-item active" aria-current="page">Receiving</li>
+    <li class="breadcrumb-item active" aria-current="page">Delivery Order</li>
   </ol>
 </nav>
 
 <div class="card">
   <div class="card-header">
     <div class="d-md-flex justify-content-between">
-      <h4 class="card-title my-1 ml-2">Receiving</h4>
+      <h4 class="card-title my-1 ml-2">Delivery Order</h4>
       <a [routerLink]="['/receiving/create']" role="button" class="btn btn-primary mr-2">
         <i class="fa fa-plus"></i> New Delivery Order
       </a>
     </div>
   </div>
   <div class="card-body">
+    <div class="row">
+      <label class="col-md-1 col-form-label" for="search">
+        Search
+      </label>
+      <div class="col-md-11">
+        <input type="text" name="search" id="search" class="form-control" [(ngModel)]="searchTerm">
+      </div>
+    </div>
     <div class="table-responsive">
       <table class="table table-sm table-bordered table-hover mt-2">
         <thead class="table-dark">
@@ -31,12 +39,20 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let item of receivingData; let num = index">
-            <th scope="row" class="text-center">{{ num+1 }}</th>
-            <td class="text-center">{{ item.ref_no }}</td>
-            <td class="text-center">{{ item.do_no }}</td>
-            <td class="text-center">{{ item.supplier.name }}</td>
-            <td class="text-center">{{ item.subcon.name }}</td>
+          <tr *ngFor="let item of data | filter:searchTerm ; let num = index">
+            <th scope="row" class="text-center">{{ item.count }}</th>
+            <td class="text-center">
+              <ngb-highlight [result]="item.ref_no" [term]="searchTerm"></ngb-highlight>
+            </td>
+            <td class="text-center">
+              <ngb-highlight [result]="item.do_no" [term]="searchTerm"></ngb-highlight>
+            </td>
+            <td class="text-center">
+              <ngb-highlight [result]="item.supplier.name" [term]="searchTerm"></ngb-highlight>
+            </td>
+            <td class="text-center">
+              <ngb-highlight [result]="item.subcon.name" [term]="searchTerm"></ngb-highlight>
+            </td>
             <td class="text-center">{{ item.received_date }}</td>
             <td class="text-center">{{ formatStatus(item.status) }}</td>
             <td class="text-center"><button data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight"
@@ -46,6 +62,19 @@
           </tr>
         </tbody>
       </table>
+    </div>
+    <div class="d-flex justify-content-between p-2">
+      <ngb-pagination [collectionSize]="collectionSize" [(page)]="page" [pageSize]="pageSize"
+        (pageChange)="refreshReceiving()">
+      </ngb-pagination>
+
+      <div class="col-md-3">
+        <select class="form-select" [(ngModel)]="pageSize" (ngModelChange)="refreshReceiving()">
+          <option [ngValue]="15">15 items per page</option>
+          <option [ngValue]="30">30 items per page</option>
+          <option [ngValue]="100">100 items per page</option>
+        </select>
+      </div>
     </div>
   </div>
 </div>

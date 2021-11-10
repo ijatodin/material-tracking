@@ -6,23 +6,27 @@ import { environment } from 'src/environments/environment';
 @Component({
   selector: 'app-receiving',
   templateUrl: './receiving.component.html',
-  styleUrls: ['./receiving.component.scss']
+  styleUrls: ['./receiving.component.scss'],
 })
 export class ReceivingComponent implements OnInit {
-
-  receivingData:any = null;
+  receivingData: any = null;
+  data: any = null;
   selectedReceiving: any = {
     location: {},
     supplier: {},
-    subcon: {}
+    subcon: {},
   };
   url: string = environment.url;
   closeResult: any;
+  searchTerm: string = '';
+  page = 1;
+  pageSize = 15;
+  collectionSize: any;
 
   constructor(
     private receivingSvc: ReceivingService,
     private modalService: NgbModal
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.getData();
@@ -51,9 +55,12 @@ export class ReceivingComponent implements OnInit {
     this.receivingSvc.getReceiving().subscribe((res) => {
       if (res.message === 'SUCCESS') {
         this.receivingData = res.model;
+        this.collectionSize = this.receivingData.length;
         // console.log(this.receivingData);
       }
-    })
+    }).add(() => {
+    this.refreshReceiving();
+    });
   }
 
   promptDelete(content: any) {
@@ -62,11 +69,11 @@ export class ReceivingComponent implements OnInit {
       .result.then(
         (result) => {
           //function di sini
-          this.receivingSvc.delete(result).subscribe((res)=>{
+          this.receivingSvc.delete(result).subscribe((res) => {
             if (res.message === 'SUCCESS') {
               this.getData();
             }
-          })
+          });
           // console.log(result);
         },
         (reason) => {
@@ -76,13 +83,22 @@ export class ReceivingComponent implements OnInit {
       );
   }
 
+  refreshReceiving() {
+    this.data = this.receivingData
+      .map((receiving, i) => ({ count: i + 1, ...receiving }))
+      .slice(
+        (this.page - 1) * this.pageSize,
+        (this.page - 1) * this.pageSize + this.pageSize
+      );
+  }
+
   promptComplete(content: any) {
     this.modalService
       .open(content, { size: 'lg', scrollable: true })
       .result.then(
         (result) => {
           //function di sini
-          this.receivingSvc.complete(result).subscribe((res)=>{
+          this.receivingSvc.complete(result).subscribe((res) => {
             if (res.message === 'SUCCESS') {
               this.getData();
             }
@@ -105,5 +121,4 @@ export class ReceivingComponent implements OnInit {
       return `with: ${reason}`;
     }
   }
-
 }

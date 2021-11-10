@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgSelectModule } from '@ng-select/ng-select';
 import {NgxPrintModule} from 'ngx-print';
 import { NgxSpinnerModule } from "ngx-spinner";
-
+import { Ng2SearchPipeModule } from 'ng2-search-filter';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -63,7 +63,8 @@ import {MatSidenavModule} from '@angular/material/sidenav';
     NgSelectModule,
     BrowserAnimationsModule,
     NgxSpinnerModule,
-    MatSidenavModule
+    MatSidenavModule,
+    Ng2SearchPipeModule
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [
