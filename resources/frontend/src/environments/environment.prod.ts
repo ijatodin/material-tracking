@@ -1,5 +1,5 @@
 export const environment = {
-  apiUrl: 'https://kys.awantera.co/api',
-  url: 'https://kys.awantera.co',
+  apiUrl: 'https://mattracker.kys.com.my/api',
+  url: 'https://mattracker.kys.com.my',
   production: true
 };
